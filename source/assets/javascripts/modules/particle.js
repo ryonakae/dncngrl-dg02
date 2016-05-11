@@ -1,11 +1,12 @@
 import THREE from 'three';
 import TWEEN from 'tween.js';
+import OrbitControls from '../lib/OrbitControls.js';
 
 export function particle() {
   console.log(THREE);
   console.log(TWEEN);
 
-  let renderer, scene, camera;
+  let renderer, scene, camera, controls;
   const width = 640;
   const height = 480;
   const pScale = 4;
@@ -32,6 +33,8 @@ export function particle() {
     camera = new THREE.PerspectiveCamera(60, width/height, 1, 10000);
     camera.position.z = 420;
 
+    controls = new OrbitControls(camera);
+
     createParticle();
 
     renderer = new THREE.WebGLRenderer();
@@ -54,6 +57,7 @@ export function particle() {
   // render
   function render(){
     if(particleFlg) pGeometry.verticesNeedUpdate = true;
+    controls.update();
     renderer.render(scene, camera);
   }
 
