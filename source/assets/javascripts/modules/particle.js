@@ -8,6 +8,7 @@ export function particle() {
   let renderer, scene, camera;
   const width = 640;
   const height = 480;
+  const pScale = 4;
 
   let imgArray = [];
   let randomArray = [];
@@ -29,7 +30,7 @@ export function particle() {
     scene.fog = new THREE.Fog(0xffffff, 0, 3000);
 
     camera = new THREE.PerspectiveCamera(60, width/height, 1, 10000);
-    camera.position.z = 500;
+    camera.position.z = 420;
 
     createParticle();
 
@@ -46,7 +47,7 @@ export function particle() {
   // animate
   function animate(){
     render();
-    // TWEEN.update();
+    TWEEN.update();
     requestAnimationFrame(animate);
   }
 
@@ -84,15 +85,15 @@ export function particle() {
 
       // material
       pMaterial = new THREE.PointsMaterial({
-        size: 2,
+        size: pScale,
         sizeAttenuation: false,
         transparent: true,
-        opacity: 0.7,
+        opacity: 1,
         vertexColors: THREE.VertexColors
       });
 
-      for(let x = 0; x < imageW; x++){
-        for(let y = 0; y < imageH; y++){
+      for(let x = 0; x < imageW; x+=pScale){
+        for(let y = 0; y < imageH; y+=pScale){
           const r = pixels[index];
           const g = pixels[index+1];
           const b = pixels[index+2];
@@ -113,26 +114,27 @@ export function particle() {
           index = (x*4) + y*(4*imageW);
         }
       }
+      console.log(i + ' particles');
 
       // pointCloud
       pointCloud = new THREE.Points( pGeometry, pMaterial );
       scene.add(pointCloud);
 
       // animate
-      // for(let i = 0; i < imgArray.length; i++){
-      //   pTween[i] = new TWEEN.Tween(pGeometry.vertices[i])
-      //     .to({ x: imgArray[i].vertex.x, y: imgArray[i].vertex.y, z: imgArray[i].vertex.z }, 4000)
-      //     .easing(TWEEN.Easing.Quartic.InOut)
-      //     .start();
-      //
-      //   pTweenBack[i] = new TWEEN.Tween(pGeometry.vertices[i])
-      //     .delay(1000)
-      //     .to({ x: randomArray[i].vertex.x, y: randomArray[i].vertex.y, z: randomArray[i].vertex.z }, 4000)
-      //     .easing(TWEEN.Easing.Quartic.InOut);
-      //
-      //   pTween[i].chain(pTweenBack[i]);
-      //   pTweenBack[i].chain(pTween[i]);
-      // }
+      for(let i = 0; i < imgArray.length; i++){
+        pTween[i] = new TWEEN.Tween(pGeometry.vertices[i])
+          .to({ x: imgArray[i].vertex.x, y: imgArray[i].vertex.y, z: imgArray[i].vertex.z }, 4000)
+          .easing(TWEEN.Easing.Quartic.InOut)
+          .start();
+
+        pTweenBack[i] = new TWEEN.Tween(pGeometry.vertices[i])
+          .delay(4000)
+          .to({ x: randomArray[i].vertex.x, y: randomArray[i].vertex.y, z: randomArray[i].vertex.z }, 4000)
+          .easing(TWEEN.Easing.Quartic.InOut);
+
+        pTween[i].chain(pTweenBack[i]);
+        pTweenBack[i].chain(pTween[i]);
+      }
 
       particleFlg = true;
     }
