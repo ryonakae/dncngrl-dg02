@@ -45,6 +45,7 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
+    "gsap": "^1.18.4",
     "imagesloaded": "^4.1.0",
     "jquery": "^2.2.3",
     "swiper": "^3.3.1",

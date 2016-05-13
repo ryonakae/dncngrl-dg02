@@ -1,7 +1,8 @@
 'use strict';
 
 window.jQuery = window.$ = require('jquery');
-import { particle } from './modules/particle';
+import Particle from './modules/particle';
+const particle = new Particle();
 
 (() => {
   $(() => {
@@ -11,6 +12,6 @@ import { particle } from './modules/particle';
   const init = () => {
     console.log('init');
 
-    particle();
+    particle.init();
   };
 })();
