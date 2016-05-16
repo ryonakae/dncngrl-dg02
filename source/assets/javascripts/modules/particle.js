@@ -31,7 +31,7 @@ export function particle() {
     scene.fog = new THREE.Fog(0xffffff, 0, 3000);
 
     camera = new THREE.PerspectiveCamera(60, width/height, 1, 10000);
-    camera.position.z = 420;
+    camera.position.z = 100;
 
     controls = new OrbitControls(camera);
 
@@ -42,7 +42,7 @@ export function particle() {
 
     const axis = new THREE.AxisHelper(200);
     axis.position.set(0, 0, 0);
-    scene.add(axis);
+    // scene.add(axis);
 
     initSlide('out');
 
@@ -62,15 +62,37 @@ export function particle() {
   }
 
   function initSlide(animationPhase){
-    const width = 200;
-    const height = 200;
+    const width = 100;
+    const height = 100;
 
-    const plane = new THREE.PlaneGeometry(width, height, 32, 32);
+    const plane = new THREE.PlaneGeometry(width, height, width/2, height/2);
     THREE.BAS.Utils.separateFaces(plane);
 
     const geometry = new THREE.BAS.ModelBufferGeometry(plane);
     geometry.bufferUVs();
     console.log(geometry, geometry.faceCount);
+
+    const positionBuffer = geometry.createAttribute('position', 3).array;
+    for (var i = 0; i < geometry.faceCount; i++) {
+      var face = geometry.modelGeometry.faces[i];
+      var centroid = THREE.BAS.Utils.computeCentroid(geometry.modelGeometry, face);
+
+      var a = geometry.modelGeometry.vertices[face.a];
+      var b = geometry.modelGeometry.vertices[face.b];
+      var c = geometry.modelGeometry.vertices[face.c];
+
+      positionBuffer[face.a * 3]     = a.x - centroid.x;
+      positionBuffer[face.a * 3 + 1] = a.y - centroid.y;
+      positionBuffer[face.a * 3 + 2] = a.z - centroid.z;
+
+      positionBuffer[face.b * 3]     = b.x - centroid.x;
+      positionBuffer[face.b * 3 + 1] = b.y - centroid.y;
+      positionBuffer[face.b * 3 + 2] = b.z - centroid.z;
+
+      positionBuffer[face.c * 3]     = c.x - centroid.x;
+      positionBuffer[face.c * 3 + 1] = c.y - centroid.y;
+      positionBuffer[face.c * 3 + 2] = c.z - centroid.z;
+    }
 
     const aAnimation = geometry.createAttribute('aAnimation', 2);
     const aStartPosition = geometry.createAttribute('aStartPosition', 3);
@@ -105,20 +127,24 @@ export function particle() {
       return tempPoint;
     }
 
-    for (i = 0, i2 = 0, i3 = 0; i < 1; i++, i2 += 6, i3 += 9) {
+    for (i = 0, i2 = 0, i3 = 0; i < geometry.faceCount; i++, i2 += 6, i3 += 9) {
       var face = plane.faces[i];
       var centroid = THREE.BAS.Utils.computeCentroid(plane, face);
 
       // animation
-      var duration = THREE.Math.randFloat(minDuration, maxDuration);
-      var delayX = THREE.Math.mapLinear(centroid.x, -width * 0.5, width * 0.5, 0.0, maxDelayX);
+      // var duration = THREE.Math.randFloat(minDuration, maxDuration);
+      var duration = maxDuration;
+      // var delayX = THREE.Math.mapLinear(centroid.x, -width * 0.5, width * 0.5, 0.0, maxDelayX);
+      var delayX = 0;
       var delayY;
 
       if (animationPhase === 'in') {
-        delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, height * 0.5, 0.0, maxDelayY)
+        // delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, height * 0.5, 0.0, maxDelayY)
+        delayY = 0
       }
       else {
-        delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, height * 0.5, maxDelayY, 0.0)
+        // delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, height * 0.5, maxDelayY, 0.0)
+        delayY = 0
       }
 
       for (v = 0; v < 6; v += 2) {
@@ -156,10 +182,10 @@ export function particle() {
         aEndPosition.array[i3 + v + 1] = endPosition.y;
         aEndPosition.array[i3 + v + 2] = endPosition.z;
 
-        console.log(startPosition.x, startPosition.y);
-        console.log(control0.x, control0.y);
-        console.log(control1.x, control1.y);
-        console.log(endPosition.x, endPosition.y);
+        // console.log(startPosition.x, startPosition.y);
+        // console.log(control0.x, control0.y);
+        // console.log(control1.x, control1.y);
+        // console.log(endPosition.x, endPosition.y);
       }
     }
 
@@ -171,9 +197,9 @@ export function particle() {
       },
       shaderFunctions: [
         THREE.BAS.ShaderChunk['cubic_bezier'],
-        //THREE.BAS.ShaderChunk[(animationPhase === 'in' ? 'ease_out_cubic' : 'ease_in_cubic')],
+        // THREE.BAS.ShaderChunk[(animationPhase === 'in' ? 'ease_out_cubic' : 'ease_in_cubic')],
         THREE.BAS.ShaderChunk['ease_in_out_cubic'],
-        THREE.BAS.ShaderChunk['quaternion_rotation']
+        // THREE.BAS.ShaderChunk['quaternion_rotation2']
       ],
       shaderParameters: [
         'uniform float uTime;',
@@ -213,7 +239,7 @@ export function particle() {
     scene.add(slide);
 
     const timeline = new TimelineMax({repeat:-1, repeatDelay:1.0, yoyo: true});
-    // timeline.add(TweenMax.fromTo(slide, 3.0, {time:0.0}, {time:totalDuration, ease:Power0.easeInOut}));
+    timeline.add(TweenMax.fromTo(slide, 5.0, {time:0.0}, {time:totalDuration, ease:Power0.easeInOut}));
 
     function setImage(img) {
       material.uniforms.map.value.image = img;
