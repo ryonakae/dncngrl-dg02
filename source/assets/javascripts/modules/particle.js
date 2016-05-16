@@ -132,19 +132,15 @@ export function particle() {
       var centroid = THREE.BAS.Utils.computeCentroid(plane, face);
 
       // animation
-      // var duration = THREE.Math.randFloat(minDuration, maxDuration);
-      var duration = maxDuration;
-      // var delayX = THREE.Math.mapLinear(centroid.x, -width * 0.5, width * 0.5, 0.0, maxDelayX);
-      var delayX = 0;
+      var duration = THREE.Math.randFloat(minDuration, maxDuration);
+      var delayX = THREE.Math.mapLinear(centroid.x, -width * 0.5, width * 0.5, 0.0, maxDelayX);
       var delayY;
 
       if (animationPhase === 'in') {
-        // delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, height * 0.5, 0.0, maxDelayY)
-        delayY = 0
+        delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, height * 0.5, 0.0, maxDelayY)
       }
       else {
-        // delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, height * 0.5, maxDelayY, 0.0)
-        delayY = 0
+        delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, height * 0.5, maxDelayY, 0.0)
       }
 
       for (v = 0; v < 6; v += 2) {
@@ -199,7 +195,7 @@ export function particle() {
         THREE.BAS.ShaderChunk['cubic_bezier'],
         // THREE.BAS.ShaderChunk[(animationPhase === 'in' ? 'ease_out_cubic' : 'ease_in_cubic')],
         THREE.BAS.ShaderChunk['ease_in_out_cubic'],
-        // THREE.BAS.ShaderChunk['quaternion_rotation2']
+        THREE.BAS.ShaderChunk['quaternion_rotation']
       ],
       shaderParameters: [
         'uniform float uTime;',
@@ -239,7 +235,7 @@ export function particle() {
     scene.add(slide);
 
     const timeline = new TimelineMax({repeat:-1, repeatDelay:1.0, yoyo: true});
-    timeline.add(TweenMax.fromTo(slide, 5.0, {time:0.0}, {time:totalDuration, ease:Power0.easeInOut}));
+    timeline.add(TweenMax.fromTo(slide, 4.0, {time:0.0}, {time:totalDuration, ease:Power0.easeInOut}));
 
     function setImage(img) {
       material.uniforms.map.value.image = img;
