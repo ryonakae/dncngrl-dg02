@@ -11,9 +11,9 @@ export function particle() {
   const height = 480;
   const minDuration = 0.8;
   const maxDuration = 1.2;
-  const maxDelayX = 0.9;
+  const maxDelayX = 0.45;
   const maxDelayY = 0.125;
-  const stretch = 0.11;
+  const stretch = 0.5;
   const totalDuration = maxDuration + maxDelayX + maxDelayY + stretch;
 
   init();
@@ -28,7 +28,7 @@ export function particle() {
     const height = 480;
 
     scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0xffffff, 0, 3000);
+    scene.fog = new THREE.Fog(0x000000, 0, 3000);
 
     camera = new THREE.PerspectiveCamera(60, width/height, 1, 10000);
     camera.position.z = 100;
@@ -38,7 +38,7 @@ export function particle() {
     renderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(width, height);
-    renderer.setClearColor(0xFFFFFF, 1.0);
+    renderer.setClearColor(0x000000, 1.0);
 
     const axis = new THREE.AxisHelper(200);
     axis.position.set(0, 0, 0);
@@ -106,23 +106,27 @@ export function particle() {
     const endPosition = new THREE.Vector3();
     const tempPoint = new THREE.Vector3();
 
-    var i, i2, i3, i4, v;
+    var i, i2, i3, v;
 
     function getControlPoint0(centroid) {
-      var signY = Math.sign(centroid.y);
+      // var signY = Math.sign(centroid.y);
+      var radian = centroid.y * (Math.PI / 180);
+      var signY = Math.sin(radian);
 
-      tempPoint.x = THREE.Math.randFloat(0.1, 0.3) * 50;
-      tempPoint.y = signY * THREE.Math.randFloat(0.1, 0.3) * 70;
-      tempPoint.z = THREE.Math.randFloatSpread(20);
+      tempPoint.x = THREE.Math.randFloat(-0.1, 0.3) * 70;
+      tempPoint.y = signY * THREE.Math.randFloat(-0.1, 0.3) * 70;
+      tempPoint.z = THREE.Math.randFloatSpread(30);
 
       return tempPoint;
     }
     function getControlPoint1(centroid) {
-      var signY = Math.sign(centroid.y);
+      // var signY = Math.sign(centroid.y);
+      var radian = centroid.y * (Math.PI / 180);
+      var signY = Math.cos(radian);
 
-      tempPoint.x = THREE.Math.randFloat(0.3, 0.6) * 50;
-      tempPoint.y = -signY * THREE.Math.randFloat(0.3, 0.6) * 70;
-      tempPoint.z = THREE.Math.randFloatSpread(20);
+      tempPoint.x = THREE.Math.randFloat(0.2, 0.4) * 70;
+      tempPoint.y = -signY * THREE.Math.randFloat(0.2, 0.4) * 70;
+      tempPoint.z = THREE.Math.randFloatSpread(30);
 
       return tempPoint;
     }
@@ -153,12 +157,12 @@ export function particle() {
       startPosition.copy(centroid);
 
       if (animationPhase === 'in') {
-        control0.copy(centroid).sub(getControlPoint0(centroid));
-        control1.copy(centroid).sub(getControlPoint1(centroid));
-      }
-      else { // out
         control0.copy(centroid).add(getControlPoint0(centroid));
         control1.copy(centroid).add(getControlPoint1(centroid));
+      }
+      else { // out
+        control0.copy(centroid).sub(getControlPoint0(centroid));
+        control1.copy(centroid).sub(getControlPoint1(centroid));
       }
 
       for (v = 0; v < 9; v += 3) {
@@ -210,7 +214,7 @@ export function particle() {
         'float tDuration = aAnimation.y;',
         'float tTime = clamp(uTime - tDelay, 0.0, tDuration);',
         'float tProgress = ease(tTime, 0.0, 1.0, tDuration);'
-        //'float tProgress = tTime / tDuration;'
+        // 'float tProgress = tTime / tDuration;'
       ],
       shaderTransformPosition: [
         (animationPhase === 'in' ? 'transformed *= tProgress;' : 'transformed *= 1.0 - tProgress;'),
