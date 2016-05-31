@@ -1,6 +1,6 @@
 import THREE from 'three';
 import gsap from 'gsap';
-import OrbitControls from '../lib/OrbitControls.js';
+// import OrbitControls from '../lib/OrbitControls.js';
 import Bas from '../lib/bas.js';
 
 export function particle() {
@@ -18,33 +18,65 @@ export function particle() {
     // console.log(TweenMax);
 
     const container = document.body;
-    const width = 640;
-    const height = 480;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    let mouseX;
+    let mouseY;
 
     scene = new THREE.Scene();
     scene.fog = new THREE.Fog(0x000000, 0, 3000);
 
+    // camera
     camera = new THREE.PerspectiveCamera(60, width/height, 1, 10000);
-    camera.position.z = 100;
 
-    controls = new OrbitControls(camera);
+    // ピクセル等倍にする(canvasのサイズでオブジェクトの大きさを変えない)
+    // http://ikeryou.jp/log/?p=242
+    const magnification = 5.0; //倍率
+    const cameraZ = ((height/2) / Math.tan((camera.fov * Math.PI/180)/2)) / -magnification;
+    camera.position.z = -cameraZ;
+    camera.lookAt(scene.position);
 
-    renderer = new THREE.WebGLRenderer();
+    // renderer
+    renderer = new THREE.WebGLRenderer({
+      // antialias: true
+    });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(width, height);
     renderer.setClearColor(0x000000, 1.0);
 
-    const axis = new THREE.AxisHelper(200);
-    axis.position.set(0, 0, 0);
+    // orbit controls
+    // controls = new OrbitControls(camera);
+
+    // axis helper
+    // const axis = new THREE.AxisHelper(200);
+    // axis.position.set(0, 0, 0);
     // scene.add(axis);
 
     // add slide
-    const slide = new Slide(100, 100, 'out');
-    slide.setImage(new THREE.ImageLoader().load('./assets/images/sample.jpg'));
+    const slide = new Slide(78, 110, 78*1.5, 110*1.5, 'in');
+    slide.setImage(new THREE.ImageLoader().load('./assets/images/sample04.jpg'));
+    slide.position.y = 10;
     scene.add(slide);
 
-    const timeline = new TimelineMax({repeat:-1, repeatDelay:1.0, yoyo: true});
-    timeline.add(TweenMax.fromTo(slide, 4.0, {time:0.0}, {time:slide.totalDuration, ease:Power0.easeInOut}));
+    // slide parallax
+    const defaultRotateX = -0.13;
+    const defaultRotateY = -0.15;
+
+    slide.rotation.x = defaultRotateX;
+    slide.rotation.y = defaultRotateY;
+
+    document.body.addEventListener('mousemove', (e) => {
+      mouseX = e.pageX - window.innerWidth/2;
+      mouseY = e.pageY - window.innerHeight/2;
+
+      slide.rotation.x = defaultRotateX + mouseY * 0.0002;
+      slide.rotation.y = defaultRotateY + mouseX * 0.0002;
+    }, false);
+
+    setTimeout(() => {
+      const timeline = new TimelineMax({repeat:-1, repeatDelay:2.0, yoyo: true});
+      timeline.add(TweenMax.fromTo(slide, 7.0, {time:0.0}, {time:slide.totalDuration, ease:Power0.easeInOut}));
+    }, 2000);
 
     container.appendChild(renderer.domElement);
 
@@ -57,27 +89,28 @@ export function particle() {
   }
 
   function render() {
-    controls.update();
+    // controls.update();
     renderer.render(scene, camera);
   }
 }
 
 class Slide extends THREE.Mesh {
-  constructor(width, height, animationPhase){
-    // 子Classはsuper();する必要あり
-    super();
+  constructor(width, height, divisionX, divisionY, animationPhase){
+    super(); // 子Classはsuper();する必要あり
 
     this.width = width;
     this.height = height;
+    this.divisionX = divisionX;
+    this.divisionY = divisionY;
     this.animationPhase = animationPhase;
     this.minDuration = 0.8;
     this.maxDuration = 1.2;
-    this.maxDelayX = 0.9;
-    this.maxDelayY = 0.125;
+    this.maxDelayX = 0.5;
+    this.maxDelayY = 0;
     this.stretch = 0.11;
     this.totalDuration = this.maxDuration + this.maxDelayX + this.maxDelayY + this.stretch;
 
-    this.plane = new THREE.PlaneGeometry(this.width, this.height, this.width/2, this.height/2);
+    this.plane = new THREE.PlaneGeometry(this.width, this.height, this.divisionX, this.divisionY);
     THREE.BAS.Utils.separateFaces(this.plane);
 
     this.geometry = new THREE.BAS.ModelBufferGeometry(this.plane);
@@ -90,11 +123,13 @@ class Slide extends THREE.Mesh {
     this.aStartPosition = this.geometry.createAttribute('aStartPosition', 3);
     this.aControl0 = this.geometry.createAttribute('aControl0', 3);
     this.aControl1 = this.geometry.createAttribute('aControl1', 3);
+    this.aControl2 = this.geometry.createAttribute('aControl2', 3);
     this.aEndPosition = this.geometry.createAttribute('aEndPosition', 3);
 
     this.startPosition = new THREE.Vector3();
     this.control0 = new THREE.Vector3();
     this.control1 = new THREE.Vector3();
+    this.control2 = new THREE.Vector3();
     this.endPosition = new THREE.Vector3();
     this.tempPoint = new THREE.Vector3();
 
@@ -112,7 +147,7 @@ class Slide extends THREE.Mesh {
       if (this.animationPhase === 'in') {
         delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, this.height * 0.5, 0.0, this.maxDelayY);
       }
-      else {
+      else if (this.animationPhase === 'out') {
         delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, this.height * 0.5, this.maxDelayY, 0.0);
       }
 
@@ -121,24 +156,37 @@ class Slide extends THREE.Mesh {
         this.aAnimation.array[i2 + v + 1] = duration;
       }
 
-      // position
-      this.endPosition.copy(centroid);
+      // startPosition
       this.startPosition.copy(centroid);
-
       if (this.animationPhase === 'in') {
-        this.control0.copy(centroid).add(this.getControlPoint0(centroid));
-        this.control1.copy(centroid).add(this.getControlPoint1(centroid));
+        for (v = 0; v < 9; v += 3) {
+          this.aStartPosition.array[i3 + v    ] = centroid.x;
+          this.aStartPosition.array[i3 + v + 1] = centroid.y + 200;
+          this.aStartPosition.array[i3 + v + 2] = centroid.z - 150;
+        }
       }
-      else { // out
-        this.control0.copy(centroid).sub(this.getControlPoint0(centroid));
-        this.control1.copy(centroid).sub(this.getControlPoint1(centroid));
+      else if (this.animationPhase === 'out') {
+        for (v = 0; v < 9; v += 3) {
+          this.aStartPosition.array[i3 + v    ] = centroid.x;
+          this.aStartPosition.array[i3 + v + 1] = centroid.y;
+          this.aStartPosition.array[i3 + v + 2] = centroid.z;
+        }
       }
+
+      // controls
+      this.control0.x = centroid.x + THREE.Math.randFloat(-120, 120) * -1;
+      this.control0.y = centroid.y + this.height/1.5 * THREE.Math.randFloat(0.0, 3.0);
+      this.control0.z = THREE.Math.randFloat(-30, -60);
+
+      this.control1.x = centroid.x + THREE.Math.randFloat(-120, 120) * 1;
+      this.control1.y = centroid.y + this.height/1.5 * THREE.Math.randFloat(0.0, 3.0);
+      this.control1.z = THREE.Math.randFloat(-60, -90);
+
+      this.control0.x = centroid.x + THREE.Math.randFloat(-120, 120) * -1;
+      this.control0.y = centroid.y + this.height/1.5 * THREE.Math.randFloat(0.0, 3.0);
+      this.control0.z = THREE.Math.randFloat(-90, -120);
 
       for (v = 0; v < 9; v += 3) {
-        this.aStartPosition.array[i3 + v]     = this.startPosition.x;
-        this.aStartPosition.array[i3 + v + 1] = this.startPosition.y;
-        this.aStartPosition.array[i3 + v + 2] = this.startPosition.z;
-
         this.aControl0.array[i3 + v]     = this.control0.x;
         this.aControl0.array[i3 + v + 1] = this.control0.y;
         this.aControl0.array[i3 + v + 2] = this.control0.z;
@@ -147,9 +195,26 @@ class Slide extends THREE.Mesh {
         this.aControl1.array[i3 + v + 1] = this.control1.y;
         this.aControl1.array[i3 + v + 2] = this.control1.z;
 
-        this.aEndPosition.array[i3 + v]     = this.endPosition.x;
-        this.aEndPosition.array[i3 + v + 1] = this.endPosition.y;
-        this.aEndPosition.array[i3 + v + 2] = this.endPosition.z;
+        this.aControl2.array[i3 + v]     = this.control2.x;
+        this.aControl2.array[i3 + v + 1] = this.control2.y;
+        this.aControl2.array[i3 + v + 2] = this.control2.z;
+      }
+
+      // endPosition
+      this.endPosition.copy(this.startPosition);
+      if (this.animationPhase === 'in') {
+        for (v = 0; v < 9; v += 3) {
+          this.aEndPosition.array[i3 + v]     = this.endPosition.x;
+          this.aEndPosition.array[i3 + v + 1] = this.endPosition.y;
+          this.aEndPosition.array[i3 + v + 2] = this.endPosition.z;
+        }
+      }
+      else if (this.animationPhase === 'out') {
+        for (v = 0; v < 9; v += 3) {
+          this.aEndPosition.array[i3 + v]     = this.endPosition.x;
+          this.aEndPosition.array[i3 + v + 1] = this.endPosition.y + 200;
+          this.aEndPosition.array[i3 + v + 2] = this.endPosition.z - 150;
+        }
       }
     }
 
@@ -191,15 +256,9 @@ class Slide extends THREE.Mesh {
     console.log(this.material);
 
     console.log(this);
+    this.frustumCulled = false;
 
-    Object.defineProperty(this, 'time', {
-      get: function () {
-        return this.material.uniforms['uTime'].value;
-      },
-      set: function (v) {
-        this.material.uniforms['uTime'].value = v;
-      }
-    });
+    this.defineProperty();
   }
 
   bufferPositions() {
@@ -229,8 +288,6 @@ class Slide extends THREE.Mesh {
 
   getControlPoint0(centroid) {
     const signY = Math.sign(centroid.y);
-    // const radian = centroid.y * (Math.PI / 180);
-    // const signY = Math.cos(radian);
 
     this.tempPoint.x = THREE.Math.randFloat(0.1, 0.3) * 50;
     this.tempPoint.y = -signY * THREE.Math.randFloat(0.1, 0.3) * 70;
@@ -241,8 +298,6 @@ class Slide extends THREE.Mesh {
 
   getControlPoint1(centroid) {
     const signY = Math.sign(centroid.y);
-    // const radian = centroid.y * (Math.PI / 180);
-    // const signY = Math.cos(radian);
 
     this.tempPoint.x = THREE.Math.randFloat(0.3, 0.6) * 50;
     this.tempPoint.y = signY * THREE.Math.randFloat(0.3, 0.6) * 70;
@@ -252,7 +307,23 @@ class Slide extends THREE.Mesh {
   }
 
   setImage(img) {
+    this.material.uniforms.map.value.minFilter = THREE.LinearFilter;
+    this.material.uniforms.map.value.magFilter = THREE.LinearFilter;
+
     this.material.uniforms.map.value.image = img;
     this.material.uniforms.map.value.needsUpdate = true;
+
+    console.log(this.material.uniforms.map.value);
+  }
+
+  defineProperty() {
+    Object.defineProperty(this, 'time', {
+      get: function () {
+        return this.material.uniforms['uTime'].value;
+      },
+      set: function (v) {
+        this.material.uniforms['uTime'].value = v;
+      }
+    });
   }
 }
