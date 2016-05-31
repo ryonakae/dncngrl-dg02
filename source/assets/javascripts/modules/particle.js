@@ -9,12 +9,6 @@ export function particle() {
   let renderer, scene, camera, controls;
   const width = 640;
   const height = 480;
-  const minDuration = 0.8;
-  const maxDuration = 1.2;
-  const maxDelayX = 0.45;
-  const maxDelayY = 0.125;
-  const stretch = 0.5;
-  const totalDuration = maxDuration + maxDelayX + maxDelayY + stretch;
 
   init();
 
@@ -44,7 +38,13 @@ export function particle() {
     axis.position.set(0, 0, 0);
     // scene.add(axis);
 
-    initSlide('out');
+    // add slide
+    const slide = new Slide(100, 100, 'out');
+    slide.setImage(new THREE.ImageLoader().load('./assets/images/sample.jpg'));
+    scene.add(slide);
+
+    const timeline = new TimelineMax({repeat:-1, repeatDelay:1.0, yoyo: true});
+    timeline.add(TweenMax.fromTo(slide, 4.0, {time:0.0}, {time:slide.totalDuration, ease:Power0.easeInOut}));
 
     container.appendChild(renderer.domElement);
 
@@ -60,136 +60,101 @@ export function particle() {
     controls.update();
     renderer.render(scene, camera);
   }
+}
 
-  function initSlide(animationPhase){
-    const width = 100;
-    const height = 100;
+class Slide extends THREE.Mesh {
+  constructor(width, height, animationPhase){
+    // 子Classはsuper();する必要あり
+    super();
 
-    const plane = new THREE.PlaneGeometry(width, height, width/2, height/2);
-    THREE.BAS.Utils.separateFaces(plane);
+    this.width = width;
+    this.height = height;
+    this.animationPhase = animationPhase;
+    this.minDuration = 0.8;
+    this.maxDuration = 1.2;
+    this.maxDelayX = 0.9;
+    this.maxDelayY = 0.125;
+    this.stretch = 0.11;
+    this.totalDuration = this.maxDuration + this.maxDelayX + this.maxDelayY + this.stretch;
 
-    const geometry = new THREE.BAS.ModelBufferGeometry(plane);
-    geometry.bufferUVs();
-    console.log(geometry, geometry.faceCount);
+    this.plane = new THREE.PlaneGeometry(this.width, this.height, this.width/2, this.height/2);
+    THREE.BAS.Utils.separateFaces(this.plane);
 
-    const positionBuffer = geometry.createAttribute('position', 3).array;
-    for (var i = 0; i < geometry.faceCount; i++) {
-      var face = geometry.modelGeometry.faces[i];
-      var centroid = THREE.BAS.Utils.computeCentroid(geometry.modelGeometry, face);
+    this.geometry = new THREE.BAS.ModelBufferGeometry(this.plane);
+    this.geometry.bufferUVs();
+    console.log(this.geometry, this.geometry.faceCount);
 
-      var a = geometry.modelGeometry.vertices[face.a];
-      var b = geometry.modelGeometry.vertices[face.b];
-      var c = geometry.modelGeometry.vertices[face.c];
+    this.bufferPositions();
 
-      positionBuffer[face.a * 3]     = a.x - centroid.x;
-      positionBuffer[face.a * 3 + 1] = a.y - centroid.y;
-      positionBuffer[face.a * 3 + 2] = a.z - centroid.z;
+    this.aAnimation = this.geometry.createAttribute('aAnimation', 2);
+    this.aStartPosition = this.geometry.createAttribute('aStartPosition', 3);
+    this.aControl0 = this.geometry.createAttribute('aControl0', 3);
+    this.aControl1 = this.geometry.createAttribute('aControl1', 3);
+    this.aEndPosition = this.geometry.createAttribute('aEndPosition', 3);
 
-      positionBuffer[face.b * 3]     = b.x - centroid.x;
-      positionBuffer[face.b * 3 + 1] = b.y - centroid.y;
-      positionBuffer[face.b * 3 + 2] = b.z - centroid.z;
+    this.startPosition = new THREE.Vector3();
+    this.control0 = new THREE.Vector3();
+    this.control1 = new THREE.Vector3();
+    this.endPosition = new THREE.Vector3();
+    this.tempPoint = new THREE.Vector3();
 
-      positionBuffer[face.c * 3]     = c.x - centroid.x;
-      positionBuffer[face.c * 3 + 1] = c.y - centroid.y;
-      positionBuffer[face.c * 3 + 2] = c.z - centroid.z;
-    }
+    let i, i2, i3, v;
 
-    const aAnimation = geometry.createAttribute('aAnimation', 2);
-    const aStartPosition = geometry.createAttribute('aStartPosition', 3);
-    const aControl0 = geometry.createAttribute('aControl0', 3);
-    const aControl1 = geometry.createAttribute('aControl1', 3);
-    const aEndPosition = geometry.createAttribute('aEndPosition', 3);
-
-    const startPosition = new THREE.Vector3();
-    const control0 = new THREE.Vector3();
-    const control1 = new THREE.Vector3();
-    const endPosition = new THREE.Vector3();
-    const tempPoint = new THREE.Vector3();
-
-    var i, i2, i3, v;
-
-    function getControlPoint0(centroid) {
-      // var signY = Math.sign(centroid.y);
-      var radian = centroid.y * (Math.PI / 180);
-      var signY = Math.sin(radian);
-
-      tempPoint.x = THREE.Math.randFloat(-0.1, 0.3) * 70;
-      tempPoint.y = signY * THREE.Math.randFloat(-0.1, 0.3) * 70;
-      tempPoint.z = THREE.Math.randFloatSpread(30);
-
-      return tempPoint;
-    }
-    function getControlPoint1(centroid) {
-      // var signY = Math.sign(centroid.y);
-      var radian = centroid.y * (Math.PI / 180);
-      var signY = Math.cos(radian);
-
-      tempPoint.x = THREE.Math.randFloat(0.2, 0.4) * 70;
-      tempPoint.y = -signY * THREE.Math.randFloat(0.2, 0.4) * 70;
-      tempPoint.z = THREE.Math.randFloatSpread(30);
-
-      return tempPoint;
-    }
-
-    for (i = 0, i2 = 0, i3 = 0; i < geometry.faceCount; i++, i2 += 6, i3 += 9) {
-      var face = plane.faces[i];
-      var centroid = THREE.BAS.Utils.computeCentroid(plane, face);
+    for (i = 0, i2 = 0, i3 = 0; i < this.geometry.faceCount; i++, i2 += 6, i3 += 9) {
+      const planeFace = this.plane.faces[i];
+      const centroid = THREE.BAS.Utils.computeCentroid(this.plane, planeFace);
 
       // animation
-      var duration = THREE.Math.randFloat(minDuration, maxDuration);
-      var delayX = THREE.Math.mapLinear(centroid.x, -width * 0.5, width * 0.5, 0.0, maxDelayX);
-      var delayY;
+      const duration = THREE.Math.randFloat(this.minDuration, this.maxDuration);
+      const delayX = THREE.Math.mapLinear(centroid.x, -this.width * 0.5, this.width * 0.5, 0.0, this.maxDelayX);
+      let delayY;
 
-      if (animationPhase === 'in') {
-        delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, height * 0.5, 0.0, maxDelayY)
+      if (this.animationPhase === 'in') {
+        delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, this.height * 0.5, 0.0, this.maxDelayY);
       }
       else {
-        delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, height * 0.5, maxDelayY, 0.0)
+        delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, this.height * 0.5, this.maxDelayY, 0.0);
       }
 
       for (v = 0; v < 6; v += 2) {
-        aAnimation.array[i2 + v]     = delayX + delayY + (Math.random() * stretch * duration);
-        aAnimation.array[i2 + v + 1] = duration;
+        this.aAnimation.array[i2 + v]     = delayX + delayY + (Math.random() * this.stretch * duration);
+        this.aAnimation.array[i2 + v + 1] = duration;
       }
 
       // position
-      endPosition.copy(centroid);
-      startPosition.copy(centroid);
+      this.endPosition.copy(centroid);
+      this.startPosition.copy(centroid);
 
-      if (animationPhase === 'in') {
-        control0.copy(centroid).add(getControlPoint0(centroid));
-        control1.copy(centroid).add(getControlPoint1(centroid));
+      if (this.animationPhase === 'in') {
+        this.control0.copy(centroid).add(this.getControlPoint0(centroid));
+        this.control1.copy(centroid).add(this.getControlPoint1(centroid));
       }
       else { // out
-        control0.copy(centroid).sub(getControlPoint0(centroid));
-        control1.copy(centroid).sub(getControlPoint1(centroid));
+        this.control0.copy(centroid).sub(this.getControlPoint0(centroid));
+        this.control1.copy(centroid).sub(this.getControlPoint1(centroid));
       }
 
       for (v = 0; v < 9; v += 3) {
-        aStartPosition.array[i3 + v]     = startPosition.x;
-        aStartPosition.array[i3 + v + 1] = startPosition.y;
-        aStartPosition.array[i3 + v + 2] = startPosition.z;
+        this.aStartPosition.array[i3 + v]     = this.startPosition.x;
+        this.aStartPosition.array[i3 + v + 1] = this.startPosition.y;
+        this.aStartPosition.array[i3 + v + 2] = this.startPosition.z;
 
-        aControl0.array[i3 + v]     = control0.x;
-        aControl0.array[i3 + v + 1] = control0.y;
-        aControl0.array[i3 + v + 2] = control0.z;
+        this.aControl0.array[i3 + v]     = this.control0.x;
+        this.aControl0.array[i3 + v + 1] = this.control0.y;
+        this.aControl0.array[i3 + v + 2] = this.control0.z;
 
-        aControl1.array[i3 + v]     = control1.x;
-        aControl1.array[i3 + v + 1] = control1.y;
-        aControl1.array[i3 + v + 2] = control1.z;
+        this.aControl1.array[i3 + v]     = this.control1.x;
+        this.aControl1.array[i3 + v + 1] = this.control1.y;
+        this.aControl1.array[i3 + v + 2] = this.control1.z;
 
-        aEndPosition.array[i3 + v]     = endPosition.x;
-        aEndPosition.array[i3 + v + 1] = endPosition.y;
-        aEndPosition.array[i3 + v + 2] = endPosition.z;
-
-        // console.log(startPosition.x, startPosition.y);
-        // console.log(control0.x, control0.y);
-        // console.log(control1.x, control1.y);
-        // console.log(endPosition.x, endPosition.y);
+        this.aEndPosition.array[i3 + v]     = this.endPosition.x;
+        this.aEndPosition.array[i3 + v + 1] = this.endPosition.y;
+        this.aEndPosition.array[i3 + v + 2] = this.endPosition.z;
       }
     }
 
-    const material = new THREE.BAS.BasicAnimationMaterial({
+    // material
+    this.material = new THREE.BAS.BasicAnimationMaterial({
       shading: THREE.FlatShading,
       side: THREE.DoubleSide,
       uniforms: {
@@ -217,16 +182,17 @@ export function particle() {
         // 'float tProgress = tTime / tDuration;'
       ],
       shaderTransformPosition: [
-        (animationPhase === 'in' ? 'transformed *= tProgress;' : 'transformed *= 1.0 - tProgress;'),
+        (this.animationPhase === 'in' ? 'transformed *= tProgress;' : 'transformed *= 1.0 - tProgress;'),
         'transformed += cubicBezier(aStartPosition, aControl0, aControl1, aEndPosition, tProgress);'
       ]
     }, {
       map: new THREE.Texture()
     });
-    console.log(material);
+    console.log(this.material);
 
-    const slide = new THREE.Mesh(geometry, material);
-    Object.defineProperty(slide, 'time', {
+    console.log(this);
+
+    Object.defineProperty(this, 'time', {
       get: function () {
         return this.material.uniforms['uTime'].value;
       },
@@ -234,16 +200,59 @@ export function particle() {
         this.material.uniforms['uTime'].value = v;
       }
     });
-    const imageLoader = new THREE.ImageLoader();
-    setImage(imageLoader.load('./assets/images/sample.jpg'));
-    scene.add(slide);
+  }
 
-    const timeline = new TimelineMax({repeat:-1, repeatDelay:1.0, yoyo: true});
-    timeline.add(TweenMax.fromTo(slide, 4.0, {time:0.0}, {time:totalDuration, ease:Power0.easeInOut}));
+  bufferPositions() {
+    const positionBuffer = this.geometry.createAttribute('position', 3).array;
 
-    function setImage(img) {
-      material.uniforms.map.value.image = img;
-      material.uniforms.map.value.needsUpdate = true;
+    for (let i = 0; i < this.geometry.faceCount; i++) {
+      const geomFace = this.geometry.modelGeometry.faces[i];
+      const centroid = THREE.BAS.Utils.computeCentroid(this.geometry.modelGeometry, geomFace);
+
+      const a = this.geometry.modelGeometry.vertices[geomFace.a];
+      const b = this.geometry.modelGeometry.vertices[geomFace.b];
+      const c = this.geometry.modelGeometry.vertices[geomFace.c];
+
+      positionBuffer[geomFace.a * 3]     = a.x - centroid.x;
+      positionBuffer[geomFace.a * 3 + 1] = a.y - centroid.y;
+      positionBuffer[geomFace.a * 3 + 2] = a.z - centroid.z;
+
+      positionBuffer[geomFace.b * 3]     = b.x - centroid.x;
+      positionBuffer[geomFace.b * 3 + 1] = b.y - centroid.y;
+      positionBuffer[geomFace.b * 3 + 2] = b.z - centroid.z;
+
+      positionBuffer[geomFace.c * 3]     = c.x - centroid.x;
+      positionBuffer[geomFace.c * 3 + 1] = c.y - centroid.y;
+      positionBuffer[geomFace.c * 3 + 2] = c.z - centroid.z;
     }
+  }
+
+  getControlPoint0(centroid) {
+    const signY = Math.sign(centroid.y);
+    // const radian = centroid.y * (Math.PI / 180);
+    // const signY = Math.cos(radian);
+
+    this.tempPoint.x = THREE.Math.randFloat(0.1, 0.3) * 50;
+    this.tempPoint.y = -signY * THREE.Math.randFloat(0.1, 0.3) * 70;
+    this.tempPoint.z = THREE.Math.randFloatSpread(20);
+
+    return this.tempPoint;
+  }
+
+  getControlPoint1(centroid) {
+    const signY = Math.sign(centroid.y);
+    // const radian = centroid.y * (Math.PI / 180);
+    // const signY = Math.cos(radian);
+
+    this.tempPoint.x = THREE.Math.randFloat(0.3, 0.6) * 50;
+    this.tempPoint.y = signY * THREE.Math.randFloat(0.3, 0.6) * 70;
+    this.tempPoint.z = THREE.Math.randFloatSpread(20);
+
+    return this.tempPoint;
+  }
+
+  setImage(img) {
+    this.material.uniforms.map.value.image = img;
+    this.material.uniforms.map.value.needsUpdate = true;
   }
 }
