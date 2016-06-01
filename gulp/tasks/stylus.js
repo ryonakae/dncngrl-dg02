@@ -15,6 +15,8 @@ import lazypipe from 'lazypipe';
 
 // stylus
 gulp.task('stylus', () => {
+  // lazypipe().pipe(fn[, arg1[, arg2[, ...]]])
+  // e.g.: lazypipe().pipe(concat, 'bundle.js', {newLine: ';'});
   const prodTasks = lazypipe()
     .pipe(combineMediaQueries)
     .pipe(csscomb)

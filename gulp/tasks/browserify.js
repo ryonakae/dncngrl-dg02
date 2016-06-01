@@ -10,9 +10,7 @@ import glob from 'glob';
 import gutil from 'gulp-util';
 import plumber from 'gulp-plumber';
 import gulpif from 'gulp-if';
-import lazypipe from 'lazypipe';
 import uglify from 'gulp-uglify';
-import sourcemaps from 'gulp-sourcemaps';
 
 
 // bundleScript function
@@ -35,18 +33,13 @@ const bundleScript = (isProduction) => {
       options.cache = {};
       options.packageCache = {};
       options.fullPaths = true;
+      options.debug = true; // enable source map
       b = watchify(browserify(options));
     }
 
     // bundle function
     const bundle = () => {
       const bundleFile = file.replace(/.+\/(.+)\.js/g, '$1') + '.js';
-
-      // lazypipe().pipe(fn[, arg1[, arg2[, ...]]])
-      // e.g.: lazypipe().pipe(concat, 'bundle.js', {newLine: ';'});
-      const sourcemapTasks = lazypipe()
-        .pipe(sourcemaps.init, { loadMaps: true })
-        .pipe(sourcemaps.write, './');
 
       b
         .bundle()
@@ -55,7 +48,6 @@ const bundleScript = (isProduction) => {
         })
         .pipe(source(bundleFile))
         .pipe(buffer())
-        .pipe(gulpif(!isProduction, sourcemapTasks()))
         .pipe(gulpif(isProduction, uglify({ preserveComments: 'some' })))
         .pipe(gulp.dest(destPath))
         .on('end', () => {
