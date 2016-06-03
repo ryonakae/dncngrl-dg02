@@ -1,2 +1,2 @@
 # dncngrl_02
-http://dncngrl.com/dg01
+http://dncngrl.com/dg02
