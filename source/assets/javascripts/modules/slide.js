@@ -1,102 +1,14 @@
 import THREE from 'three';
 import gsap from 'gsap';
-// import OrbitControls from '../lib/OrbitControls.js';
 import Bas from '../lib/bas.js';
 
-export function particle() {
-  new Bas();
 
-  let renderer, scene, camera, controls;
-  const width = 640;
-  const height = 480;
-
-  init();
-
-  function init() {
-    // console.log(THREE);
-    // console.log(OrbitControls);
-    // console.log(TweenMax);
-
-    const container = document.body;
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    let mouseX;
-    let mouseY;
-
-    scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0x000000, 0, 3000);
-
-    // camera
-    camera = new THREE.PerspectiveCamera(60, width/height, 1, 10000);
-
-    // ピクセル等倍にする(canvasのサイズでオブジェクトの大きさを変えない)
-    // http://ikeryou.jp/log/?p=242
-    const magnification = 5.0; //倍率
-    const cameraZ = ((height/2) / Math.tan((camera.fov * Math.PI/180)/2)) / -magnification;
-    camera.position.z = -cameraZ;
-    camera.lookAt(scene.position);
-
-    // renderer
-    renderer = new THREE.WebGLRenderer({
-      // antialias: true
-    });
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(width, height);
-    renderer.setClearColor(0x000000, 1.0);
-
-    // orbit controls
-    // controls = new OrbitControls(camera);
-
-    // axis helper
-    // const axis = new THREE.AxisHelper(200);
-    // axis.position.set(0, 0, 0);
-    // scene.add(axis);
-
-    // add slide
-    const slide = new Slide(78, 110, 78*1.5, 110*1.5, 'in');
-    slide.setImage(new THREE.ImageLoader().load('./assets/images/sample04.jpg'));
-    slide.position.y = 10;
-    scene.add(slide);
-
-    // slide parallax
-    const defaultRotateX = -0.13;
-    const defaultRotateY = -0.15;
-
-    slide.rotation.x = defaultRotateX;
-    slide.rotation.y = defaultRotateY;
-
-    document.body.addEventListener('mousemove', (e) => {
-      mouseX = e.pageX - window.innerWidth/2;
-      mouseY = e.pageY - window.innerHeight/2;
-
-      slide.rotation.x = defaultRotateX + mouseY * 0.0002;
-      slide.rotation.y = defaultRotateY + mouseX * 0.0002;
-    }, false);
-
-    setTimeout(() => {
-      const timeline = new TimelineMax({repeat:-1, repeatDelay:2.0, yoyo: true});
-      timeline.add(TweenMax.fromTo(slide, 7.0, {time:0.0}, {time:slide.totalDuration, ease:Power0.easeInOut}));
-    }, 2000);
-
-    container.appendChild(renderer.domElement);
-
-    animate();
-  }
-
-  function animate() {
-    render();
-    requestAnimationFrame(animate);
-  }
-
-  function render() {
-    // controls.update();
-    renderer.render(scene, camera);
-  }
-}
-
-class Slide extends THREE.Mesh {
+// Slide Class
+export default class Slide extends THREE.Mesh {
   constructor(width, height, divisionX, divisionY, animationPhase){
     super(); // 子Classはsuper();する必要あり
+
+    new Bas();
 
     this.width = width;
     this.height = height;
@@ -111,6 +23,7 @@ class Slide extends THREE.Mesh {
     this.totalDuration = this.maxDuration + this.maxDelayX + this.maxDelayY + this.stretch;
 
     this.plane = new THREE.PlaneGeometry(this.width, this.height, this.divisionX, this.divisionY);
+    console.log(THREE.BAS);
     THREE.BAS.Utils.separateFaces(this.plane);
 
     this.geometry = new THREE.BAS.ModelBufferGeometry(this.plane);
