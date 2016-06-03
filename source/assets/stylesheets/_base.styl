@@ -1,4 +1,21 @@
 @import 'kouto-swiss'
+@import '_config'
 
 normalize()
 box-sizing-reset()
+
+
+body
+  font-family $fontFamily_default
+  font-size $fontSize_default
+  line-height $lineHeight_default
+  letter-spacing $letterSpacing_default
+  background-color $bgColor_default
+  font-kerning normal
+  color $textColor_default
+  // text-align justify
+  word-wrap break-word
+  overflow-wrap break-word
+
+  +retina-query(only screen, 2)
+    -webkit-font-smoothing antialiased

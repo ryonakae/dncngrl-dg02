@@ -1,5 +1,4 @@
 import THREE from 'three';
-import {resizeManager} from '../dncngrl_02';
 
 
 // Canvas Class
