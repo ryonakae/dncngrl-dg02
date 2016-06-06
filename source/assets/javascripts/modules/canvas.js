@@ -1,4 +1,5 @@
 import THREE from 'three';
+// import OrbitControls from '../lib/OrbitControls.js';
 
 
 // Canvas Class
@@ -33,6 +34,9 @@ export default class Canvas {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setClearColor(0x000000, 0);
 
+    // controls
+    // this.controls = new OrbitControls(this.camera);
+
     // container
     this.container = this.dom;
     this.container.appendChild(this.renderer.domElement);
@@ -56,6 +60,7 @@ export default class Canvas {
   }
 
   render() {
+    // this.controls.update();
     this.renderer.render(this.scene, this.camera);
   }
 
