@@ -100,7 +100,8 @@ export default class Particle extends THREE.Mesh {
         THREE.BAS.ShaderChunk['ease_cubic_in_out'],
         THREE.BAS.ShaderChunk['ease_quad_out'],
         // quatFromAxisAngle and rotateVector functions
-        THREE.BAS.ShaderChunk['quaternion_rotation']
+        THREE.BAS.ShaderChunk['quaternion_rotation'],
+        THREE.BAS.ShaderChunk['cubic_bezier']
       ],
       // parameters must be the same as the names of uniforms and attributes, defined above
       // as a convention, I prefix uniforms with 'u' and attributes with 'a' (and constants with 'c', varyings with 'v', and temps with 't')
@@ -142,7 +143,8 @@ export default class Particle extends THREE.Mesh {
         'transformed = rotateVector(tQuat, transformed);',
         // linearly interpolate between the start and end position based on tProgress
         // and add the value as a delta
-        'transformed += mix(aStartPosition, aEndPosition, tProgress);'
+        'transformed += mix(aStartPosition, aEndPosition, tProgress);',
+        // 'transformed += cubicBezier(aStartPosition, aEndPosition, aStartPosition, aEndPosition, tProgress);'
       ]
     },
     // material uniform values go here

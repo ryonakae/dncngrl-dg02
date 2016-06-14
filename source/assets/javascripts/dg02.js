@@ -45,10 +45,10 @@ import Particle from './modules/particle';
       eyecatch.rotation.y = defaultRotateY + mouseX * 0.0002;
     }, false);
 
+    TweenMax.fromTo(eyecatch, 6.0, {time:0.0}, {time:eyecatch.totalDuration, ease:Power0.easeInOut});
     setTimeout(() => {
-      const timeline = new TimelineMax({repeat:0, repeatDelay:2.0, yoyo: false});
-      timeline.add(TweenMax.fromTo(eyecatch, 7.0, {time:0.0}, {time:eyecatch.totalDuration, ease:Power0.easeInOut}));
-    }, 1000);
+      TweenMax.fromTo(eyecatch, 4.0, {time:eyecatch.totalDuration, ease:Power0.easeInOut}, {time:0.0});
+    }, 8000);
 
 
     // introduction particle
