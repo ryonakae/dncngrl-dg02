@@ -56,17 +56,22 @@ import Particle from './modules/particle';
     const canvasIntro = new Canvas(bgIntro, 1.0);
     canvasIntro.init();
 
-    const particle = new Particle(10000);
+    const particle = new Particle(100000/2);
     canvasIntro.scene.add(particle);
+
+    setTimeout(() => {
+      const timeline = new TimelineMax({repeat:-1, repeatDelay:2.0, yoyo: true});
+      timeline.add(TweenMax.fromTo(particle, 7.0, {time:0.0}, {time:particle.totalDuration, ease:Power0.easeInOut}));
+    }, 1000);
 
 
     // gallery
-    const bgGallery = document.getElementById('bg_gallery');
-    const canvasGallery = new Canvas(bgGallery, 5.0);
-    canvasGallery.init();
-
-    const slide1 = new Slide(78, 110, 78*1.5, 110*1.5, 'out');
-    slide1.setImage(new THREE.ImageLoader().load('./assets/images/sample04.jpg'));
-    canvasGallery.scene.add(slide1);
+    // const bgGallery = document.getElementById('bg_gallery');
+    // const canvasGallery = new Canvas(bgGallery, 5.0);
+    // canvasGallery.init();
+    //
+    // const slide1 = new Slide(78, 110, 78*1.5, 110*1.5, 'out');
+    // slide1.setImage(new THREE.ImageLoader().load('./assets/images/sample04.jpg'));
+    // canvasGallery.scene.add(slide1);
   };
 })();

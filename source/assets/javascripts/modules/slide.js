@@ -136,15 +136,15 @@ export default class Slide extends THREE.Mesh {
       shading: THREE.FlatShading,
       side: THREE.DoubleSide,
       uniforms: {
-        uTime: {type: 'f', value: 0}
+        uTime: {value: 0}
       },
-      shaderFunctions: [
+      vertexFunctions: [
         THREE.BAS.ShaderChunk['cubic_bezier'],
         // THREE.BAS.ShaderChunk[(animationPhase === 'in' ? 'ease_out_cubic' : 'ease_in_cubic')],
-        THREE.BAS.ShaderChunk['ease_in_out_cubic'],
+        THREE.BAS.ShaderChunk['ease_cubic_in_out'],
         THREE.BAS.ShaderChunk['quaternion_rotation']
       ],
-      shaderParameters: [
+      vertexParameters: [
         'uniform float uTime;',
         'attribute vec2 aAnimation;',
         'attribute vec3 aStartPosition;',
@@ -152,14 +152,15 @@ export default class Slide extends THREE.Mesh {
         'attribute vec3 aControl1;',
         'attribute vec3 aEndPosition;',
       ],
-      shaderVertexInit: [
+      vertexInit: [
         'float tDelay = aAnimation.x;',
         'float tDuration = aAnimation.y;',
         'float tTime = clamp(uTime - tDelay, 0.0, tDuration);',
-        'float tProgress = ease(tTime, 0.0, 1.0, tDuration);'
+        'float tProgress = easeCubicInOut(tTime, 0.0, 1.0, tDuration);'
         // 'float tProgress = tTime / tDuration;'
       ],
-      shaderTransformPosition: [
+      vertexNormal: [],
+      vertexPosition: [
         (this.animationPhase === 'in' ? 'transformed *= tProgress;' : 'transformed *= 1.0 - tProgress;'),
         'transformed += cubicBezier(aStartPosition, aControl0, aControl1, aEndPosition, tProgress);'
       ]

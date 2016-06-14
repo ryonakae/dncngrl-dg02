@@ -42,17 +42,21 @@ export default class Particle extends THREE.Mesh {
     // temp position
     const startPosition = new THREE.Vector3();
     const endPosition = new THREE.Vector3();
-    const range = 400;
+    const range = {
+      x: window.innerWidth,
+      y: window.innerHeight,
+      z: 300
+    };
 
     // calculate the stand and end positions for each prefab
     for(i = 0; i < this.prefabCount; i++){
-      startPosition.x = THREE.Math.randFloatSpread(range) - range * 0.5;
-      startPosition.y = THREE.Math.randFloatSpread(range);
-      startPosition.z = THREE.Math.randFloatSpread(range);
+      startPosition.x = THREE.Math.randFloatSpread(range.x);
+      startPosition.y = THREE.Math.randFloatSpread(range.y);
+      startPosition.z = THREE.Math.randFloatSpread(range.z);
 
-      endPosition.x = THREE.Math.randFloatSpread(range) + range * 0.5;
-      endPosition.y = THREE.Math.randFloatSpread(range);
-      endPosition.z = THREE.Math.randFloatSpread(range);
+      endPosition.x = THREE.Math.randFloatSpread(range.x);
+      endPosition.y = THREE.Math.randFloatSpread(range.y);
+      endPosition.z = THREE.Math.randFloatSpread(range.z);
 
       this.geometry.setPrefabData(aStartPosition, i, startPosition.toArray(prefabData));
       this.geometry.setPrefabData(aEndPosition, i, endPosition.toArray(prefabData));
@@ -133,7 +137,7 @@ export default class Particle extends THREE.Mesh {
         // 'transformed' is the vertex position modified throughout the THREE.js vertex shader
         // it contains the position of each vertex in model space
         // scaling it can be done by simple multiplication
-        'transformed *= scl;',
+        // 'transformed *= scl;',
         // rotate the vector by the quaternion calculated in vertexInit
         'transformed = rotateVector(tQuat, transformed);',
         // linearly interpolate between the start and end position based on tProgress

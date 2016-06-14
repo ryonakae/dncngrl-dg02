@@ -5,21 +5,9 @@ function Bas(){
 
   THREE.BAS.ShaderChunk = {};
 
-  THREE.BAS.ShaderChunk["animation_time"] = "float tDelay = aAnimation.x;\nfloat tDuration = aAnimation.y;\nfloat tTime = clamp(uTime - tDelay, 0.0, tDuration);\nfloat tProgress = ease(tTime, 0.0, 1.0, tDuration);\n";
-
   THREE.BAS.ShaderChunk["catmull-rom"] = "vec3 catmullRom(vec3 p0, vec3 p1, vec3 p2, vec3 p3, float t)\n{\n    vec3 v0 = (p2 - p0) * 0.5;\n    vec3 v1 = (p3 - p1) * 0.5;\n    float t2 = t * t;\n    float t3 = t * t * t;\n\n    return vec3((2.0 * p1 - 2.0 * p2 + v0 + v1) * t3 + (-3.0 * p1 + 3.0 * p2 - 2.0 * v0 - v1) * t2 + v0 * t + p1);\n}\n\nvec3 catmullRom(vec3 p0, vec3 p1, vec3 p2, vec3 p3, vec2 c, float t)\n{\n    vec3 v0 = (p2 - p0) * c.x;\n    vec3 v1 = (p3 - p1) * c.y;\n    float t2 = t * t;\n    float t3 = t * t * t;\n\n    return vec3((2.0 * p1 - 2.0 * p2 + v0 + v1) * t3 + (-3.0 * p1 + 3.0 * p2 - 2.0 * v0 - v1) * t2 + v0 * t + p1);\n}\n\nfloat catmullRom(float p0, float p1, float p2, float p3, float t)\n{\n    float v0 = (p2 - p0) * 0.5;\n    float v1 = (p3 - p1) * 0.5;\n    float t2 = t * t;\n    float t3 = t * t * t;\n\n    return float((2.0 * p1 - 2.0 * p2 + v0 + v1) * t3 + (-3.0 * p1 + 3.0 * p2 - 2.0 * v0 - v1) * t2 + v0 * t + p1);\n}\n\nfloat catmullRom(float p0, float p1, float p2, float p3, vec2 c, float t)\n{\n    float v0 = (p2 - p0) * c.x;\n    float v1 = (p3 - p1) * c.y;\n    float t2 = t * t;\n    float t3 = t * t * t;\n\n    return float((2.0 * p1 - 2.0 * p2 + v0 + v1) * t3 + (-3.0 * p1 + 3.0 * p2 - 2.0 * v0 - v1) * t2 + v0 * t + p1);\n}\n";
 
   THREE.BAS.ShaderChunk["cubic_bezier"] = "vec3 cubicBezier(vec3 p0, vec3 c0, vec3 c1, vec3 p1, float t) {\n    float tn = 1.0 - t;\n\n    return tn * tn * tn * p0 + 3.0 * tn * tn * t * c0 + 3.0 * tn * t * t * c1 + t * t * t * p1;\n}\n\nvec2 cubicBezier(vec2 p0, vec2 c0, vec2 c1, vec2 p1, float t) {\n    float tn = 1.0 - t;\n\n    return tn * tn * tn * p0 + 3.0 * tn * tn * t * c0 + 3.0 * tn * t * t * c1 + t * t * t * p1;\n}\n";
-
-  THREE.BAS.ShaderChunk["ease_in_cubic"] = "float ease(float t, float b, float c, float d) {\n  return c*(t/=d)*t*t + b;\n}\n";
-
-  THREE.BAS.ShaderChunk["ease_in_out_cubic"] = "float ease(float t, float b, float c, float d) {\n  if ((t/=d/2.0) < 1.0) return c/2.0*t*t*t + b;\n  return c/2.0*((t-=2.0)*t*t + 2.0) + b;\n}\n";
-
-  THREE.BAS.ShaderChunk["ease_in_quad"] = "float ease(float t, float b, float c, float d) {\n  return c*(t/=d)*t + b;\n}\n";
-
-  THREE.BAS.ShaderChunk["ease_out_back"] = "float ease(float t, float b, float c, float d) {\n  float s = 1.70158;\n  return c*((t=t/d-1.0)*t*((s+1.0)*t + s) + 1.0) + b;\n}\n\nfloat ease(float t, float b, float c, float d, float s) {\n  return c*((t=t/d-1.0)*t*((s+1.0)*t + s) + 1.0) + b;\n}\n";
-
-  THREE.BAS.ShaderChunk["ease_out_cubic"] = "float ease(float t, float b, float c, float d) {\n  return c*((t=t/d - 1.0)*t*t + 1.0) + b;\n}\n";
 
   THREE.BAS.ShaderChunk["ease_back_in"] = "float easeBackIn(float p, float amplitude) {\n    return p * p * ((amplitude + 1.0) * p - amplitude);\n}\n\nfloat easeBackIn(float p) {\n    return easeBackIn(p, 1.70158);\n}\n\nfloat easeBackIn(float t, float b, float c, float d, float amplitude) {\n    return b + easeBackIn(t / d, amplitude) * c;\n}\n\nfloat easeBackIn(float t, float b, float c, float d) {\n    return b + easeBackIn(t / d) * c;\n}\n";
 
@@ -758,7 +746,13 @@ function Bas(){
     return attribute;
   };
 
-  THREE.BAS.PrefabBufferGeometry = function (prefab, count) {
+  /**
+   * A THREE.BufferGeometry where a 'prefab' geometry is repeated a number of times
+   * @param prefab the THREE.Geometry instance to repeat
+   * @param count the number of times to repeat it
+   * @constructor
+   */
+  THREE.BAS.PrefabBufferGeometry = function(prefab, count) {
     THREE.BufferGeometry.call(this);
 
     this.prefabGeometry = prefab;
@@ -771,7 +765,7 @@ function Bas(){
   THREE.BAS.PrefabBufferGeometry.prototype = Object.create(THREE.BufferGeometry.prototype);
   THREE.BAS.PrefabBufferGeometry.prototype.constructor = THREE.BAS.PrefabBufferGeometry;
 
-  THREE.BAS.PrefabBufferGeometry.prototype.bufferIndices = function () {
+  THREE.BAS.PrefabBufferGeometry.prototype.bufferIndices = function() {
     var prefabFaceCount = this.prefabGeometry.faces.length;
     var prefabIndexCount = this.prefabGeometry.faces.length * 3;
     var prefabIndices = [];
@@ -833,142 +827,30 @@ function Bas(){
     }
   };
 
-  /**
-   * based on BufferGeometry.computeVertexNormals
-   * calculate vertex normals for a prefab, and repeat the data in the normal buffer
-   */
-  THREE.BAS.PrefabBufferGeometry.prototype.computeVertexNormals = function () {
-    var index = this.index;
-    var attributes = this.attributes;
-    var positions = attributes.position.array;
-
-    if (attributes.normal === undefined) {
-      this.addAttribute('normal', new THREE.BufferAttribute(new Float32Array(positions.length), 3));
-    }
-
-    var normals = attributes.normal.array;
-
-    var vA, vB, vC,
-
-    pA = new THREE.Vector3(),
-    pB = new THREE.Vector3(),
-    pC = new THREE.Vector3(),
-
-    cb = new THREE.Vector3(),
-    ab = new THREE.Vector3();
-
-    var indices = index.array;
-    var prefabIndexCount = this.prefabGeometry.faces.length * 3;
-
-    for (var i = 0; i < prefabIndexCount; i += 3) {
-      vA = indices[i + 0] * 3;
-      vB = indices[i + 1] * 3;
-      vC = indices[i + 2] * 3;
-
-      pA.fromArray(positions, vA);
-      pB.fromArray(positions, vB);
-      pC.fromArray(positions, vC);
-
-      cb.subVectors(pC, pB);
-      ab.subVectors(pA, pB);
-      cb.cross(ab);
-
-      normals[vA] += cb.x;
-      normals[vA + 1] += cb.y;
-      normals[vA + 2] += cb.z;
-
-      normals[vB] += cb.x;
-      normals[vB + 1] += cb.y;
-      normals[vB + 2] += cb.z;
-
-      normals[vC] += cb.x;
-      normals[vC + 1] += cb.y;
-      normals[vC + 2] += cb.z;
-    }
-
-    for (var j = 1; j < this.prefabCount; j++) {
-      for (var k = 0; k < prefabIndexCount; k++) {
-        normals[j * prefabIndexCount + k] = normals[k];
-      }
-    }
-
-    this.normalizeNormals();
-
-    attributes.normal.needsUpdate = true;
-  };
-
-  THREE.BAS.PrefabBufferGeometry.prototype.createAttribute = function (name, itemSize, factory) {
+  THREE.BAS.PrefabBufferGeometry.prototype.createAttribute = function(name, itemSize, factory) {
     var buffer = new Float32Array(this.prefabCount * this.prefabVertexCount * itemSize);
     var attribute = new THREE.BufferAttribute(buffer, itemSize);
 
     this.addAttribute(name, attribute);
 
     if (factory) {
-      for (var i = 0, offset = 0; i < this.prefabCount; i++) {
-        var r = factory(i, this.prefabCount);
+      var data = [];
 
-        for (var j = 0; j < this.prefabVertexCount; j++) {
-          for (var k = 0; k < itemSize; k++) {
-            buffer[offset++] = typeof r === 'number' ? r : r[k];
-          }
-        }
+      for (var i = 0; i < this.prefabCount; i++) {
+        this.setPrefabData(attribute, i, factory(data, i, this.prefabCount));
       }
     }
 
     return attribute;
   };
 
-  THREE.BAS.PrefabBufferGeometry.prototype.setAttribute4 = function (name, data) {
-    var offset = 0;
-    var array = this.geometry.attributes[name].array;
-    var i, j;
-
-    for (i = 0; i < data.length; i++) {
-      var v = data[i];
-
-      for (j = 0; j < this.prefabVertexCount; j++) {
-        array[offset++] = v.x;
-        array[offset++] = v.y;
-        array[offset++] = v.z;
-        array[offset++] = v.w;
-      }
-    }
-
-    this.geometry.attributes[name].needsUpdate = true;
-  };
-  THREE.BAS.PrefabBufferGeometry.prototype.setAttribute3 = function (name, data) {
-    var offset = 0;
-    var array = this.geometry.attributes[name].array;
-    var i, j;
-
-    for (i = 0; i < data.length; i++) {
-      var v = data[i];
-
-      for (j = 0; j < this.prefabVertexCount; j++) {
-        array[offset++] = v.x;
-        array[offset++] = v.y;
-        array[offset++] = v.z;
-      }
-    }
-
-    this.geometry.attributes[name].needsUpdate = true;
-  };
-  THREE.BAS.PrefabBufferGeometry.prototype.setAttribute2 = function (name, data) {
-    var offset = 0;
-    var array = this.geometry.attributes[name].array;
-    var i, j;
-
-    for (i = 0; i < this.prefabCount; i++) {
-      var v = data[i];
-
-      for (j = 0; j < this.prefabVertexCount; j++) {
-        array[offset++] = v.x;
-        array[offset++] = v.y;
-      }
-    }
-
-    this.geometry.attributes[name].needsUpdate = true;
-  };
+  /**
+   * Copy data for all vertices of the prefab
+   * usually called in a loop
+   * @param attribute The attribute or attribute name where data is to be stored.
+   * @param prefabIndex Index of the prefab in the buffer geometry.
+   * @param data Array of data. Length should be equal to item size of the attribute.
+   */
   THREE.BAS.PrefabBufferGeometry.prototype.setPrefabData = function(attribute, prefabIndex, data) {
     attribute = (typeof attribute === 'string') ? this.attributes[attribute] : attribute;
 
@@ -981,41 +863,71 @@ function Bas(){
     }
   };
 
-  THREE.BAS.BaseAnimationMaterial = function (parameters) {
+  THREE.BAS.BaseAnimationMaterial = function (parameters, uniformValues) {
     THREE.ShaderMaterial.call(this);
 
-    this.shaderFunctions = [];
-    this.shaderParameters = [];
-    this.shaderVertexInit = [];
-    this.shaderTransformNormal = [];
-    this.shaderTransformPosition = [];
-
     this.setValues(parameters);
+
+    // todo add missing default defines
+
+    if (uniformValues) {
+      uniformValues.map && (this.defines['USE_MAP'] = '');
+      uniformValues.normalMap && (this.defines['USE_NORMALMAP'] = '');
+      uniformValues.envMap && (this.defines['USE_ENVMAP'] = '');
+
+      if (uniformValues.envMap) {
+        this.defines['USE_ENVMAP'] = '';
+
+        var envMapTypeDefine = 'ENVMAP_TYPE_CUBE';
+        var envMapModeDefine = 'ENVMAP_MODE_REFLECTION';
+        var envMapBlendingDefine = 'ENVMAP_BLENDING_MULTIPLY';
+
+        switch (uniformValues.envMap.mapping) {
+          case THREE.CubeReflectionMapping:
+          case THREE.CubeRefractionMapping:
+            envMapTypeDefine = 'ENVMAP_TYPE_CUBE';
+            break;
+          case THREE.CubeUVReflectionMapping:
+          case THREE.CubeUVRefractionMapping:
+            envMapTypeDefine = 'ENVMAP_TYPE_CUBE_UV';
+            break;
+          case THREE.EquirectangularReflectionMapping:
+          case THREE.EquirectangularRefractionMapping:
+            envMapTypeDefine = 'ENVMAP_TYPE_EQUIREC';
+            break;
+          case THREE.SphericalReflectionMapping:
+            envMapTypeDefine = 'ENVMAP_TYPE_SPHERE';
+            break;
+        }
+
+        switch (uniformValues.envMap.mapping) {
+          case THREE.CubeRefractionMapping:
+          case THREE.EquirectangularRefractionMapping:
+            envMapModeDefine = 'ENVMAP_MODE_REFRACTION';
+            break;
+        }
+
+        switch (uniformValues.combine) {
+          case THREE.MixOperation:
+            envMapBlendingDefine = 'ENVMAP_BLENDING_MIX';
+            break;
+          case THREE.AddOperation:
+            envMapBlendingDefine = 'ENVMAP_BLENDING_ADD';
+            break;
+          case THREE.MultiplyOperation:
+          default:
+            envMapBlendingDefine = 'ENVMAP_BLENDING_MULTIPLY';
+            break;
+        }
+
+        this.defines[envMapTypeDefine] = '';
+        this.defines[envMapBlendingDefine] = '';
+        this.defines[envMapModeDefine] = '';
+      }
+    }
   };
   THREE.BAS.BaseAnimationMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
   THREE.BAS.BaseAnimationMaterial.prototype.constructor = THREE.BAS.BaseAnimationMaterial;
-
-  // abstract
-  THREE.BAS.BaseAnimationMaterial.prototype._concatVertexShader = function () {
-    return '';
-  };
-
-  THREE.BAS.BaseAnimationMaterial.prototype._concatFunctions = function () {
-    return this.shaderFunctions.join('\n');
-  };
-  THREE.BAS.BaseAnimationMaterial.prototype._concatParameters = function () {
-    return this.shaderParameters.join('\n');
-  };
-  THREE.BAS.BaseAnimationMaterial.prototype._concatVertexInit = function () {
-    return this.shaderVertexInit.join('\n');
-  };
-  THREE.BAS.BaseAnimationMaterial.prototype._concatTransformNormal = function () {
-    return this.shaderTransformNormal.join('\n');
-  };
-  THREE.BAS.BaseAnimationMaterial.prototype._concatTransformPosition = function () {
-    return this.shaderTransformPosition.join('\n');
-  };
-
 
   THREE.BAS.BaseAnimationMaterial.prototype.setUniformValues = function (values) {
     for (var key in values) {
@@ -1023,7 +935,7 @@ function Bas(){
         var uniform = this.uniforms[key];
         var value = values[key];
 
-        // todo add matrix uniform types
+        // todo add matrix uniform types?
         switch (uniform.type) {
           case 'c': // color
             uniform.value.set(value);
@@ -1042,19 +954,34 @@ function Bas(){
     }
   };
 
+  THREE.BAS.BaseAnimationMaterial.prototype._stringifyChunk = function(name) {
+    return this[name] ? (this[name].join('\n')) : '';
+  };
+
   THREE.BAS.BasicAnimationMaterial = function(parameters, uniformValues) {
-    THREE.BAS.BaseAnimationMaterial.call(this, parameters);
+    this.varyingParameters = [];
+
+    this.vertexFunctions = [];
+    this.vertexParameters = [];
+    this.vertexInit = [];
+    this.vertexNormal = [];
+    this.vertexPosition = [];
+    this.vertexColor = [];
+
+    this.fragmentFunctions = [];
+    this.fragmentParameters = [];
+    this.fragmentInit = [];
+    this.fragmentMap = [];
+    this.fragmentAlpha = [];
+
+    THREE.BAS.BaseAnimationMaterial.call(this, parameters, uniformValues);
 
     var basicShader = THREE.ShaderLib['basic'];
 
     this.uniforms = THREE.UniformsUtils.merge([basicShader.uniforms, this.uniforms]);
     this.lights = false;
     this.vertexShader = this._concatVertexShader();
-    this.fragmentShader = basicShader.fragmentShader;
-
-    // todo add missing default defines
-    uniformValues.map && (this.defines['USE_MAP'] = '');
-    uniformValues.normalMap && (this.defines['USE_NORMALMAP'] = '');
+    this.fragmentShader = this._concatFragmentShader();
 
     this.setUniformValues(uniformValues);
   };
@@ -1062,7 +989,7 @@ function Bas(){
   THREE.BAS.BasicAnimationMaterial.prototype.constructor = THREE.BAS.BasicAnimationMaterial;
 
   THREE.BAS.BasicAnimationMaterial.prototype._concatVertexShader = function() {
-    // based on THREE.ShaderLib.phong
+    // based on THREE.ShaderLib.basic
     return [
 
       THREE.ShaderChunk[ "common" ],
@@ -1074,13 +1001,13 @@ function Bas(){
       THREE.ShaderChunk[ "skinning_pars_vertex" ],
       THREE.ShaderChunk[ "logdepthbuf_pars_vertex" ],
 
-      this._concatFunctions(),
-
-      this._concatParameters(),
+      this._stringifyChunk('vertexFunctions'),
+      this._stringifyChunk('vertexParameters'),
+      this._stringifyChunk('varyingParameters'),
 
       "void main() {",
 
-      this._concatVertexInit(),
+      this._stringifyChunk('vertexInit'),
 
       THREE.ShaderChunk[ "uv_vertex" ],
       THREE.ShaderChunk[ "uv2_vertex" ],
@@ -1091,7 +1018,7 @@ function Bas(){
 
       THREE.ShaderChunk[ "beginnormal_vertex" ],
 
-      this._concatTransformNormal(),
+      this._stringifyChunk('vertexNormal'),
 
       THREE.ShaderChunk[ "morphnormal_vertex" ],
       THREE.ShaderChunk[ "skinnormal_vertex" ],
@@ -1101,7 +1028,8 @@ function Bas(){
 
       THREE.ShaderChunk[ "begin_vertex" ],
 
-      this._concatTransformPosition(),
+      this._stringifyChunk('vertexPosition'),
+      this._stringifyChunk('vertexColor'),
 
       THREE.ShaderChunk[ "morphtarget_vertex" ],
       THREE.ShaderChunk[ "skinning_vertex" ],
@@ -1116,21 +1044,208 @@ function Bas(){
     ].join( "\n" );
   };
 
-  THREE.BAS.PhongAnimationMaterial = function(parameters, uniformValues) {
-      THREE.BAS.BaseAnimationMaterial.call(this, parameters);
+  THREE.BAS.BasicAnimationMaterial.prototype._concatFragmentShader = function() {
+    return [
+      "uniform vec3 diffuse;",
+      "uniform float opacity;",
 
-      var phongShader = THREE.ShaderLib['phong'];
+      this._stringifyChunk('fragmentFunctions'),
+      this._stringifyChunk('fragmentParameters'),
+      this._stringifyChunk('varyingParameters'),
 
-      this.uniforms = THREE.UniformsUtils.merge([phongShader.uniforms, this.uniforms]);
-      this.lights = true;
-      this.vertexShader = this._concatVertexShader();
-      this.fragmentShader = phongShader.fragmentShader;
+      "#ifndef FLAT_SHADED",
 
-      // todo add missing default defines
-      uniformValues.map && (this.defines['USE_MAP'] = '');
-      uniformValues.normalMap && (this.defines['USE_NORMALMAP'] = '');
+      "	varying vec3 vNormal;",
 
-      this.setUniformValues(uniformValues);
+      "#endif",
+
+      THREE.ShaderChunk[ "common" ],
+      THREE.ShaderChunk[ "color_pars_fragment" ],
+      THREE.ShaderChunk[ "uv_pars_fragment" ],
+      THREE.ShaderChunk[ "uv2_pars_fragment" ],
+      THREE.ShaderChunk[ "map_pars_fragment" ],
+      THREE.ShaderChunk[ "alphamap_pars_fragment" ],
+      THREE.ShaderChunk[ "aomap_pars_fragment" ],
+      THREE.ShaderChunk[ "envmap_pars_fragment" ],
+      THREE.ShaderChunk[ "fog_pars_fragment" ],
+      THREE.ShaderChunk[ "specularmap_pars_fragment" ],
+      THREE.ShaderChunk[ "logdepthbuf_pars_fragment" ],
+
+      "void main() {",
+
+      this._stringifyChunk('fragmentInit'),
+
+      "	vec4 diffuseColor = vec4( diffuse, opacity );",
+
+      THREE.ShaderChunk[ "logdepthbuf_fragment" ],
+      (this._stringifyChunk('fragmentMap') || THREE.ShaderChunk[ "map_fragment" ]),
+
+      THREE.ShaderChunk[ "color_fragment" ],
+
+      this._stringifyChunk('fragmentAlpha'),
+
+      THREE.ShaderChunk[ "alphamap_fragment" ],
+      THREE.ShaderChunk[ "alphatest_fragment" ],
+      THREE.ShaderChunk[ "specularmap_fragment" ],
+
+      "	ReflectedLight reflectedLight;",
+      "	reflectedLight.directDiffuse = vec3( 0.0 );",
+      "	reflectedLight.directSpecular = vec3( 0.0 );",
+      "	reflectedLight.indirectDiffuse = diffuseColor.rgb;",
+      "	reflectedLight.indirectSpecular = vec3( 0.0 );",
+
+      THREE.ShaderChunk[ "aomap_fragment" ],
+
+      "	vec3 outgoingLight = reflectedLight.indirectDiffuse;",
+
+      THREE.ShaderChunk[ "envmap_fragment" ],
+      THREE.ShaderChunk[ "linear_to_gamma_fragment" ],
+      THREE.ShaderChunk[ "fog_fragment" ],
+
+      "	gl_FragColor = vec4( outgoingLight, diffuseColor.a );",
+
+      "}"
+    ].join('\n');
+  };
+
+  THREE.BAS.DepthAnimationMaterial = function (parameters) {
+    this.depthPacking = THREE.RGBADepthPacking;
+    this.clipping = true;
+
+    this.vertexFunctions = [];
+    this.vertexParameters = [];
+    this.vertexInit = [];
+    this.vertexPosition = [];
+
+    THREE.BAS.BaseAnimationMaterial.call(this, parameters);
+
+    var depthShader = THREE.ShaderLib['depth'];
+
+    this.uniforms = THREE.UniformsUtils.merge([depthShader.uniforms, this.uniforms]);
+    this.vertexShader = this._concatVertexShader();
+    this.fragmentShader = depthShader.fragmentShader;
+  };
+  THREE.BAS.DepthAnimationMaterial.prototype = Object.create(THREE.BAS.BaseAnimationMaterial.prototype);
+  THREE.BAS.DepthAnimationMaterial.prototype.constructor = THREE.BAS.DepthAnimationMaterial;
+
+  THREE.BAS.DepthAnimationMaterial.prototype._concatVertexShader = function () {
+    return [
+      THREE.ShaderChunk["common"],
+      THREE.ShaderChunk["uv_pars_vertex"],
+      THREE.ShaderChunk["displacementmap_pars_vertex"],
+      THREE.ShaderChunk["morphtarget_pars_vertex"],
+      THREE.ShaderChunk["skinning_pars_vertex"],
+      THREE.ShaderChunk["logdepthbuf_pars_vertex"],
+      THREE.ShaderChunk["clipping_planes_pars_vertex"],
+
+      this._stringifyChunk('vertexFunctions'),
+      this._stringifyChunk('vertexParameters'),
+
+      'void main() {',
+
+      this._stringifyChunk('vertexInit'),
+
+      THREE.ShaderChunk["uv_vertex"],
+      THREE.ShaderChunk["skinbase_vertex"],
+
+      THREE.ShaderChunk["begin_vertex"],
+
+      this._stringifyChunk('vertexPosition'),
+
+
+      THREE.ShaderChunk["displacementmap_vertex"],
+      THREE.ShaderChunk["morphtarget_vertex"],
+      THREE.ShaderChunk["skinning_vertex"],
+      THREE.ShaderChunk["project_vertex"],
+      THREE.ShaderChunk["logdepthbuf_vertex"],
+      THREE.ShaderChunk["clipping_planes_vertex"],
+
+      '}'
+
+    ].join('\n');
+  };
+
+  THREE.BAS.DistanceAnimationMaterial = function (parameters) {
+    this.depthPacking = THREE.RGBADepthPacking;
+    this.clipping = true;
+
+    this.vertexFunctions = [];
+    this.vertexParameters = [];
+    this.vertexInit = [];
+    this.vertexPosition = [];
+
+    THREE.BAS.BaseAnimationMaterial.call(this, parameters);
+
+    var distanceShader = THREE.ShaderLib['distanceRGBA'];
+
+    this.uniforms = THREE.UniformsUtils.merge([distanceShader.uniforms, this.uniforms]);
+    this.vertexShader = this._concatVertexShader();
+    this.fragmentShader = distanceShader.fragmentShader;
+  };
+  THREE.BAS.DistanceAnimationMaterial.prototype = Object.create(THREE.BAS.BaseAnimationMaterial.prototype);
+  THREE.BAS.DistanceAnimationMaterial.prototype.constructor = THREE.BAS.DistanceAnimationMaterial;
+
+  THREE.BAS.DistanceAnimationMaterial.prototype._concatVertexShader = function () {
+    return [
+      'varying vec4 vWorldPosition;',
+
+      THREE.ShaderChunk["common"],
+      THREE.ShaderChunk["morphtarget_pars_vertex"],
+      THREE.ShaderChunk["skinning_pars_vertex"],
+      THREE.ShaderChunk["clipping_planes_pars_vertex"],
+
+      this._stringifyChunk('vertexFunctions'),
+      this._stringifyChunk('vertexParameters'),
+
+      'void main() {',
+
+      this._stringifyChunk('vertexInit'),
+
+      THREE.ShaderChunk["skinbase_vertex"],
+      THREE.ShaderChunk["begin_vertex"],
+
+      this._stringifyChunk('vertexPosition'),
+
+      THREE.ShaderChunk["morphtarget_vertex"],
+      THREE.ShaderChunk["skinning_vertex"],
+      THREE.ShaderChunk["project_vertex"],
+      THREE.ShaderChunk["worldpos_vertex"],
+      THREE.ShaderChunk["clipping_planes_vertex"],
+
+      'vWorldPosition = worldPosition;',
+
+      '}'
+
+    ].join('\n');
+  };
+
+  THREE.BAS.PhongAnimationMaterial = function (parameters, uniformValues) {
+    this.varyingParameters = [];
+
+    this.vertexFunctions = [];
+    this.vertexParameters = [];
+    this.vertexInit = [];
+    this.vertexNormal = [];
+    this.vertexPosition = [];
+    this.vertexColor = [];
+
+    this.fragmentFunctions = [];
+    this.fragmentParameters = [];
+    this.fragmentInit = [];
+    this.fragmentAlpha = [];
+    this.fragmentEmissive = [];
+    this.fragmentSpecular = [];
+
+    THREE.BAS.BaseAnimationMaterial.call(this, parameters, uniformValues);
+
+    var phongShader = THREE.ShaderLib['phong'];
+
+    this.uniforms = THREE.UniformsUtils.merge([phongShader.uniforms, this.uniforms]);
+    this.lights = true;
+    this.vertexShader = this._concatVertexShader();
+    this.fragmentShader = this._concatFragmentShader();
+
+    this.setUniformValues(uniformValues);
   };
   THREE.BAS.PhongAnimationMaterial.prototype = Object.create(THREE.BAS.BaseAnimationMaterial.prototype);
   THREE.BAS.PhongAnimationMaterial.prototype.constructor = THREE.BAS.PhongAnimationMaterial;
