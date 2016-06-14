@@ -51,13 +51,12 @@ import Particle from './modules/particle';
     }, 1000);
 
 
-    // introduction
+    // introduction particle
     const bgIntro = document.getElementById('bg_introduction');
     const canvasIntro = new Canvas(bgIntro, 1.0);
     canvasIntro.init();
 
     const particle = new Particle(10000);
-    particle.init();
     canvasIntro.scene.add(particle);
 
 
