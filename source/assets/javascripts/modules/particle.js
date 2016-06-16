@@ -39,6 +39,7 @@ export default class Particle extends THREE.Mesh {
 
     const aStartPosition = this.geometry.createAttribute('aStartPosition', 3);
     const aEndPosition = this.geometry.createAttribute('aEndPosition', 3);
+
     // temp position
     const startPosition = new THREE.Vector3();
     const endPosition = new THREE.Vector3();
@@ -52,7 +53,7 @@ export default class Particle extends THREE.Mesh {
     for(i = 0; i < this.prefabCount; i++){
       startPosition.x = THREE.Math.randFloatSpread(range.x);
       startPosition.y = THREE.Math.randFloatSpread(range.y);
-      startPosition.z = THREE.Math.randFloatSpread(range.z);
+      startPosition.z = THREE.Math.randFloatSpread(range.z) + 500;
 
       endPosition.x = THREE.Math.randFloatSpread(range.x);
       endPosition.y = THREE.Math.randFloatSpread(range.y);
@@ -166,7 +167,7 @@ export default class Particle extends THREE.Mesh {
         return this.material.uniforms['uTime'].value;
       },
       set: function (v) {
-        this.material.uniforms['uTime'].value = v;
+        return this.material.uniforms['uTime'].value = v;
       }
     });
   }

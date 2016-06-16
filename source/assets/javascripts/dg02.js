@@ -46,9 +46,9 @@ import Particle from './modules/particle';
     }, false);
 
     TweenMax.fromTo(eyecatch, 6.0, {time:0.0}, {time:eyecatch.totalDuration, ease:Power0.easeInOut});
-    setTimeout(() => {
+    bgTop.addEventListener('click', ()=>{
       TweenMax.fromTo(eyecatch, 4.0, {time:eyecatch.totalDuration, ease:Power0.easeInOut}, {time:0.0});
-    }, 8000);
+    }, false);
 
 
     // introduction particle
@@ -59,10 +59,7 @@ import Particle from './modules/particle';
     const particle = new Particle(100000/2);
     canvasIntro.scene.add(particle);
 
-    setTimeout(() => {
-      const timeline = new TimelineMax({repeat:-1, repeatDelay:2.0, yoyo: true});
-      timeline.add(TweenMax.fromTo(particle, 7.0, {time:0.0}, {time:particle.totalDuration, ease:Power0.easeInOut}));
-    }, 1000);
+    TweenMax.fromTo(particle, 6.0, {time:0.0}, {time:particle.totalDuration, ease:Power0.easeInOut});
 
 
     // gallery
