@@ -23,7 +23,7 @@ import Particle from './modules/particle';
     const canvasTop = new Canvas(bgTop, 5.0);
     canvasTop.init();
 
-    const eyecatch = new Slide(78, 110, 78*1.5, 110*1.5, 'out');
+    const eyecatch = new Slide(78, 110, 78*1.5, 110*1.5, 'eyecatch', 'in');
     eyecatch.setImage(new THREE.ImageLoader().load('./assets/images/sample04.jpg'));
     eyecatch.position.y = 10;
     canvasTop.scene.add(eyecatch);
@@ -46,23 +46,10 @@ import Particle from './modules/particle';
     }, false);
 
     // eyecatch animation
-    eyecatch.uAnimationPhase = 1;
-    TweenMax.fromTo(eyecatch, 6.0, {
-      uTime: 0.0
-    }, {
-      uTime: eyecatch.totalDuration,
-      ease: Power0.easeInOut
-    });
-
     setTimeout(() => {
-      TweenMax.fromTo(eyecatch, 4.0, {
-        uAnimationPhase: 1,
-        uTime: eyecatch.totalDuration,
-        ease: Power0.easeInOut
-      }, {
-        uTime: 0.0
-      });
-    }, 8000);
+      const timeline = new TimelineMax({repeat:-1, repeatDelay:1.0, yoyo: true});
+      timeline.add(TweenMax.fromTo(eyecatch, 7.0, {time:0.0}, {time:eyecatch.totalDuration, ease:Power0.easeInOut}));
+    }, 1000);
 
 
     // introduction particle
@@ -74,7 +61,7 @@ import Particle from './modules/particle';
     canvasIntro.scene.add(particle);
 
     setTimeout(() => {
-      const timeline = new TimelineMax({repeat:-1, repeatDelay:2.0, yoyo: true});
+      const timeline = new TimelineMax({repeat:-1, repeatDelay:1.0, yoyo: true});
       timeline.add(TweenMax.fromTo(particle, 7.0, {time:0.0}, {time:particle.totalDuration, ease:Power0.easeInOut}));
     }, 1000);
 
