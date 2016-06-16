@@ -25,7 +25,7 @@ import Particle from './modules/particle';
 
     const eyecatch = new Slide(78, 110, 78*1.5, 110*1.5, 'eyecatch', 'in');
     eyecatch.setImage(new THREE.ImageLoader().load('./assets/images/sample04.jpg'));
-    eyecatch.position.y = 10;
+    eyecatch.position.y = 3;
     canvasTop.scene.add(eyecatch);
 
     // eyecatch parallax
@@ -47,23 +47,19 @@ import Particle from './modules/particle';
 
     // eyecatch animation
     setTimeout(() => {
-      const timeline = new TimelineMax({repeat:-1, repeatDelay:1.0, yoyo: true});
+      const timeline = new TimelineMax({repeat:0, repeatDelay:1.0, yoyo: false});
       timeline.add(TweenMax.fromTo(eyecatch, 7.0, {time:0.0}, {time:eyecatch.totalDuration, ease:Power0.easeInOut}));
     }, 1000);
 
 
     // introduction particle
     const bgIntro = document.getElementById('bg_introduction');
-    const canvasIntro = new Canvas(bgIntro, 1.0);
+    const canvasIntro = new Canvas(bgIntro, 30.0);
     canvasIntro.init();
 
-    const particle = new Particle(100000/2);
-    canvasIntro.scene.add(particle);
-
-    setTimeout(() => {
-      const timeline = new TimelineMax({repeat:-1, repeatDelay:1.0, yoyo: true});
-      timeline.add(TweenMax.fromTo(particle, 7.0, {time:0.0}, {time:particle.totalDuration, ease:Power0.easeInOut}));
-    }, 1000);
+    const particle = new Particle(100000);
+    canvasIntro.scene.add(particle.particleSystem);
+    particle.animate();
 
 
     // gallery
