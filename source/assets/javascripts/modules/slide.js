@@ -32,12 +32,15 @@ export default class Slide extends THREE.Mesh {
 
     this.bufferPositions();
 
-    this.aAnimation = this.geometry.createAttribute('aAnimation', 2);
-    this.aStartPosition = this.geometry.createAttribute('aStartPosition', 3);
+    this.aAnimationIn = this.geometry.createAttribute('aAnimationIn', 2);
+    this.aAnimationOut = this.geometry.createAttribute('aAnimationOut', 2);
+    this.aStartPositionIn = this.geometry.createAttribute('aStartPositionIn', 3);
+    this.aStartPositionOut = this.geometry.createAttribute('aStartPositionOut', 3);
     this.aControl0 = this.geometry.createAttribute('aControl0', 3);
     this.aControl1 = this.geometry.createAttribute('aControl1', 3);
     this.aControl2 = this.geometry.createAttribute('aControl2', 3);
-    this.aEndPosition = this.geometry.createAttribute('aEndPosition', 3);
+    this.aEndPositionIn = this.geometry.createAttribute('aEndPositionIn', 3);
+    this.aEndPositionOut = this.geometry.createAttribute('aEndPositionOut', 3);
 
     this.startPosition = new THREE.Vector3();
     this.control0 = new THREE.Vector3();
@@ -55,35 +58,29 @@ export default class Slide extends THREE.Mesh {
       // animation
       const duration = THREE.Math.randFloat(this.minDuration, this.maxDuration);
       const delayX = THREE.Math.mapLinear(centroid.x, -this.width * 0.5, this.width * 0.5, 0.0, this.maxDelayX);
-      let delayY;
+      let delayYIn, delayYOut;
 
-      if (this.animationPhase === 'in') {
-        delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, this.height * 0.5, 0.0, this.maxDelayY);
-      }
-      else if (this.animationPhase === 'out') {
-        delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, this.height * 0.5, this.maxDelayY, 0.0);
-      }
+      delayYIn = THREE.Math.mapLinear(Math.abs(centroid.y), 0, this.height * 0.5, 0.0, this.maxDelayY);
+      delayYOut = THREE.Math.mapLinear(Math.abs(centroid.y), 0, this.height * 0.5, this.maxDelayY, 0.0);
 
       for (v = 0; v < 6; v += 2) {
-        this.aAnimation.array[i2 + v]     = delayX + delayY + (Math.random() * this.stretch * duration);
-        this.aAnimation.array[i2 + v + 1] = duration;
+        this.aAnimationIn.array[i2 + v]     = delayX + delayYIn + (Math.random() * this.stretch * duration);
+        this.aAnimationIn.array[i2 + v + 1] = duration;
+
+        this.aAnimationOut.array[i2 + v]     = delayX + delayYOut + (Math.random() * this.stretch * duration);
+        this.aAnimationOut.array[i2 + v + 1] = duration;
       }
 
       // startPosition
       this.startPosition.copy(centroid);
-      if (this.animationPhase === 'in') {
-        for (v = 0; v < 9; v += 3) {
-          this.aStartPosition.array[i3 + v    ] = centroid.x;
-          this.aStartPosition.array[i3 + v + 1] = centroid.y + 200;
-          this.aStartPosition.array[i3 + v + 2] = centroid.z - 150;
-        }
-      }
-      else if (this.animationPhase === 'out') {
-        for (v = 0; v < 9; v += 3) {
-          this.aStartPosition.array[i3 + v    ] = centroid.x;
-          this.aStartPosition.array[i3 + v + 1] = centroid.y;
-          this.aStartPosition.array[i3 + v + 2] = centroid.z;
-        }
+      for (v = 0; v < 9; v += 3) {
+        this.aStartPositionIn.array[i3 + v    ] = centroid.x;
+        this.aStartPositionIn.array[i3 + v + 1] = centroid.y + 200;
+        this.aStartPositionIn.array[i3 + v + 2] = centroid.z - 150;
+
+        this.aStartPositionOut.array[i3 + v    ] = centroid.x;
+        this.aStartPositionOut.array[i3 + v + 1] = centroid.y;
+        this.aStartPositionOut.array[i3 + v + 2] = centroid.z;
       }
 
       // controls
@@ -115,19 +112,14 @@ export default class Slide extends THREE.Mesh {
 
       // endPosition
       this.endPosition.copy(this.startPosition);
-      if (this.animationPhase === 'in') {
-        for (v = 0; v < 9; v += 3) {
-          this.aEndPosition.array[i3 + v]     = this.endPosition.x;
-          this.aEndPosition.array[i3 + v + 1] = this.endPosition.y;
-          this.aEndPosition.array[i3 + v + 2] = this.endPosition.z;
-        }
-      }
-      else if (this.animationPhase === 'out') {
-        for (v = 0; v < 9; v += 3) {
-          this.aEndPosition.array[i3 + v]     = this.endPosition.x;
-          this.aEndPosition.array[i3 + v + 1] = this.endPosition.y + 200;
-          this.aEndPosition.array[i3 + v + 2] = this.endPosition.z - 150;
-        }
+      for (v = 0; v < 9; v += 3) {
+        this.aEndPositionIn.array[i3 + v]     = this.endPosition.x;
+        this.aEndPositionIn.array[i3 + v + 1] = this.endPosition.y;
+        this.aEndPositionIn.array[i3 + v + 2] = this.endPosition.z;
+
+        this.aEndPositionOut.array[i3 + v]     = this.endPosition.x;
+        this.aEndPositionOut.array[i3 + v + 1] = this.endPosition.y + 200;
+        this.aEndPositionOut.array[i3 + v + 2] = this.endPosition.z - 150;
       }
     }
 
@@ -136,7 +128,8 @@ export default class Slide extends THREE.Mesh {
       shading: THREE.FlatShading,
       side: THREE.DoubleSide,
       uniforms: {
-        uTime: {value: 0}
+        uTime: {value: 0},
+        uAnimationPhase: {value: 1} // in:0 / out:1
       },
       vertexFunctions: [
         THREE.BAS.ShaderChunk['cubic_bezier'],
@@ -146,23 +139,30 @@ export default class Slide extends THREE.Mesh {
       ],
       vertexParameters: [
         'uniform float uTime;',
-        'attribute vec2 aAnimation;',
-        'attribute vec3 aStartPosition;',
+        'uniform int uAnimationPhase;',
+        'attribute vec2 aAnimationIn;',
+        'attribute vec2 aAnimationOut;',
+        'attribute vec3 aStartPositionIn;',
+        'attribute vec3 aStartPositionOut;',
         'attribute vec3 aControl0;',
         'attribute vec3 aControl1;',
-        'attribute vec3 aEndPosition;',
+        'attribute vec3 aEndPositionIn;',
+        'attribute vec3 aEndPositionOut;',
       ],
       vertexInit: [
-        'float tDelay = aAnimation.x;',
-        'float tDuration = aAnimation.y;',
+        'float tDelay;',
+        'float tDuration;',
+        'uAnimationPhase == 0 ? tDelay = aAnimationIn.x : tDelay = aAnimationOut.x;',
+        'uAnimationPhase == 0 ? tDuration = aAnimationIn.y : tDuration = aAnimationOut.y;',
         'float tTime = clamp(uTime - tDelay, 0.0, tDuration);',
         'float tProgress = easeCubicInOut(tTime, 0.0, 1.0, tDuration);'
         // 'float tProgress = tTime / tDuration;'
       ],
       vertexNormal: [],
       vertexPosition: [
-        (this.animationPhase === 'in' ? 'transformed *= tProgress;' : 'transformed *= 1.0 - tProgress;'),
-        'transformed += cubicBezier(aStartPosition, aControl0, aControl1, aEndPosition, tProgress);'
+        // (this.animationPhase === 'in' ? 'transformed *= tProgress;' : 'transformed *= 1.0 - tProgress;'),
+        'uAnimationPhase == 0 ? transformed *= tProgress : transformed *= 1.0 - tProgress;',
+        'uAnimationPhase == 0 ? transformed += cubicBezier(aStartPositionIn, aControl0, aControl1, aEndPositionIn, tProgress) : transformed += cubicBezier(aStartPositionOut, aControl0, aControl1, aEndPositionOut, tProgress);'
       ]
     }, {
       map: new THREE.Texture()
@@ -231,12 +231,20 @@ export default class Slide extends THREE.Mesh {
   }
 
   defineProperty() {
-    Object.defineProperty(this, 'time', {
+    Object.defineProperty(this, 'uTime', {
       get: function () {
         return this.material.uniforms['uTime'].value;
       },
       set: function (v) {
-        this.material.uniforms['uTime'].value = v;
+        return this.material.uniforms['uTime'].value = v;
+      }
+    });
+    Object.defineProperty(this, 'uAnimationPhase', {
+      get: function () {
+        return this.material.uniforms['uAnimationPhase'].value;
+      },
+      set: function (v) {
+        return this.material.uniforms['uAnimationPhase'].value = v;
       }
     });
   }

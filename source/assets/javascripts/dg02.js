@@ -23,7 +23,7 @@ import Particle from './modules/particle';
     const canvasTop = new Canvas(bgTop, 5.0);
     canvasTop.init();
 
-    const eyecatch = new Slide(78, 110, 78*1.5, 110*1.5, 'in');
+    const eyecatch = new Slide(78, 110, 78*1.5, 110*1.5, 'out');
     eyecatch.setImage(new THREE.ImageLoader().load('./assets/images/sample04.jpg'));
     eyecatch.position.y = 10;
     canvasTop.scene.add(eyecatch);
@@ -45,9 +45,23 @@ import Particle from './modules/particle';
       eyecatch.rotation.y = defaultRotateY + mouseX * 0.0002;
     }, false);
 
-    TweenMax.fromTo(eyecatch, 6.0, {time:0.0}, {time:eyecatch.totalDuration, ease:Power0.easeInOut});
+    // eyecatch animation
+    eyecatch.uAnimationPhase = 1;
+    TweenMax.fromTo(eyecatch, 6.0, {
+      uTime: 0.0
+    }, {
+      uTime: eyecatch.totalDuration,
+      ease: Power0.easeInOut
+    });
+
     setTimeout(() => {
-      TweenMax.fromTo(eyecatch, 4.0, {time:eyecatch.totalDuration, ease:Power0.easeInOut}, {time:0.0});
+      TweenMax.fromTo(eyecatch, 4.0, {
+        uAnimationPhase: 1,
+        uTime: eyecatch.totalDuration,
+        ease: Power0.easeInOut
+      }, {
+        uTime: 0.0
+      });
     }, 8000);
 
 
