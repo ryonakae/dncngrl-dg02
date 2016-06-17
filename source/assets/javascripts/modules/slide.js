@@ -5,7 +5,7 @@ import Bas from '../lib/bas.js';
 
 // Slide Class
 export default class Slide extends THREE.Mesh {
-  constructor(width, height, divisionX, divisionY, animationPhase){
+  constructor(width, height, divisionX, divisionY, type, animationPhase){
     super(); // 子Classはsuper();する必要あり
 
     new Bas();
@@ -14,12 +14,13 @@ export default class Slide extends THREE.Mesh {
     this.height = height;
     this.divisionX = divisionX;
     this.divisionY = divisionY;
+    this.type = type;
     this.animationPhase = animationPhase;
-    this.minDuration = 0.8;
-    this.maxDuration = 1.2;
-    this.maxDelayX = 0.5;
-    this.maxDelayY = 0;
-    this.stretch = 0.11;
+    this.minDuration = 0.9;
+    this.maxDuration = 1.1;
+    this.maxDelayX = 0.03;
+    this.maxDelayY = 0.03;
+    this.stretch = 0.07;
     this.totalDuration = this.maxDuration + this.maxDelayX + this.maxDelayY + this.stretch;
 
     this.plane = new THREE.PlaneGeometry(this.width, this.height, this.divisionX, this.divisionY);
@@ -36,13 +37,11 @@ export default class Slide extends THREE.Mesh {
     this.aStartPosition = this.geometry.createAttribute('aStartPosition', 3);
     this.aControl0 = this.geometry.createAttribute('aControl0', 3);
     this.aControl1 = this.geometry.createAttribute('aControl1', 3);
-    this.aControl2 = this.geometry.createAttribute('aControl2', 3);
     this.aEndPosition = this.geometry.createAttribute('aEndPosition', 3);
 
     this.startPosition = new THREE.Vector3();
     this.control0 = new THREE.Vector3();
     this.control1 = new THREE.Vector3();
-    this.control2 = new THREE.Vector3();
     this.endPosition = new THREE.Vector3();
     this.tempPoint = new THREE.Vector3();
 
@@ -73,9 +72,9 @@ export default class Slide extends THREE.Mesh {
       this.startPosition.copy(centroid);
       if (this.animationPhase === 'in') {
         for (v = 0; v < 9; v += 3) {
-          this.aStartPosition.array[i3 + v    ] = centroid.x;
-          this.aStartPosition.array[i3 + v + 1] = centroid.y + 200;
-          this.aStartPosition.array[i3 + v + 2] = centroid.z - 150;
+          this.aStartPosition.array[i3 + v    ] = centroid.x * 5;
+          this.aStartPosition.array[i3 + v + 1] = centroid.y * 4;
+          this.aStartPosition.array[i3 + v + 2] = centroid.z;
         }
       }
       else if (this.animationPhase === 'out') {
@@ -87,17 +86,13 @@ export default class Slide extends THREE.Mesh {
       }
 
       // controls
-      this.control0.x = centroid.x + THREE.Math.randFloat(-120, 120) * -1;
-      this.control0.y = centroid.y + this.height/1.5 * THREE.Math.randFloat(0.0, 3.0);
-      this.control0.z = THREE.Math.randFloat(-30, -60);
+      this.control0.x = centroid.x * THREE.Math.randFloat(-3, -5);
+      this.control0.y = centroid.y * THREE.Math.randFloat(-2, -4);
+      this.control0.z = centroid.z;
 
-      this.control1.x = centroid.x + THREE.Math.randFloat(-120, 120) * 1;
-      this.control1.y = centroid.y + this.height/1.5 * THREE.Math.randFloat(0.0, 3.0);
-      this.control1.z = THREE.Math.randFloat(-60, -90);
-
-      this.control0.x = centroid.x + THREE.Math.randFloat(-120, 120) * -1;
-      this.control0.y = centroid.y + this.height/1.5 * THREE.Math.randFloat(0.0, 3.0);
-      this.control0.z = THREE.Math.randFloat(-90, -120);
+      this.control1.x = centroid.x;
+      this.control1.y = centroid.y;
+      this.control1.z = centroid.z;
 
       for (v = 0; v < 9; v += 3) {
         this.aControl0.array[i3 + v]     = this.control0.x;
@@ -107,10 +102,6 @@ export default class Slide extends THREE.Mesh {
         this.aControl1.array[i3 + v]     = this.control1.x;
         this.aControl1.array[i3 + v + 1] = this.control1.y;
         this.aControl1.array[i3 + v + 2] = this.control1.z;
-
-        this.aControl2.array[i3 + v]     = this.control2.x;
-        this.aControl2.array[i3 + v + 1] = this.control2.y;
-        this.aControl2.array[i3 + v + 2] = this.control2.z;
       }
 
       // endPosition
@@ -125,8 +116,8 @@ export default class Slide extends THREE.Mesh {
       else if (this.animationPhase === 'out') {
         for (v = 0; v < 9; v += 3) {
           this.aEndPosition.array[i3 + v]     = this.endPosition.x;
-          this.aEndPosition.array[i3 + v + 1] = this.endPosition.y + 200;
-          this.aEndPosition.array[i3 + v + 2] = this.endPosition.z - 150;
+          this.aEndPosition.array[i3 + v + 1] = this.endPosition.y;
+          this.aEndPosition.array[i3 + v + 2] = this.endPosition.z;
         }
       }
     }

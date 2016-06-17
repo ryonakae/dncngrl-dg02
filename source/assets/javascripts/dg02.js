@@ -23,9 +23,9 @@ import Particle from './modules/particle';
     const canvasTop = new Canvas(bgTop, 5.0);
     canvasTop.init();
 
-    const eyecatch = new Slide(78, 110, 78*1.5, 110*1.5, 'in');
+    const eyecatch = new Slide(78, 110, 78*1.5, 110*1.5, 'eyecatch', 'in');
     eyecatch.setImage(new THREE.ImageLoader().load('./assets/images/sample04.jpg'));
-    eyecatch.position.y = 10;
+    eyecatch.position.y = 3;
     canvasTop.scene.add(eyecatch);
 
     // eyecatch parallax
@@ -45,21 +45,21 @@ import Particle from './modules/particle';
       eyecatch.rotation.y = defaultRotateY + mouseX * 0.0002;
     }, false);
 
-    TweenMax.fromTo(eyecatch, 6.0, {time:0.0}, {time:eyecatch.totalDuration, ease:Power0.easeInOut});
+    // eyecatch animation
+    TweenMax.fromTo(eyecatch, 7.0, {time:0.0}, {time:eyecatch.totalDuration, ease:Power0.easeInOut});
     bgTop.addEventListener('click', ()=>{
-      TweenMax.fromTo(eyecatch, 4.0, {time:eyecatch.totalDuration, ease:Power0.easeInOut}, {time:0.0});
+      TweenMax.fromTo(eyecatch, 5.0, {time:eyecatch.totalDuration, ease:Power0.easeInOut}, {time:0.0});
     }, false);
 
 
     // introduction particle
     const bgIntro = document.getElementById('bg_introduction');
-    const canvasIntro = new Canvas(bgIntro, 1.0);
+    const canvasIntro = new Canvas(bgIntro, 25.0);
     canvasIntro.init();
 
-    const particle = new Particle(100000/2);
-    canvasIntro.scene.add(particle);
-
-    TweenMax.fromTo(particle, 6.0, {time:0.0}, {time:particle.totalDuration, ease:Power0.easeInOut});
+    const particle = new Particle(100000);
+    canvasIntro.scene.add(particle.particleSystem);
+    particle.animate();
 
 
     // gallery
