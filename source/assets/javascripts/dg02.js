@@ -94,7 +94,7 @@ import Carousel from './modules/Carousel';
     document.getElementById('galleryNavPrev').addEventListener('click', ()=>{
       if(slideCount > 1){
         galleryNav.classList.add('is-disableClick');
-        carousel.slidePrev(slideCount, 3.0, ()=>{
+        carousel.slidePrev(slideCount, 3.5, ()=>{
           slideCount--;
           galleryNav.classList.remove('is-disableClick');
         });
