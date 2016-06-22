@@ -21,23 +21,15 @@ export default class Carousel {
   }
 
   slideNext(currentNum, duration, cb){
-    if(currentNum < this.slides.length) {
-      this.slides[currentNum-1].slideNextOut(duration);
-      this.slides[currentNum].slideNextIn(duration, cb);
-      console.log(currentNum);
-    } else {
-      console.log('last');
-    }
+    this.slides[currentNum-1].slideNextOut(duration);
+    this.slides[currentNum].slideNextIn(duration, cb);
+    console.log(currentNum);
   }
 
   slidePrev(currentNum, duration, cb){
-    if(currentNum > 1){
-      this.slides[currentNum-1].slidePrevOut(duration);
-      this.slides[currentNum-2].slidePrevIn(duration, cb);
-      console.log(currentNum);
-    } else {
-      console.log('first');
-    }
+    this.slides[currentNum-1].slidePrevOut(duration);
+    this.slides[currentNum-2].slidePrevIn(duration, cb);
+    console.log(currentNum);
   }
 }
 

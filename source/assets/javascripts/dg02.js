@@ -87,25 +87,32 @@ import Carousel from './modules/Carousel';
     carousel.addSlide(canvasGallery.scene, './assets/images/sample03.jpg');
 
     carousel.slides[0].init('out');
-    // carousel.slides[3].init('out');
 
     let slideCount = 1;
-    let slideCount_prev = 4;
-    bgGallery.addEventListener('click', ()=>{
-      // carousel.slides[0].slideOut(5.0, ()=>{
-      //   console.log('slide out');
-      // });
-      // carousel.slides[1].slideIn(5.0, ()=>{
-      //   console.log('slide in');
-      // });
+    let galleryNav = document.getElementById('galleryNav');
 
-      carousel.slideNext(slideCount, 5.0, ()=>{
-        slideCount++;
-      });
+    document.getElementById('galleryNavPrev').addEventListener('click', ()=>{
+      if(slideCount > 1){
+        galleryNav.classList.add('is-disableClick');
+        carousel.slidePrev(slideCount, 3.0, ()=>{
+          slideCount--;
+          galleryNav.classList.remove('is-disableClick');
+        });
+      } else {
+        console.log('first');
+      }
+    }, false);
 
-      // carousel.slidePrev(slideCount_prev, 5.0, ()=>{
-      //   slideCount_prev--;
-      // });
+    document.getElementById('galleryNavNext').addEventListener('click', ()=>{
+      if(slideCount < carousel.slides.length) {
+        galleryNav.classList.add('is-disableClick');
+        carousel.slideNext(slideCount, 3.0, ()=>{
+          slideCount++;
+          galleryNav.classList.remove('is-disableClick');
+        });
+      } else {
+        console.log('last');
+      }
     }, false);
   };
 })();
