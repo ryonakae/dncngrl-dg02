@@ -7,7 +7,7 @@ import gsap from 'gsap';
 import Canvas from './modules/Canvas';
 import Eyecatch from './modules/Eyecatch';
 import Particle from './modules/Particle';
-// import Particles from './lib/particles'
+
 
 (() => {
   $(() => {
@@ -19,7 +19,7 @@ import Particle from './modules/Particle';
 
 
     // eyecatch
-    const bgTop = document.getElementById('bg_top');
+    const bgTop = document.getElementById('bgTop');
     const canvasTop = new Canvas(bgTop, 5.0);
     canvasTop.init();
 
@@ -49,7 +49,7 @@ import Particle from './modules/Particle';
 
 
     // introduction particle
-    const bgIntro = document.getElementById('bg_introduction');
+    const bgIntro = document.getElementById('bgIntroduction');
     const canvasIntro = new Canvas(bgIntro, 25.0);
     canvasIntro.init();
 
