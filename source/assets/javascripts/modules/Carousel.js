@@ -21,13 +21,23 @@ export default class Carousel {
   }
 
   slideNext(currentNum, duration, cb){
-    this.slides[currentNum-1].slideOut(duration);
-    this.slides[currentNum].slideIn(duration, cb);
+    if(currentNum < this.slides.length) {
+      this.slides[currentNum-1].slideNextOut(duration);
+      this.slides[currentNum].slideNextIn(duration, cb);
+      console.log(currentNum);
+    } else {
+      console.log('last');
+    }
   }
 
   slidePrev(currentNum, duration, cb){
-    this.slides[currentNum-1].slideOut(duration);
-    this.slides[currentNum-2].slideIn(duration, cb);
+    if(currentNum > 1){
+      this.slides[currentNum-1].slidePrevOut(duration);
+      this.slides[currentNum-2].slidePrevIn(duration, cb);
+      console.log(currentNum);
+    } else {
+      console.log('first');
+    }
   }
 }
 
@@ -264,7 +274,7 @@ class Slide extends THREE.Mesh {
     });
   }
 
-  slideIn(duration, cb){
+  slideNextIn(duration, cb){
     this.init('in');
 
     TweenMax.fromTo(this, duration, {
@@ -278,7 +288,7 @@ class Slide extends THREE.Mesh {
     });
   }
 
-  slideOut(duration, cb){
+  slideNextOut(duration, cb){
     this.init('out');
 
     TweenMax.fromTo(this, duration, {
@@ -286,6 +296,34 @@ class Slide extends THREE.Mesh {
     }, {
       time: this.totalDuration,
       ease: Power0.easeInOut,
+      onComplete: ()=>{
+        if(cb) cb();
+      }
+    });
+  }
+
+  slidePrevIn(duration, cb){
+    this.init('out');
+
+    TweenMax.fromTo(this, duration, {
+      time: this.totalDuration,
+      ease: Power0.easeInOut,
+    }, {
+      time: 0.0,
+      onComplete: ()=>{
+        if(cb) cb();
+      }
+    });
+  }
+
+  slidePrevOut(duration, cb){
+    this.init('in');
+
+    TweenMax.fromTo(this, duration, {
+      time: this.totalDuration,
+      ease: Power0.easeInOut,
+    }, {
+      time: 0.0,
       onComplete: ()=>{
         if(cb) cb();
       }
