@@ -72,12 +72,12 @@ export default class Particle {
       velocityRandomness: 5,
       lifetime: 10,
       size: 4,
-      ease: Power0.easeInOut,
+      ease: Power3.easeInOut,
       onComplete: cb
     });
     TweenMax.to(this.spawnerOptions, duration, {
       timeScale: 0.3,
-      ease: Power0.easeInOut
+      ease: Power3.easeInOut
     });
   }
 
@@ -87,12 +87,12 @@ export default class Particle {
       velocityRandomness: 30,
       lifetime: 1,
       size: 0,
-      ease: Power0.easeInOut,
+      ease: Power3.easeInOut,
       onComplete: cb
     });
     TweenMax.to(this.spawnerOptions, duration, {
       timeScale: 1,
-      ease: Power0.easeInOut,
+      ease: Power3.easeInOut,
       onComplete: ()=>{
         setTimeout(()=>{
           this.stopAnimate();

@@ -209,7 +209,7 @@ export default class Eyecatch extends THREE.Mesh {
       time:0.0
     }, {
       time:this.totalDuration,
-      ease:Power0.easeInOut,
+      ease:Power3.easeInOut,
       onComplete: cb
     });
   }
@@ -217,7 +217,7 @@ export default class Eyecatch extends THREE.Mesh {
   out(duration, cb) {
     TweenMax.fromTo(this, duration, {
       time:this.totalDuration,
-      ease:Power0.easeInOut
+      ease:Power3.easeInOut
     }, {
       time:0.0,
       onComplete: cb
