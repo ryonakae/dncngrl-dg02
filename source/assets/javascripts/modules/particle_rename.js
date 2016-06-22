@@ -97,7 +97,7 @@ export default class Particle {
         setTimeout(()=>{
           this.stopAnimate();
           console.log('particle stop');
-        }, duration*1000);
+        }, duration*1000 * 1.5);
       }
     });
   }
