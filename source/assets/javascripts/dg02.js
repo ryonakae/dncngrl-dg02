@@ -77,19 +77,33 @@ import Carousel from './modules/Carousel';
 
     // gallery
     const bgGallery = document.getElementById('bgGallery');
-    const canvasGallery = new Canvas(bgGallery, 8.0);
+    const canvasGallery = new Canvas(bgGallery, 7.0);
     canvasGallery.init();
 
-    const carousel = new Carousel(100, 67, 100*1.5, 67*1.5, 3);
+    const carousel = new Carousel(100, 67, 100*1.5, 67*1.5);
     carousel.addSlide(canvasGallery.scene, './assets/images/sample01.jpg');
     carousel.addSlide(canvasGallery.scene, './assets/images/sample02.jpg');
     carousel.addSlide(canvasGallery.scene, './assets/images/sample03.jpg');
 
     carousel.slides[0].init('out');
 
+    let slideCount = 1;
+    // let slideCount = 3;
     bgGallery.addEventListener('click', ()=>{
-      carousel.slides[0].slideOut(5.0);
-      carousel.slides[1].slideIn(5.0);
+      // carousel.slides[0].slideOut(5.0, ()=>{
+      //   console.log('slide out');
+      // });
+      // carousel.slides[1].slideIn(5.0, ()=>{
+      //   console.log('slide in');
+      // });
+
+      carousel.slideNext(slideCount, 10.0, ()=>{
+        slideCount++;
+      });
+
+      // carousel.slideNext(slideCount, 5.0, ()=>{
+      //   slideCount--;
+      // });
     }, false);
   };
 })();

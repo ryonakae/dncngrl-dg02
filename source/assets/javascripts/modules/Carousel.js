@@ -5,12 +5,11 @@ import Bas from '../lib/bas.js';
 
 // Carousel Class
 export default class Carousel {
-  constructor(itemWidth, itemHeight, itemDivisionX, itemDivisionY, itemCount){
+  constructor(itemWidth, itemHeight, itemDivisionX, itemDivisionY){
     this.itemWidth = itemWidth;
     this.itemHeight = itemHeight;
     this.itemDivisionX = itemDivisionX;
     this.itemDivisionY = itemDivisionY;
-    this.itemCount = itemCount;
     this.slides = [];
   }
 
@@ -18,7 +17,17 @@ export default class Carousel {
     const slide = new Slide(this.itemWidth, this.itemHeight, this.itemDivisionX, this.itemDivisionY, imageSrc);
     scene.add(slide);
     this.slides.push(slide);
-    console.log(this.slides);
+    console.log(this.slides, this.slides.length);
+  }
+
+  slideNext(currentNum, duration, cb){
+    this.slides[currentNum-1].slideOut(duration);
+    this.slides[currentNum].slideIn(duration, cb);
+  }
+
+  slidePrev(currentNum, duration, cb){
+    this.slides[currentNum-1].slideOut(duration);
+    this.slides[currentNum-2].slideIn(duration, cb);
   }
 }
 
@@ -54,9 +63,17 @@ class Slide extends THREE.Mesh {
 
     this.frustumCulled = false;
     this.defineProperty();
+
+    // hide slide at default
+    this.visible = false;
+
+    console.log(this);
   }
 
   init(animationPhase) {
+    // show slide
+    this.visible = true;
+
     // geometry
     this.plane = new THREE.PlaneGeometry(this.width, this.height, this.divisionX, this.divisionY);
     // console.log(THREE.BAS);
@@ -210,7 +227,7 @@ class Slide extends THREE.Mesh {
     const signY = Math.sign(centroid.y);
 
     this.tempPoint.x = THREE.Math.randFloat(0.1, 0.3) * 50;
-    this.tempPoint.y = -signY * THREE.Math.randFloat(0.1, 0.3) * 70;
+    this.tempPoint.y = signY * THREE.Math.randFloat(0.1, 0.3) * 70;
     this.tempPoint.z = THREE.Math.randFloatSpread(20);
 
     return this.tempPoint;
@@ -220,7 +237,7 @@ class Slide extends THREE.Mesh {
     const signY = Math.sign(centroid.y);
 
     this.tempPoint.x = THREE.Math.randFloat(0.3, 0.6) * 50;
-    this.tempPoint.y = signY * THREE.Math.randFloat(0.3, 0.6) * 70;
+    this.tempPoint.y = -signY * THREE.Math.randFloat(0.3, 0.6) * 70;
     this.tempPoint.z = THREE.Math.randFloatSpread(20);
 
     return this.tempPoint;
@@ -254,8 +271,10 @@ class Slide extends THREE.Mesh {
       time: 0.0,
     }, {
       time: this.totalDuration,
-      ease: Power1.easeInOut,
-      onComplete: cb
+      ease: Power0.easeInOut,
+      onComplete: ()=>{
+        if(cb) cb();
+      }
     });
   }
 
@@ -266,8 +285,10 @@ class Slide extends THREE.Mesh {
       time: 0.0,
     }, {
       time: this.totalDuration,
-      ease: Power1.easeInOut,
-      onComplete: cb
+      ease: Power0.easeInOut,
+      onComplete: ()=>{
+        if(cb) cb();
+      }
     });
   }
 }
