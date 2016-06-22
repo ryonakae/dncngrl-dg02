@@ -7,6 +7,7 @@ import gsap from 'gsap';
 import Canvas from './modules/Canvas';
 import Eyecatch from './modules/Eyecatch';
 import Particle from './modules/Particle';
+import Carousel from './modules/Carousel';
 
 
 (() => {
@@ -75,12 +76,20 @@ import Particle from './modules/Particle';
 
 
     // gallery
-    // const bgGallery = document.getElementById('bg_gallery');
-    // const canvasGallery = new Canvas(bgGallery, 5.0);
-    // canvasGallery.init();
-    //
-    // const slide1 = new Slide(78, 110, 78*1.5, 110*1.5, 'out');
-    // slide1.setImage(new THREE.ImageLoader().load('./assets/images/sample04.jpg'));
-    // canvasGallery.scene.add(slide1);
+    const bgGallery = document.getElementById('bgGallery');
+    const canvasGallery = new Canvas(bgGallery, 8.0);
+    canvasGallery.init();
+
+    const carousel = new Carousel(100, 67, 100*1.5, 67*1.5, 3);
+    carousel.addSlide(canvasGallery.scene, './assets/images/sample01.jpg');
+    carousel.addSlide(canvasGallery.scene, './assets/images/sample02.jpg');
+    carousel.addSlide(canvasGallery.scene, './assets/images/sample03.jpg');
+
+    carousel.slides[0].init('out');
+
+    bgGallery.addEventListener('click', ()=>{
+      carousel.slides[0].slideOut(5.0);
+      carousel.slides[1].slideIn(5.0);
+    }, false);
   };
 })();
