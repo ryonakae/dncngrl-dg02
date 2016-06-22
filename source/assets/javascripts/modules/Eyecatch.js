@@ -3,9 +3,9 @@ import gsap from 'gsap';
 import Bas from '../lib/bas.js';
 
 
-// Slide Class
-export default class Slide extends THREE.Mesh {
-  constructor(width, height, divisionX, divisionY, type, animationPhase){
+// Eyecatch Class
+export default class Eyecatch extends THREE.Mesh {
+  constructor(width, height, divisionX, divisionY){
     super(); // 子Classはsuper();する必要あり
 
     new Bas();
@@ -14,13 +14,11 @@ export default class Slide extends THREE.Mesh {
     this.height = height;
     this.divisionX = divisionX;
     this.divisionY = divisionY;
-    this.type = type;
-    this.animationPhase = animationPhase;
-    this.minDuration = 0.9;
-    this.maxDuration = 1.1;
-    this.maxDelayX = 0.03;
+    this.minDuration = 0.8;
+    this.maxDuration = 1.2;
+    this.maxDelayX = 0.5;
     this.maxDelayY = 0.03;
-    this.stretch = 0.07;
+    this.stretch = 0.11;
     this.totalDuration = this.maxDuration + this.maxDelayX + this.maxDelayY + this.stretch;
 
     this.plane = new THREE.PlaneGeometry(this.width, this.height, this.divisionX, this.divisionY);
@@ -54,14 +52,7 @@ export default class Slide extends THREE.Mesh {
       // animation
       const duration = THREE.Math.randFloat(this.minDuration, this.maxDuration);
       const delayX = THREE.Math.mapLinear(centroid.x, -this.width * 0.5, this.width * 0.5, 0.0, this.maxDelayX);
-      let delayY;
-
-      if (this.animationPhase === 'in') {
-        delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, this.height * 0.5, 0.0, this.maxDelayY);
-      }
-      else if (this.animationPhase === 'out') {
-        delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, this.height * 0.5, this.maxDelayY, 0.0);
-      }
+      const delayY = THREE.Math.mapLinear(Math.abs(centroid.y), 0, this.height * 0.5, 0.0, this.maxDelayY);
 
       for (v = 0; v < 6; v += 2) {
         this.aAnimation.array[i2 + v]     = delayX + delayY + (Math.random() * this.stretch * duration);
@@ -70,29 +61,20 @@ export default class Slide extends THREE.Mesh {
 
       // startPosition
       this.startPosition.copy(centroid);
-      if (this.animationPhase === 'in') {
-        for (v = 0; v < 9; v += 3) {
-          this.aStartPosition.array[i3 + v    ] = centroid.x * 5;
-          this.aStartPosition.array[i3 + v + 1] = centroid.y * 4;
-          this.aStartPosition.array[i3 + v + 2] = centroid.z;
-        }
-      }
-      else if (this.animationPhase === 'out') {
-        for (v = 0; v < 9; v += 3) {
-          this.aStartPosition.array[i3 + v    ] = centroid.x;
-          this.aStartPosition.array[i3 + v + 1] = centroid.y;
-          this.aStartPosition.array[i3 + v + 2] = centroid.z;
-        }
+      for (v = 0; v < 9; v += 3) {
+        this.aStartPosition.array[i3 + v    ] = centroid.x;
+        this.aStartPosition.array[i3 + v + 1] = centroid.y + 250;
+        this.aStartPosition.array[i3 + v + 2] = centroid.z - 150;
       }
 
       // controls
-      this.control0.x = centroid.x * THREE.Math.randFloat(-3, -5);
-      this.control0.y = centroid.y * THREE.Math.randFloat(-2, -4);
-      this.control0.z = centroid.z;
+      this.control0.x = centroid.x + THREE.Math.randFloat(-90, 90);
+      this.control0.y = centroid.y + this.height/1.5 * THREE.Math.randFloat(0, 3);
+      this.control0.z = centroid.z + THREE.Math.randFloat(-30, -60);
 
-      this.control1.x = centroid.x;
-      this.control1.y = centroid.y;
-      this.control1.z = centroid.z;
+      this.control1.x = centroid.x + THREE.Math.randFloat(-90, 90);
+      this.control1.y = centroid.y + this.height/1.5 * THREE.Math.randFloat(0, 3);
+      this.control1.z = centroid.z + THREE.Math.randFloat(-60, -90);
 
       for (v = 0; v < 9; v += 3) {
         this.aControl0.array[i3 + v]     = this.control0.x;
@@ -106,19 +88,10 @@ export default class Slide extends THREE.Mesh {
 
       // endPosition
       this.endPosition.copy(this.startPosition);
-      if (this.animationPhase === 'in') {
-        for (v = 0; v < 9; v += 3) {
-          this.aEndPosition.array[i3 + v]     = this.endPosition.x;
-          this.aEndPosition.array[i3 + v + 1] = this.endPosition.y;
-          this.aEndPosition.array[i3 + v + 2] = this.endPosition.z;
-        }
-      }
-      else if (this.animationPhase === 'out') {
-        for (v = 0; v < 9; v += 3) {
-          this.aEndPosition.array[i3 + v]     = this.endPosition.x;
-          this.aEndPosition.array[i3 + v + 1] = this.endPosition.y;
-          this.aEndPosition.array[i3 + v + 2] = this.endPosition.z;
-        }
+      for (v = 0; v < 9; v += 3) {
+        this.aEndPosition.array[i3 + v]     = this.endPosition.x;
+        this.aEndPosition.array[i3 + v + 1] = this.endPosition.y;
+        this.aEndPosition.array[i3 + v + 2] = this.endPosition.z;
       }
     }
 
@@ -131,7 +104,6 @@ export default class Slide extends THREE.Mesh {
       },
       vertexFunctions: [
         THREE.BAS.ShaderChunk['cubic_bezier'],
-        // THREE.BAS.ShaderChunk[(animationPhase === 'in' ? 'ease_out_cubic' : 'ease_in_cubic')],
         THREE.BAS.ShaderChunk['ease_cubic_in_out'],
         THREE.BAS.ShaderChunk['quaternion_rotation']
       ],
@@ -152,7 +124,7 @@ export default class Slide extends THREE.Mesh {
       ],
       vertexNormal: [],
       vertexPosition: [
-        (this.animationPhase === 'in' ? 'transformed *= tProgress;' : 'transformed *= 1.0 - tProgress;'),
+        'transformed *= tProgress;',
         'transformed += cubicBezier(aStartPosition, aControl0, aControl1, aEndPosition, tProgress);'
       ]
     }, {
@@ -230,5 +202,41 @@ export default class Slide extends THREE.Mesh {
         this.material.uniforms['uTime'].value = v;
       }
     });
+  }
+
+  in(duration, cb){
+    TweenMax.fromTo(this, duration, {
+      time:0.0
+    }, {
+      time:this.totalDuration,
+      ease:Power0.easeInOut,
+      onComplete: cb
+    });
+  }
+
+  out(duration, cb) {
+    TweenMax.fromTo(this, duration, {
+      time:this.totalDuration,
+      ease:Power0.easeInOut
+    }, {
+      time:0.0,
+      onComplete: cb
+    });
+  }
+
+  parallax(dom, defaultRotateX, defaultRotateY, param){
+    let mouseX;
+    let mouseY;
+
+    this.rotation.x = defaultRotateX;
+    this.rotation.y = defaultRotateY;
+
+    dom.addEventListener('mousemove', (e) => {
+      mouseX = e.pageX - window.innerWidth/2;
+      mouseY = e.pageY - window.innerHeight/2;
+
+      this.rotation.x = defaultRotateX + mouseY * param;
+      this.rotation.y = defaultRotateY + mouseX * param;
+    }, false);
   }
 }

@@ -1,4 +1,5 @@
 import THREE from 'three';
+import gsap from 'gsap';
 require('../lib/GPUParticleSystem');
 
 
@@ -7,6 +8,7 @@ export default class Particle {
   constructor(count) {
     this.tick = null;
     this.clock = new THREE.Clock(true);
+    this.requestId = null;
 
     this.particleSystem = new THREE.GPUParticleSystem({
       maxParticles: count,
@@ -14,21 +16,21 @@ export default class Particle {
 
     this.options = {
       position: new THREE.Vector3(),
-      positionRandomness: 3,
+      positionRandomness: 30, //4
       velocity: new THREE.Vector3(),
-      velocityRandomness: 3,
+      velocityRandomness: 30, //4
       color: 0xffffff,
       colorRandomness: 0.2,
-      turbulence: 0.78,
-      lifetime: 10,
-      size: 4,
-      sizeRandomness: 1,
+      turbulence: 0.78, //0.78
+      lifetime: 1, //10
+      size: 0, //4
+      sizeRandomness: 0,
     };
     this.spawnerOptions = {
       spawnRate: 30000,
       horizontalSpeed: 1.5,
       verticalSpeed: 1.24,
-      timeScale: 0.5
+      timeScale: 0.3 //0.4
     };
 
     console.log(this);
@@ -36,9 +38,7 @@ export default class Particle {
   }
 
   animate(){
-    requestAnimationFrame(()=>{
-      this.animate();
-    });
+    this.requestId = requestAnimationFrame(this.animate.bind(this));
 
     var delta = this.clock.getDelta() * this.spawnerOptions.timeScale;
     // console.log(delta);
@@ -57,5 +57,48 @@ export default class Particle {
     }
 
     this.particleSystem.update(this.tick);
+    console.log('particle update');
+  }
+
+  stopAnimate(){
+    cancelAnimationFrame(this.requestId);
+  }
+
+  fadeIn(duration, cb){
+    this.animate();
+
+    TweenMax.to(this.options, duration, {
+      positionRandomness: 5,
+      velocityRandomness: 5,
+      lifetime: 10,
+      size: 4,
+      ease: Power0.easeInOut,
+      onComplete: cb
+    });
+    TweenMax.to(this.spawnerOptions, duration, {
+      timeScale: 0.3,
+      ease: Power0.easeInOut
+    });
+  }
+
+  fadeOut(duration, cb){
+    TweenMax.to(this.options, duration, {
+      positionRandomness: 30,
+      velocityRandomness: 30,
+      lifetime: 1,
+      size: 0,
+      ease: Power0.easeInOut,
+      onComplete: cb
+    });
+    TweenMax.to(this.spawnerOptions, duration, {
+      timeScale: 1,
+      ease: Power0.easeInOut,
+      onComplete: ()=>{
+        setTimeout(()=>{
+          this.stopAnimate();
+          console.log('particle stop');
+        }, duration*1000);
+      }
+    });
   }
 }

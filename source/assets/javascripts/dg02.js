@@ -4,9 +4,9 @@ window.jQuery = window.$ = require('jquery');
 import THREE from 'three';
 import gsap from 'gsap';
 
-import Canvas from './modules/canvas';
-import Slide from './modules/slide';
-import Particle from './modules/particle';
+import Canvas from './modules/Canvas';
+import Eyecatch from './modules/Eyecatch';
+import Particle from './modules/Particle';
 // import Particles from './lib/particles'
 
 (() => {
@@ -23,32 +23,28 @@ import Particle from './modules/particle';
     const canvasTop = new Canvas(bgTop, 5.0);
     canvasTop.init();
 
-    const eyecatch = new Slide(78, 110, 78*1.5, 110*1.5, 'eyecatch', 'in');
+    const eyecatch = new Eyecatch(78, 110, 78*1.5, 110*1.5);
     eyecatch.setImage(new THREE.ImageLoader().load('./assets/images/sample04.jpg'));
     eyecatch.position.y = 3;
     canvasTop.scene.add(eyecatch);
 
-    // eyecatch parallax
-    let mouseX;
-    let mouseY;
-    const defaultRotateX = -0.13;
-    const defaultRotateY = -0.15;
+    eyecatch.parallax(document.body, -0.13, -0.15, 0.0002);
 
-    eyecatch.rotation.x = defaultRotateX;
-    eyecatch.rotation.y = defaultRotateY;
-
-    document.body.addEventListener('mousemove', (e) => {
-      mouseX = e.pageX - window.innerWidth/2;
-      mouseY = e.pageY - window.innerHeight/2;
-
-      eyecatch.rotation.x = defaultRotateX + mouseY * 0.0002;
-      eyecatch.rotation.y = defaultRotateY + mouseX * 0.0002;
-    }, false);
-
-    // eyecatch animation
-    TweenMax.fromTo(eyecatch, 7.0, {time:0.0}, {time:eyecatch.totalDuration, ease:Power0.easeInOut});
+    // eyecatch in/out
+    let isEyecatchStarted = false;
     bgTop.addEventListener('click', ()=>{
-      TweenMax.fromTo(eyecatch, 5.0, {time:eyecatch.totalDuration, ease:Power0.easeInOut}, {time:0.0});
+      if(isEyecatchStarted == false){
+        eyecatch.in(6.0, ()=>{
+          console.log('eyecatch in');
+          isEyecatchStarted = true;
+        });
+      }
+      else if(isEyecatchStarted == true){
+        eyecatch.out(5.0, ()=>{
+          console.log('eyecatch out');
+          isEyecatchStarted = false;
+        });
+      }
     }, false);
 
 
@@ -59,7 +55,23 @@ import Particle from './modules/particle';
 
     const particle = new Particle(100000);
     canvasIntro.scene.add(particle.particleSystem);
-    particle.animate();
+
+    // particle in/out
+    let isParticleStarted = false;
+    bgIntro.addEventListener('click', ()=>{
+      if(isParticleStarted == false){
+        particle.fadeIn(2.0, ()=>{
+          console.log('fadeIn');
+          isParticleStarted = true;
+        });
+      }
+      else if(isParticleStarted == true){
+        particle.fadeOut(2.0, ()=>{
+          console.log('fadeOut');
+          isParticleStarted = false;
+        });
+      }
+    }, false);
 
 
     // gallery

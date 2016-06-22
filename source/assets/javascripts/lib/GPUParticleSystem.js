@@ -209,6 +209,7 @@ THREE.GPUParticleSystem = function(options) {
 	self.particleSpriteTex.wrapS = self.particleSpriteTex.wrapT = THREE.RepeatWrapping;
 
 	self.particleShaderMat = new THREE.ShaderMaterial({
+		shading: THREE.FlatShading,
 		transparent: true,
 		depthWrite: false,
 		uniforms: {
