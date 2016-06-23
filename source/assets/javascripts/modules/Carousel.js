@@ -90,4 +90,27 @@ export default class Carousel {
   updateIndicator(currentNum) {
     this.indicatorCurrent.textContent = currentNum;
   }
+
+  initParallax(dom, defaultRotateX, defaultRotateY, param){
+    let mouseX;
+    let mouseY;
+    let rotation = {};
+
+    for(let i = 0; i < this.slides.length; i++){
+      this.slides[i].rotation.x = defaultRotateX;
+      this.slides[i].rotation.y = defaultRotateY;
+
+      dom.addEventListener('mousemove', (e)=>{
+        mouseX = e.pageX - window.innerWidth/2;
+        mouseY = e.pageY - window.innerHeight/2;
+
+        this.slides[i].rotation.x = defaultRotateX + mouseY * param;
+        this.slides[i].rotation.y = defaultRotateY + mouseX * param;
+      }, false);
+    }
+  }
+
+  destroyParallax(){
+    console.log('carousel parallax destroy');
+  }
 }

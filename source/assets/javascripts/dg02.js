@@ -82,7 +82,7 @@ const uaManager = new UaManager();
 
     // gallery
     const bgGallery = document.getElementById('bgGallery');
-    const canvasGallery = new Canvas(bgGallery, 6.0);
+    let canvasGallery = new Canvas(bgGallery, 7);
     canvasGallery.init();
 
     const carousel = new Carousel({
@@ -104,5 +104,15 @@ const uaManager = new UaManager();
         './assets/images/sample03.jpg'
       ]
     });
+
+    carousel.initParallax(document.body, 0, 0, 0.00006);
+
+    window.addEventListener('dblclick', ()=>{
+      // canvasGallery.destroy();
+      // console.log(canvasGallery);
+      // canvasGallery = null;
+      // console.log(canvasGallery);
+      carousel.destroyParallax();
+    }, false);
   };
 })();

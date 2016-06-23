@@ -13,6 +13,8 @@ export default class Canvas {
     this.scene = null;
     this.camera = null;
     this.controls = null;
+
+    this.requestId = null;
   }
 
   init() {
@@ -49,14 +51,17 @@ export default class Canvas {
     this.resize();
     window.addEventListener('resize', this.resize, false);
 
-    console.log('canvas init', this.dom);
+    console.log('canvas init', this);
   }
 
   animate() {
+    this.requestId = requestAnimationFrame(this.animate.bind(this));
+
     this.render();
-    requestAnimationFrame(() => {
-      this.animate();
-    });
+  }
+
+  stopAnimate(){
+    cancelAnimationFrame(this.requestId);
   }
 
   render() {
@@ -76,5 +81,30 @@ export default class Canvas {
     // http://ikeryou.jp/log/?p=242
     const cameraZ = ((window.innerHeight/2) / Math.tan((this.camera.fov * Math.PI/180)/2)) / -this.magnification;
     this.camera.position.z = -cameraZ;
+  }
+
+  destroy(){
+    // sceneからmeshを削除
+    for (let i = this.scene.children.length-1; i >= 0; i--) {
+      const mesh = this.scene.children[i];
+      this.scene.remove(mesh);
+      mesh.geometry.dispose();
+      mesh.material.dispose();
+
+      // 最後なら
+      if(i == 0){
+        // canvas消す
+        this.container.removeChild(this.renderer.domElement);
+
+        // もろもろ消す
+        this.stopAnimate(); //アニメーション止める
+        this.scene = null;
+        this.camera = null;
+        this.controls = null;
+        this.renderer = null;
+
+        console.log('canvas destroy', this);
+      }
+    }
   }
 }
