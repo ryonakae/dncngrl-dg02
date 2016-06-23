@@ -1,0 +1,212 @@
+/*
+Stylus variables are information about icon's compiled state, stored under its original file name
+
+.icon-home {
+  width: $icon_home_width;
+}
+
+The large array-like variables contain all information about a single icon
+$icon_home = x y offset_x offset_y width height total_width total_height image_path;
+
+At the bottom of this section, we provide information about the spritesheet itself
+$spritesheet = width height image $spritesheet_sprites;
+*/
+$icon_fb_name = 'icon_fb';
+$icon_fb_x = 0px;
+$icon_fb_y = 26px;
+$icon_fb_offset_x = 0px;
+$icon_fb_offset_y = -26px;
+$icon_fb_width = 11px;
+$icon_fb_height = 18px;
+$icon_fb_total_width = 52px;
+$icon_fb_total_height = 44px;
+$icon_fb_image = '../images/sprite.png';
+$icon_fb = 0px 26px 0px -26px 11px 18px 52px 44px '../images/sprite.png' 'icon_fb';
+$icon_gp_name = 'icon_gp';
+$icon_gp_x = 0px;
+$icon_gp_y = 0px;
+$icon_gp_offset_x = 0px;
+$icon_gp_offset_y = 0px;
+$icon_gp_width = 24px;
+$icon_gp_height = 16px;
+$icon_gp_total_width = 52px;
+$icon_gp_total_height = 44px;
+$icon_gp_image = '../images/sprite.png';
+$icon_gp = 0px 0px 0px 0px 24px 16px 52px 44px '../images/sprite.png' 'icon_gp';
+$icon_tw_name = 'icon_tw';
+$icon_tw_x = 34px;
+$icon_tw_y = 0px;
+$icon_tw_offset_x = -34px;
+$icon_tw_offset_y = 0px;
+$icon_tw_width = 18px;
+$icon_tw_height = 14px;
+$icon_tw_total_width = 52px;
+$icon_tw_total_height = 44px;
+$icon_tw_image = '../images/sprite.png';
+$icon_tw = 34px 0px -34px 0px 18px 14px 52px 44px '../images/sprite.png' 'icon_tw';
+$icon_fb_2x_name = 'icon_fb-2x';
+$icon_fb_2x_x = 0px;
+$icon_fb_2x_y = 52px;
+$icon_fb_2x_offset_x = 0px;
+$icon_fb_2x_offset_y = -52px;
+$icon_fb_2x_width = 22px;
+$icon_fb_2x_height = 36px;
+$icon_fb_2x_total_width = 104px;
+$icon_fb_2x_total_height = 88px;
+$icon_fb_2x_image = '../images/sprite-2x.png';
+$icon_fb_2x = 0px 52px 0px -52px 22px 36px 104px 88px '../images/sprite-2x.png' 'icon_fb-2x';
+$icon_gp_2x_name = 'icon_gp-2x';
+$icon_gp_2x_x = 0px;
+$icon_gp_2x_y = 0px;
+$icon_gp_2x_offset_x = 0px;
+$icon_gp_2x_offset_y = 0px;
+$icon_gp_2x_width = 48px;
+$icon_gp_2x_height = 32px;
+$icon_gp_2x_total_width = 104px;
+$icon_gp_2x_total_height = 88px;
+$icon_gp_2x_image = '../images/sprite-2x.png';
+$icon_gp_2x = 0px 0px 0px 0px 48px 32px 104px 88px '../images/sprite-2x.png' 'icon_gp-2x';
+$icon_tw_2x_name = 'icon_tw-2x';
+$icon_tw_2x_x = 68px;
+$icon_tw_2x_y = 0px;
+$icon_tw_2x_offset_x = -68px;
+$icon_tw_2x_offset_y = 0px;
+$icon_tw_2x_width = 36px;
+$icon_tw_2x_height = 28px;
+$icon_tw_2x_total_width = 104px;
+$icon_tw_2x_total_height = 88px;
+$icon_tw_2x_image = '../images/sprite-2x.png';
+$icon_tw_2x = 68px 0px -68px 0px 36px 28px 104px 88px '../images/sprite-2x.png' 'icon_tw-2x';
+$spritesheet_width = 52px;
+$spritesheet_height = 44px;
+$spritesheet_image = '../images/sprite.png';
+$spritesheet_sprites = $icon_fb $icon_gp $icon_tw;
+$spritesheet = 52px 44px '../images/sprite.png' $spritesheet_sprites;
+$retina_spritesheet_width = 104px;
+$retina_spritesheet_height = 88px;
+$retina_spritesheet_image = '../images/sprite-2x.png';
+$retina_spritesheet_sprites = $icon_fb_2x $icon_gp_2x $icon_tw_2x;
+$retina_spritesheet = 104px 88px '../images/sprite-2x.png' $retina_spritesheet_sprites;
+
+/*
+These "retina group" variables are mappings for the naming and pairing of normal and retina sprites.
+
+The list formatted variables are intended for mixins like `retinaSprite` and `retinaSprites`.
+*/
+$icon_fb_group_name = 'icon_fb';
+$icon_fb_group = 'icon_fb' $icon_fb $icon_fb_2x;
+$icon_gp_group_name = 'icon_gp';
+$icon_gp_group = 'icon_gp' $icon_gp $icon_gp_2x;
+$icon_tw_group_name = 'icon_tw';
+$icon_tw_group = 'icon_tw' $icon_tw $icon_tw_2x;
+$retina_groups = $icon_fb_group $icon_gp_group $icon_tw_group;
+
+/*
+The provided mixins are intended to be used with the array-like variables
+
+.icon-home {
+  spriteWidth($icon_home)
+}
+
+.icon-email {
+  sprite($icon_email)
+}
+
+Example usage in HTML:
+
+`display: block` sprite:
+<div class="icon-home"></div>
+
+To change `display` (e.g. `display: inline-block;`), we suggest using a common CSS class:
+
+// CSS
+.icon {
+  display: inline-block;
+}
+
+// HTML
+<i class="icon icon-home"></i>
+*/
+spriteWidth($sprite) {
+  width: $sprite[4];
+}
+
+spriteHeight($sprite) {
+  height: $sprite[5];
+}
+
+spritePosition($sprite) {
+  background-position: $sprite[2] $sprite[3];
+}
+
+spriteImage($sprite) {
+  background-image: url($sprite[8]);
+}
+
+sprite($sprite) {
+  spriteImage($sprite)
+  spritePosition($sprite)
+  spriteWidth($sprite)
+  spriteHeight($sprite)
+}
+
+/*
+The `retinaSprite` mixin sets up rules and a media query for a sprite/retina sprite.
+  It should be used with a "retina group" variable.
+
+The media query is from CSS Tricks: https://css-tricks.com/snippets/css/retina-display-media-query/
+
+$icon_home_group = 'icon-home' $icon_home $icon_home_2x;
+
+.icon-home {
+  retinaSprite($icon_home_group)
+}
+*/
+spriteBackgroundSize($sprite) {
+  background-size: $sprite[6] $sprite[7];
+}
+
+retinaSprite($retina_group) {
+  $normal_sprite = $retina_group[1];
+  $retina_sprite = $retina_group[2];
+  sprite($normal_sprite)
+
+  @media (-webkit-min-device-pixel-ratio: 2),
+         (min-resolution: 192dpi) {
+    spriteImage($retina_sprite)
+    spriteBackgroundSize($normal_sprite)
+  }
+}
+
+/*
+The `sprites` mixin generates identical output to the CSS template
+  but can be overridden inside of Stylus
+
+This must be run when you have at least 2 sprites.
+  If run with a single sprite, then there will be reference errors.
+
+sprites($spritesheet_sprites);
+*/
+sprites($sprites) {
+  for $sprite in $sprites {
+    $sprite_name = $sprite[9];
+    .{$sprite_name} {
+      sprite($sprite);
+    }
+  }
+}
+
+/*
+The `retinaSprites` mixin generates a CSS rule and media query for retina groups
+  This yields the same output as CSS retina template but can be overridden in Stylus
+
+retinaSprites($retina_groups);
+*/
+retinaSprites($retina_groups) {
+  for $retina_group in $retina_groups {
+    $sprite_name = $retina_group[0];
+    .{$sprite_name} {
+      retinaSprite($retina_group);
+    }
+  }
+}

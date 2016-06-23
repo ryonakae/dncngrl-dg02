@@ -45,9 +45,9 @@ gulp.task('image:sprite', (callback) => {
       imgPath: '../images/sprite.png',
       cssName: '_sprite.styl',
       padding: 10,
-      // retinaSrcFilter: path.source.sprite + '*-2x.png',
-      // retinaImgName: 'sprite-2x.png',
-      // retinaImgPath: '../images/sprite-2x.png'
+      retinaSrcFilter: path.source.sprite + '*-2x.png',
+      retinaImgName: 'sprite-2x.png',
+      retinaImgPath: '../images/sprite-2x.png'
     }));
 
   const imgStream = spriteData.img

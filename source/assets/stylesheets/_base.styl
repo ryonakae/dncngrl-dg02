@@ -1,5 +1,6 @@
 @import 'kouto-swiss'
 @import '_config'
+@import '_sprite'
 
 normalize()
 box-sizing-reset()
@@ -16,6 +17,13 @@ body
   // text-align justify
   word-wrap break-word
   overflow-wrap break-word
+  width 100vw
+  height 100vh
+  overflow hidden
 
   +retina-query(only screen, 2)
     -webkit-font-smoothing antialiased
+
+  a
+    color inherit
+    text-decoration none

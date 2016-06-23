@@ -1,0 +1,71 @@
+.header
+  position fixed
+  top 0
+  left 0
+  width 100%
+  padding 30px 30px 0
+  z-index 10
+  clearfix()
+
+  &_backTop
+    float left
+    font-size $fontSize_small
+    border 1px solid $borderColor_default
+    color rgba($textColor_default, 0.7)
+    padding 10px 15px
+
+  &_share
+    float right
+    position relative
+    margin-top 8px
+
+    > *
+      display inline-block
+      vertical-align middle
+
+    .title
+      font-size $fontSize_small
+
+    .border
+      width 30px
+      height 1px
+      background-color $borderColor_default
+      margin-left 15px
+
+    .list
+      margin 0 0 0 15px
+      padding 0
+      list-style-type none
+
+      .item
+        display inline-block
+        vertical-align middle
+        margin-left 10px
+        width 30px
+        height 30px
+        position relative
+
+        a
+          display block
+          width 100%
+          height 100%
+
+          span
+            display block
+            hide-text()
+            position relative
+            top 50%
+            left 50%
+            transform translate(-50%, -50%)
+
+        &:first-child
+          margin-left 0
+
+        &-tw a span
+          retinaSprite($icon_tw_group)
+
+        &-fb a span
+          retinaSprite($icon_fb_group)
+
+        &-gp a span
+          retinaSprite($icon_gp_group)
