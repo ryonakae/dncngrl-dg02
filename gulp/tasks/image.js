@@ -9,6 +9,7 @@ import gulpif from 'gulp-if';
 import plumber from 'gulp-plumber';
 import buffer from 'vinyl-buffer';
 import merge from 'merge-stream';
+import bs from './browserSync';
 
 
 // image minify
@@ -31,7 +32,7 @@ gulp.task('image:min', () => {
     .pipe(gulpif(env.isProduction, imagemin(imageminOption)))
     .pipe(gulp.dest(path.build.images))
     .on('end', () => {
-      if(!env.isProduction) gulp.start('bs:reload');
+      if(!env.isProduction && bs.active) gulp.start('bs:reload');
     });
 });
 

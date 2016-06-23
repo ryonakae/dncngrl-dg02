@@ -3,6 +3,7 @@ import path from '../path';
 import env from '../env';
 import jade from 'gulp-jade';
 import plumber from 'gulp-plumber';
+import bs from './browserSync';
 
 
 // jade
@@ -16,6 +17,6 @@ gulp.task('jade', () => {
     .pipe(jade({ pretty: true }))
     .pipe(gulp.dest(path.build.root))
     .on('end', () => {
-      if(!env.isProduction) gulp.start('bs:reload');
+      if(!env.isProduction && bs.active) gulp.start('bs:reload');
     });
 });

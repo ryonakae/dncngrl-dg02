@@ -11,6 +11,7 @@ import plumber from 'gulp-plumber';
 import sourcemaps from 'gulp-sourcemaps';
 import gulpif from 'gulp-if';
 import lazypipe from 'lazypipe';
+import bs from './browserSync';
 
 
 // stylus
@@ -39,7 +40,8 @@ gulp.task('stylus', () => {
     .pipe(gulpif(!env.isProduction, sourcemaps.write('./')))
     .pipe(gulpif(env.isProduction, prodTasks()))
     .pipe(gulp.dest(path.build.stylesheets))
-    .on('end', () => {
-      if(!env.isProduction) gulp.start('bs:reload');
-    });
+    .pipe(bs.stream({match: '**/*.css'}));
+    // .on('end', () => {
+    //   if(!env.isProduction && bs.active) gulp.start('bs:reload');
+    // });
 });

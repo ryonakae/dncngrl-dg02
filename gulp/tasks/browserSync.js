@@ -1,11 +1,13 @@
 import gulp from 'gulp';
 import path from '../path';
 import browserSync from 'browser-sync';
+const bs = browserSync.create();
+export default bs;
 
 
 // browserSync
 gulp.task('bs:init', () => {
-  return browserSync.init({
+  return bs.init({
     open: false,
     notify: false,
     reloadDelay: 300,
@@ -19,5 +21,5 @@ gulp.task('bs:init', () => {
 
 
 gulp.task('bs:reload', () => {
-  return browserSync.reload();
+  return bs.reload();
 });

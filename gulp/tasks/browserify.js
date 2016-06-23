@@ -11,6 +11,7 @@ import gutil from 'gulp-util';
 import plumber from 'gulp-plumber';
 import gulpif from 'gulp-if';
 import uglify from 'gulp-uglify';
+import bs from './browserSync';
 
 
 // bundleScript function
@@ -52,7 +53,7 @@ const bundleScript = (isProduction) => {
         .pipe(gulp.dest(destPath))
         .on('end', () => {
           gutil.log('Finished', "'" + gutil.colors.cyan('Browserify Bundled') + "'", gutil.colors.green(bundleFile));
-          if(!isProduction) gulp.start('bs:reload');
+          if(!isProduction && bs.active) gulp.start('bs:reload');
         });
     };
 
