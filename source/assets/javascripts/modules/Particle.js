@@ -19,7 +19,8 @@ export default class Particle {
       positionRandomness: 30, //4
       velocity: new THREE.Vector3(),
       velocityRandomness: 30, //4
-      color: 0xffffff,
+      // color: 0xffffff,
+      color: 0x000000,
       colorRandomness: 0.2,
       turbulence: 0.78, //0.78
       lifetime: 1, //10
