@@ -77,42 +77,27 @@ import Carousel from './modules/Carousel';
 
     // gallery
     const bgGallery = document.getElementById('bgGallery');
-    const canvasGallery = new Canvas(bgGallery, 7.0);
+    const canvasGallery = new Canvas(bgGallery, 6.0);
     canvasGallery.init();
 
-    const carousel = new Carousel(100, 67, 100*1.5, 67*1.5);
-    carousel.addSlide(canvasGallery.scene, './assets/images/sample00.jpg');
-    carousel.addSlide(canvasGallery.scene, './assets/images/sample01.jpg');
-    carousel.addSlide(canvasGallery.scene, './assets/images/sample02.jpg');
-    carousel.addSlide(canvasGallery.scene, './assets/images/sample03.jpg');
-
-    carousel.slides[0].init('out');
-
-    let slideCount = 1;
-    let galleryNav = document.getElementById('galleryNav');
-
-    document.getElementById('galleryNavPrev').addEventListener('click', ()=>{
-      if(slideCount > 1){
-        galleryNav.classList.add('is-disableClick');
-        carousel.slidePrev(slideCount, 3.5, ()=>{
-          slideCount--;
-          galleryNav.classList.remove('is-disableClick');
-        });
-      } else {
-        console.log('first');
-      }
-    }, false);
-
-    document.getElementById('galleryNavNext').addEventListener('click', ()=>{
-      if(slideCount < carousel.slides.length) {
-        galleryNav.classList.add('is-disableClick');
-        carousel.slideNext(slideCount, 3.0, ()=>{
-          slideCount++;
-          galleryNav.classList.remove('is-disableClick');
-        });
-      } else {
-        console.log('last');
-      }
-    }, false);
+    const carousel = new Carousel({
+      itemWidth: 100,
+      itemHeight: 67,
+      itemDivisionX: 100*1.5,
+      itemDivisionY: 67*1.5,
+      duration: 3.5,
+      nav: document.getElementById('galleryNav'),
+      navNext: document.getElementById('galleryNavNext'),
+      navPrev: document.getElementById('galleryNavPrev'),
+      indicatorCurrent: document.getElementById('galleryIndicatorCurrent'),
+      indicatorAll: document.getElementById('galleryIndicatorAll'),
+      scene: canvasGallery.scene,
+      images: [
+        './assets/images/sample00.jpg',
+        './assets/images/sample01.jpg',
+        './assets/images/sample02.jpg',
+        './assets/images/sample03.jpg'
+      ]
+    });
   };
 })();

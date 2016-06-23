@@ -11,7 +11,7 @@ export default class Particle {
     this.requestId = null;
 
     this.particleSystem = new THREE.GPUParticleSystem({
-      maxParticles: count,
+      maxParticles: count
     });
 
     this.options = {
@@ -20,8 +20,9 @@ export default class Particle {
       velocity: new THREE.Vector3(),
       velocityRandomness: 30, //4
       // color: 0xffffff,
+      // color: 0x666666,
       color: 0x000000,
-      colorRandomness: 0.2,
+      colorRandomness: 0,
       turbulence: 0.78, //0.78
       lifetime: 1, //10
       size: 0, //4
@@ -31,7 +32,7 @@ export default class Particle {
       spawnRate: 30000,
       horizontalSpeed: 1.5,
       verticalSpeed: 1.24,
-      timeScale: 0.3 //0.4
+      timeScale: 0.2 //0.4
     };
 
     console.log(this);
@@ -69,16 +70,16 @@ export default class Particle {
     this.animate();
 
     TweenMax.to(this.options, duration, {
-      positionRandomness: 5,
-      velocityRandomness: 5,
+      positionRandomness: 4,
+      velocityRandomness: 4,
       lifetime: 10,
-      size: 4,
-      ease: Power3.easeOut,
+      size: 4.5,
+      ease: Power1.easeOut,
       onComplete: cb
     });
     TweenMax.to(this.spawnerOptions, duration, {
-      timeScale: 0.3,
-      ease: Power3.easeOut
+      timeScale: 0.2,
+      ease: Power1.easeOut
     });
   }
 
@@ -92,7 +93,7 @@ export default class Particle {
       onComplete: cb
     });
     TweenMax.to(this.spawnerOptions, duration, {
-      timeScale: 1,
+      timeScale: 0.7,
       ease: Power3.easeOut,
       onComplete: ()=>{
         setTimeout(()=>{
