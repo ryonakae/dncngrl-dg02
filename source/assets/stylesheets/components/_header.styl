@@ -7,12 +7,20 @@
   z-index 10
   clearfix()
 
+
   &_backTop
     float left
     font-size $fontSize_small
     border 1px solid $borderColor_default
     color rgba($textColor_default, 0.7)
     padding 10px 15px
+
+    body.is-pc &
+      &:hover
+        border-color transparent
+        background-color $textColor_default
+        color $bgColor_default
+
 
   &_share
     float right
