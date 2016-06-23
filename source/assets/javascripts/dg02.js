@@ -33,7 +33,6 @@ const uaManager = new UaManager();
     const bgIntro = document.getElementById('bgIntroduction');
     const canvasIntro = new Canvas(bgIntro, 25.0);
     let particle;
-    let particle2;
 
     // gallery
     const bgGallery = document.getElementById('bgGallery');
@@ -75,21 +74,17 @@ const uaManager = new UaManager();
     function introIn(){
       canvasIntro.init();
 
-      particle = new Particle(100000);
-      particle2 = new Particle(100000);
-      canvasIntro.scene.add(particle.particleSystem);
-      canvasIntro.scene.add(particle2.particleSystem);
+      particle = new Particle(100000, canvasIntro.renderer);
+      canvasIntro.scene.add(particle);
 
       $('.bg_item-intro').addClass('is-show');
       particle.fadeIn(1, 5.0, ()=>{
         $('.viewArea_section-intro').addClass('is-show');
         console.log('intro in');
       });
-      particle2.fadeIn(2, 5.0);
     }
 
     function introOut(){
-      particle2.fadeOut(5.0);
       particle.fadeOut(5.0, ()=>{
         $('.bg_item-intro').removeClass('is-show');
         $('.viewArea_section-intro').removeClass('is-show');

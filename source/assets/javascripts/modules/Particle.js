@@ -1,133 +1,110 @@
 import THREE from 'three';
 import gsap from 'gsap';
-require('../lib/GPUParticleSystem');
 
 
 // particle class
-export default class Particle {
+export default class Particle extends THREE.Points {
   constructor(count) {
-    this.tick = null;
-    this.clock = new THREE.Clock(true);
+    super();
+
     this.requestId = null;
 
-    this.particleSystem = new THREE.GPUParticleSystem({
-      maxParticles: count
+    this.geometry = null;
+    this.count = count;
+    this.material = null;
+    this.particles = null;
+
+    this.friction = 0.01;
+    this.mass = 1.0;
+    this.force = new THREE.Vector3();
+    this.velocity = new THREE.Vector3();
+
+    this.init();
+  }
+
+  resetForce(){
+    this.force.set(0, 0, 0);
+  }
+
+  addForce(force){
+    this.force.add(force / this.mass);
+  }
+
+  updateForce(){
+    this.force.sub(this.velocity * this.friction);
+  }
+
+  updatePos(vertex){
+    this.velocity.add(this.force);
+    vertex.add(this.velocity);
+  }
+
+  update(){
+    this.updateForce();
+    this.updatePos();
+  }
+
+  // http://yoppa.org/ma2_14/5837.html
+  addAttractionForce(vertex, x, y, z, radius, scale){
+    const posOfForce = new THREE.Vector3();
+    posOfForce.set(x, y, z);
+
+    const diff = vertex.sub(posOfForce);
+    const length = diff.length();
+
+    let bAmCloseEnough = true;
+    if(radius > 0){
+      if(length > radius){
+        bAmCloseEnough = false;
+      }
+    }
+    if(bAmCloseEnough == true){
+      const pct = 1 - (length/radius);
+      diff.normalize();
+      this.force.x = this.force.x - diff.x * scale * pct;
+      this.force.y = this.force.y - diff.y * scale * pct;
+      this.force.z = this.force.z - diff.z * scale * pct;
+    }
+  }
+
+  init(){
+    this.geometry = new THREE.Geometry();
+    this.material = new THREE.PointsMaterial({
+      color: 0xffffff,
+      size: 2,
+      transparent: true,
+      blending: THREE.AdditiveBlending
     });
 
-    this.options = {
-      position: new THREE.Vector3(),
-      positionRandomness: 30, //4
-      velocity: new THREE.Vector3(),
-      velocityRandomness: 30, //4
-      // color: 0xffffff,
-      // color: 0x666666,
-      color: 0x000000,
-      colorRandomness: 0,
-      turbulence: 1, //0.78
-      lifetime: 1, //10
-      size: 0, //4
-      sizeRandomness: 1,
-    };
-    this.spawnerOptions = {
-      spawnRate: 15000,
-      horizontalSpeed: 1.5,
-      verticalSpeed: 1.24,
-      timeScale: 0.2 //0.4
-    };
+    for (let i = 0; i < this.count; i++) {
+      const particle = new THREE.Vector3();
+      particle.x = (Math.random() - 0.5) * 1000;
+      particle.y = (Math.random() - 0.5) * 1000;
+      particle.z = (Math.random() - 0.5) * 1000;
 
-    console.log(this);
+      this.geometry.vertices.push(particle);
+    }
+
+    this.particles = new THREE.Points(this.geometry, this.material);
+    this.particles.sortPoints = true;
+
     this.frustumCulled = false;
+    console.log(this);
+
+    // this.animate();
   }
 
   animate(){
     this.requestId = requestAnimationFrame(this.animate.bind(this));
-
-    var delta = this.clock.getDelta() * this.spawnerOptions.timeScale;
-    // console.log(delta);
-    this.tick += delta;
-    if (this.tick < 0) this.tick = 0;
-
-    if (delta > 0) {
-      this.options.position.x = Math.cos(this.tick * this.spawnerOptions.horizontalSpeed) * 13;
-      this.options.position.y = Math.sin(this.tick * this.spawnerOptions.verticalSpeed) * 10;
-      this.options.position.z = Math.sin(this.tick * this.spawnerOptions.horizontalSpeed + this.spawnerOptions.verticalSpeed) * 5;
-      for (var x = 0; x < this.spawnerOptions.spawnRate * delta; x++) {
-        // Yep, that's really it.	Spawning particles is super cheap, and once you spawn them, the rest of
-        // their lifecycle is handled entirely on the GPU, driven by a time uniform updated below
-        this.particleSystem.spawnParticle(this.options);
-      }
-    }
-
-    this.particleSystem.update(this.tick);
-    // console.log('particle update');
-  }
-
-  animate2(){
-    this.requestId = requestAnimationFrame(this.animate2.bind(this));
-
-    var delta = this.clock.getDelta() * this.spawnerOptions.timeScale;
-    // console.log(delta);
-    this.tick += delta;
-    if (this.tick < 0) this.tick = 0;
-
-    if (delta > 0) {
-      this.options.position.x = Math.cos(this.tick * this.spawnerOptions.horizontalSpeed) * -13;
-      this.options.position.y = Math.sin(this.tick * this.spawnerOptions.verticalSpeed) * -10;
-      this.options.position.z = Math.sin(this.tick * this.spawnerOptions.horizontalSpeed + this.spawnerOptions.verticalSpeed) * 5;
-      for (var x = 0; x < this.spawnerOptions.spawnRate * delta; x++) {
-        // Yep, that's really it.	Spawning particles is super cheap, and once you spawn them, the rest of
-        // their lifecycle is handled entirely on the GPU, driven by a time uniform updated below
-        this.particleSystem.spawnParticle(this.options);
-      }
-    }
-
-    this.particleSystem.update(this.tick);
-    // console.log('particle update');
   }
 
   stopAnimate(){
     cancelAnimationFrame(this.requestId);
   }
 
-  fadeIn(num, duration, cb){
-    if(num == 1) {
-      this.animate();
-    } else if(num == 2) {
-      this.animate2();
-    }
-
-    TweenMax.to(this.options, duration, {
-      positionRandomness: 2,
-      velocityRandomness: 6,
-      lifetime: 3.5,
-      size: 4.5,
-      ease: Power1.easeOut,
-      onComplete: cb
-    });
-    TweenMax.to(this.spawnerOptions, duration, {
-      timeScale: 0.2,
-      ease: Power1.easeOut
-    });
+  fadeIn(duration, cb){
   }
 
   fadeOut(duration, cb){
-    TweenMax.to(this.options, duration, {
-      positionRandomness: 30,
-      velocityRandomness: 30,
-      lifetime: 1,
-      size: 0,
-      ease: Power3.easeOut,
-      onComplete: cb
-    });
-    TweenMax.to(this.spawnerOptions, duration, {
-      timeScale: 0.7,
-      ease: Power3.easeOut,
-      onComplete: ()=>{
-        setTimeout(()=>{
-          this.stopAnimate();
-          console.log('particle stop');
-        }, duration*1000 * 1.5);
-      }
-    });
   }
 }
