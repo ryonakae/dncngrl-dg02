@@ -2,6 +2,12 @@
 @import '_config'
 @import '_sprite'
 
+font-face( 'ProximaNova', '../fonts/ProximaNova-Regular', normal, normal, formats: woff )
+font-face( 'ProximaNova', '../fonts/ProximaNova-Regular-Italic', normal, italic, formats: woff )
+font-face( 'ProximaNova', '../fonts/ProximaNova-Semibold', bold, normal, formats: woff )
+font-face( 'ProximaNova', '../fonts/ProximaNova-Semibold-Italic', bold, italic, formats: woff )
+font-face( 'NotoSansJapanese', '../fonts/NotoSansJP-Regular', normal, normal, formats: woff )
+
 normalize()
 box-sizing-reset()
 
@@ -33,3 +39,23 @@ a
     &:hover
       opacity 0.7
       text-decoration none
+
+
+// noise and light
+.noise,
+.light
+  position absolute
+  width 100%
+  height 100%
+  top 0
+  left 0
+
+.noise
+  background-image url('../images/bg_noise.gif')
+  mix-blend-mode overlay
+  opacity 0.5
+
+.light
+  background-image radial-gradient(circle at center, white 0%, transparent 100%)
+  mix-blend-mode overlay
+  opacity 0.6
