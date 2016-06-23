@@ -9,6 +9,9 @@ import Eyecatch from './modules/Eyecatch';
 import Particle from './modules/Particle';
 import Carousel from './modules/Carousel';
 
+import UaManager from './modules/UaManager';
+const uaManager = new UaManager();
+
 
 (() => {
   $(() => {
@@ -18,6 +21,8 @@ import Carousel from './modules/Carousel';
   const init = () => {
     console.log('init');
 
+    // uamanager
+    uaManager.init();
 
     // eyecatch
     const bgTop = document.getElementById('bgTop');
