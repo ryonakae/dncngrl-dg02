@@ -16,15 +16,19 @@ export default class Particle extends THREE.Points {
     this.texture = null;
 
     this.posOfForce = new THREE.Vector3(0, 0, 0);
-    this.timeScale = 0.15;
-    this.tick = null;
     this.clock = new THREE.Clock(true);
+    this.delta = null;
+    this.timeScale = 0.1;
+    this.tick = null;
     this.horizontalSpeed = 1.5;
     this.verticalSpeed = 1.24;
 
     this.width = window.innerWidth * 0.6;
     this.height = window.innerHeight * 0.7;
-    this.depth = 10;
+    this.depth = 0;
+
+    this.forcePhase = 'attraction';
+    this.frameCount = 1;
 
     this.init();
   }
@@ -80,10 +84,10 @@ export default class Particle extends THREE.Points {
     this.geometry.verticesNeedUpdate = true;
 
     // posOfForceを動かす
-    const delta = this.clock.getDelta() * this.timeScale;
-    this.tick += delta;
-    this.posOfForce.x = Math.cos(this.tick * this.horizontalSpeed) * this.width * 0.6;
-    this.posOfForce.y = Math.sin(this.tick * this.verticalSpeed) * this.height * 0.6;
+    this.delta = this.clock.getDelta();
+    this.tick += this.delta * this.timeScale;
+    this.posOfForce.x = Math.cos(this.tick * this.horizontalSpeed) * this.width * -0.5;
+    this.posOfForce.y = Math.sin(this.tick * this.verticalSpeed) * this.height * 0.5;
     // this.posOfForce.z = Math.sin(this.tick * this.horizontalSpeed + this.verticalSpeed) * this.depth * 0.6;
     this.posOfForce.z = 0;
 
@@ -91,7 +95,24 @@ export default class Particle extends THREE.Points {
     for (let i = 0; i < this.count; i++) {
       const particle = this.geometry.vertices[i];
       this.vertexUpdate(particle, this.posOfForce);
+
+      if(this.frameCount % (60 * 10) == 0){
+      }
     }
+
+    // n秒毎にforcePhaseを切り替える
+    if(this.frameCount % (60 * 8) == 0){
+      if(this.forcePhase == 'attraction'){
+        this.forcePhase = 'repulsion';
+        console.log('repulsion');
+      }
+      else if(this.forcePhase == 'repulsion'){
+        this.forcePhase = 'attraction';
+        console.log('attraction');
+      }
+    }
+
+    this.frameCount++;
 
     // console.log(this.geometry.vertices[0].velocity);
     // console.log(this.posOfForce.x);
@@ -126,16 +147,23 @@ export default class Particle extends THREE.Points {
   }
 
   vertexUpdate(vertex, posOfForce){
-    vertex.force.x = (vertex.force.x - vertex.velocity.x * vertex.friction) * 0.3;
-    vertex.force.y = (vertex.force.y - vertex.velocity.y * vertex.friction) * 0.3;
-    vertex.force.z = (vertex.force.z - vertex.velocity.z * vertex.friction) * 0.3;
+    vertex.force.x = (vertex.force.x - vertex.velocity.x * vertex.friction) * 0.38;
+    vertex.force.y = (vertex.force.y - vertex.velocity.y * vertex.friction) * 0.38;
+    vertex.force.z = (vertex.force.z - vertex.velocity.z * vertex.friction) * 0.38;
 
-    this.vertexAddAttraction(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 1000, 0.02);
-    // this.vertexAddRepulsion(vertex, posOfForce.x*-1, posOfForce.y*-1, posOfForce.z*-1, 100, 0.05);
+    // forcePhaseに応じて力の加え方を変える
+    if(this.forcePhase == 'attraction'){
+      this.vertexAddAttraction(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 1000, 0.02);
+      this.vertexAddRepulsion(vertex, posOfForce.x*0.5, posOfForce.y*0.5, posOfForce.z*0.5, 200, 0.02);
+    }
+    else if (this.forcePhase == 'repulsion'){
+      this.vertexAddAttraction(vertex, posOfForce.x*-0.5, posOfForce.y*-0.5, posOfForce.z*-0.5, 700, 0.02);
+      this.vertexAddRepulsion(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 400, 0.02);
+    }
 
-    vertex.velocity.x = vertex.velocity.x + vertex.force.x * 0.3;
-    vertex.velocity.y = vertex.velocity.y + vertex.force.y * 0.3;
-    vertex.velocity.z = vertex.velocity.z + vertex.force.z * 0.3;
+    vertex.velocity.x = vertex.velocity.x + vertex.force.x * 0.38;
+    vertex.velocity.y = vertex.velocity.y + vertex.force.y * 0.38;
+    vertex.velocity.z = vertex.velocity.z + vertex.force.z * 0.38;
 
     vertex.x = vertex.x + vertex.velocity.x;
     vertex.y = vertex.y + vertex.velocity.y;

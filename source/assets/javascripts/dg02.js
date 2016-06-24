@@ -77,7 +77,7 @@ const uaManager = new UaManager();
     function introIn(){
       canvasIntro.init();
 
-      particle = new Particle(50000, canvasIntro.renderer);
+      particle = new Particle(40000, canvasIntro.renderer);
       canvasIntro.scene.add(particle);
 
       $('.bg_item-intro').addClass('is-show');
@@ -99,12 +99,10 @@ const uaManager = new UaManager();
       }, 1000);
     }
 
-    // topIn();
-    // $(window).on('click', ()=>{
-    //   topOut();
-    //   setTimeout(introIn, 5000);
-    // });
     introIn();
+    $(window).on('click', ()=>{
+      introOut();
+    });
 
 
 
