@@ -63,12 +63,15 @@ const uaManager = new UaManager();
     }
 
     function topOut(){
-      eyecatch.out(5.0, ()=>{
-        $('.bg_item-top').removeClass('is-show');
-        $('.viewArea_section-top').removeClass('is-show');
-        canvasTop.destroy();
-        console.log('eyecatch out');
-      });
+      $('.viewArea_section-top').removeClass('is-show');
+
+      setTimeout(()=>{
+        eyecatch.out(5.0, ()=>{
+          $('.bg_item-top').removeClass('is-show');
+          canvasTop.destroy();
+          console.log('eyecatch out');
+        });
+      }, 1000);
     }
 
     function introIn(){
@@ -78,19 +81,22 @@ const uaManager = new UaManager();
       canvasIntro.scene.add(particle);
 
       $('.bg_item-intro').addClass('is-show');
-      particle.fadeIn(1, 5.0, ()=>{
+      particle.in(3.0, ()=>{
         $('.viewArea_section-intro').addClass('is-show');
         console.log('intro in');
       });
     }
 
     function introOut(){
-      particle.fadeOut(5.0, ()=>{
-        $('.bg_item-intro').removeClass('is-show');
-        $('.viewArea_section-intro').removeClass('is-show');
-        canvasIntro.destroy();
-        console.log('intro out');
-      });
+      $('.viewArea_section-intro').removeClass('is-show');
+
+      setTimeout(()=>{
+        particle.out(3.0, ()=>{
+          $('.bg_item-intro').removeClass('is-show');
+          canvasIntro.destroy();
+          console.log('intro out');
+        });
+      }, 1000);
     }
 
     // topIn();

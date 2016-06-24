@@ -22,8 +22,8 @@ export default class Particle extends THREE.Points {
     this.horizontalSpeed = 1.5;
     this.verticalSpeed = 1.24;
 
-    this.width = window.innerWidth * 0.5;
-    this.height = window.innerHeight * 0.5;
+    this.width = window.innerWidth * 0.6;
+    this.height = window.innerHeight * 0.7;
     this.depth = 10;
 
     this.init();
@@ -36,12 +36,13 @@ export default class Particle extends THREE.Points {
     this.geometry = new THREE.Geometry();
     this.material = new THREE.PointsMaterial({
       color: 0x000000,
-      size: 6,
+      size: 0,
       map: this.texture,
       transparent: true,
       depthTest: false,
       // depthWrite: false,
-      blending: THREE.AdditiveBlending
+      blending: THREE.AdditiveBlending,
+      opacity: 0
     });
 
     // それぞれのパーティクル
@@ -69,7 +70,7 @@ export default class Particle extends THREE.Points {
     console.log(this.texture);
     console.log(this.geometry.vertices[0]);
 
-    this.animate();
+    window.addEventListener('resize', this.resize, false);
   }
 
   animate(){
@@ -83,7 +84,8 @@ export default class Particle extends THREE.Points {
     this.tick += delta;
     this.posOfForce.x = Math.cos(this.tick * this.horizontalSpeed) * this.width * 0.6;
     this.posOfForce.y = Math.sin(this.tick * this.verticalSpeed) * this.height * 0.6;
-    this.posOfForce.z = Math.sin(this.tick * this.horizontalSpeed + this.verticalSpeed) * this.depth * 0.6;
+    // this.posOfForce.z = Math.sin(this.tick * this.horizontalSpeed + this.verticalSpeed) * this.depth * 0.6;
+    this.posOfForce.z = 0;
 
     // それぞれのパーティクルのアニメーション
     for (let i = 0; i < this.count; i++) {
@@ -99,10 +101,28 @@ export default class Particle extends THREE.Points {
     cancelAnimationFrame(this.requestId);
   }
 
-  fadeIn(duration, cb){
+  in(duration, cb){
+    this.animate();
+
+    TweenMax.to(this.material, duration, {
+      size: 6,
+      opacity: 1,
+      ease: Power1.easeOut,
+      onComplete: cb
+    });
   }
 
-  fadeOut(duration, cb){
+  out(duration, cb){
+    TweenMax.to(this.material, duration, {
+      size: 0,
+      opacity: 0,
+      ease: Power1.easeOut,
+      onComplete: ()=>{
+        this.stopAnimate();
+        console.log('particle stop');
+        cb();
+      }
+    });
   }
 
   vertexUpdate(vertex, posOfForce){
@@ -110,7 +130,7 @@ export default class Particle extends THREE.Points {
     vertex.force.y = (vertex.force.y - vertex.velocity.y * vertex.friction) * 0.3;
     vertex.force.z = (vertex.force.z - vertex.velocity.z * vertex.friction) * 0.3;
 
-    this.vertexAddAttraction(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 1000, 0.03);
+    this.vertexAddAttraction(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 1000, 0.02);
     // this.vertexAddRepulsion(vertex, posOfForce.x*-1, posOfForce.y*-1, posOfForce.z*-1, 100, 0.05);
 
     vertex.velocity.x = vertex.velocity.x + vertex.force.x * 0.3;
@@ -202,5 +222,10 @@ export default class Particle extends THREE.Points {
       vertex.force.y = vertex.force.y + diff.y * scale * pct;
       vertex.force.z = vertex.force.y + diff.y * scale * pct;
     }
+  }
+
+  resize(){
+    this.width = window.innerWidth * 0.6;
+    this.height = window.innerHeight * 0.7;
   }
 }
