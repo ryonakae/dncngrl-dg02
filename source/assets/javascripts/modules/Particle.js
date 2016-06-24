@@ -13,58 +13,11 @@ export default class Particle extends THREE.Points {
     this.count = count;
     this.material = null;
     this.particles = null;
-
-    this.friction = 0.01;
-    this.mass = 1.0;
-    this.force = new THREE.Vector3();
-    this.velocity = new THREE.Vector3();
+    this.posOfForce = new THREE.Vector3(0, 0, 0);
+    this.frameCount = 0;
+    this.timeScale = 0.001;
 
     this.init();
-  }
-
-  resetForce(){
-    this.force.set(0, 0, 0);
-  }
-
-  addForce(force){
-    this.force.add(force / this.mass);
-  }
-
-  updateForce(){
-    this.force.sub(this.velocity * this.friction);
-  }
-
-  updatePos(vertex){
-    this.velocity.add(this.force);
-    vertex.add(this.velocity);
-  }
-
-  update(){
-    this.updateForce();
-    this.updatePos();
-  }
-
-  // http://yoppa.org/ma2_14/5837.html
-  addAttractionForce(vertex, x, y, z, radius, scale){
-    const posOfForce = new THREE.Vector3();
-    posOfForce.set(x, y, z);
-
-    const diff = vertex.sub(posOfForce);
-    const length = diff.length();
-
-    let bAmCloseEnough = true;
-    if(radius > 0){
-      if(length > radius){
-        bAmCloseEnough = false;
-      }
-    }
-    if(bAmCloseEnough == true){
-      const pct = 1 - (length/radius);
-      diff.normalize();
-      this.force.x = this.force.x - diff.x * scale * pct;
-      this.force.y = this.force.y - diff.y * scale * pct;
-      this.force.z = this.force.z - diff.z * scale * pct;
-    }
   }
 
   init(){
@@ -76,12 +29,19 @@ export default class Particle extends THREE.Points {
       blending: THREE.AdditiveBlending
     });
 
+    // それぞれのパーティクル
     for (let i = 0; i < this.count; i++) {
-      const vertex = new THREE.Vector3();
+      const vertex = new THREE.Vector3(0, 0, 0);
       vertex.x = (Math.random() - 0.5) * 1000;
       vertex.y = (Math.random() - 0.5) * 1000;
       vertex.z = (Math.random() - 0.5) * 100;
 
+      vertex.velocity = new THREE.Vector3(0, 0, 0);
+      vertex.force = new THREE.Vector3(0, 0, 0);
+      vertex.friction = 0.01;
+      vertex.mass = 1.0;
+
+      // geometryにパーティクルのデータを追加
       this.geometry.vertices.push(vertex);
     }
 
@@ -90,6 +50,7 @@ export default class Particle extends THREE.Points {
 
     this.frustumCulled = false;
     console.log(this.particles);
+    console.log(this.geometry.vertices[0]);
 
     this.animate();
   }
@@ -97,15 +58,22 @@ export default class Particle extends THREE.Points {
   animate(){
     this.requestId = requestAnimationFrame(this.animate.bind(this));
 
+    // posOfForceを動かす
+    this.posOfForce.x = Math.cos(this.frameCount * this.timeScale) * 10;
+    this.posOfForce.y = Math.sin(this.frameCount * this.timeScale) * 8;
+    this.posOfForce.z = Math.sin(this.frameCount * this.timeScale) * 3;
+
+    // それぞれのパーティクルのアニメーション
     for (let i = 0; i < this.count; i++) {
       const particle = this.geometry.vertices[i];
-      particle.x = particle.x + (Math.random() - 0.5) * 0.1;
-      particle.y = particle.y + (Math.random() - 0.5) * 0.1;
-      particle.z = particle.z + (Math.random() - 0.5) * 0.1;
+      // this.vertexUpdate(particle, this.posOfForce);
     }
 
     // 頂点変更処理
     this.geometry.verticesNeedUpdate = true;
+
+    // frameCountをアップデート
+    this.frameCount++;
   }
 
   stopAnimate(){
@@ -116,5 +84,42 @@ export default class Particle extends THREE.Points {
   }
 
   fadeOut(duration, cb){
+  }
+
+  vertexUpdate(vertex, posOfForce){
+    vertex.force = vertex.force.sub(vertex.multiplyScalar(vertex.friction));
+    this.vertexAddAttraction(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 10, 0.1);
+    vertex.velocity = vertex.velocity.add(vertex.force);
+
+    vertex.x = vertex.x + vertex.velocity.x;
+    vertex.y = vertex.y + vertex.velocity.y;
+    vertex.z = vertex.z + vertex.velocity.z;
+  }
+
+  vertexAddAttraction(vertex, forceX, forceY, forceZ, radius, scale){
+    const posOfForce = new THREE.Vector3(forceX, forceY, forceZ);
+
+    let diff = new THREE.Vector3;
+    diff.x = vertex.x - posOfForce.x;
+    diff.y = vertex.y - posOfForce.y;
+    diff.z = vertex.z - posOfForce.z;
+
+    const length = diff.length();
+
+    let bAmCloseEnough = true;
+
+    if(radius > 0){
+      if(length > radius){
+        bAmCloseEnough = false;
+      }
+    }
+
+    if(bAmCloseEnough == true) {
+      const pct = 1 - (length / radius);
+      diff.normalize();
+      vertex.force.x = vertex.force.x - diff.x * scale * pct;
+      vertex.force.y = vertex.force.y - diff.y * scale * pct;
+      vertex.force.z = vertex.force.z - diff.z * scale * pct;
+    }
   }
 }
