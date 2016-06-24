@@ -31,7 +31,7 @@ const uaManager = new UaManager();
 
     // introduction particle
     const bgIntro = document.getElementById('bgIntroduction');
-    const canvasIntro = new Canvas(bgIntro, 2.0);
+    const canvasIntro = new Canvas(bgIntro, 1.0);
     let particle;
 
     // gallery
@@ -74,7 +74,7 @@ const uaManager = new UaManager();
     function introIn(){
       canvasIntro.init();
 
-      particle = new Particle(100000, canvasIntro.renderer);
+      particle = new Particle(50000, canvasIntro.renderer);
       canvasIntro.scene.add(particle);
 
       $('.bg_item-intro').addClass('is-show');
