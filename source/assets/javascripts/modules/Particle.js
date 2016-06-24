@@ -16,7 +16,7 @@ export default class Particle extends THREE.Points {
     this.texture = null;
 
     this.posOfForce = new THREE.Vector3(0, 0, 0);
-    this.timeScale = 0.2;
+    this.timeScale = 0.15;
     this.tick = null;
     this.clock = new THREE.Clock(true);
     this.horizontalSpeed = 1.5;
