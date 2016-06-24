@@ -70,32 +70,42 @@ export default class Particle extends THREE.Points {
   init(){
     this.geometry = new THREE.Geometry();
     this.material = new THREE.PointsMaterial({
-      color: 0xffffff,
-      size: 2,
+      color: 0x000000,
+      size: 1,
       transparent: true,
       blending: THREE.AdditiveBlending
     });
 
     for (let i = 0; i < this.count; i++) {
-      const particle = new THREE.Vector3();
-      particle.x = (Math.random() - 0.5) * 1000;
-      particle.y = (Math.random() - 0.5) * 1000;
-      particle.z = (Math.random() - 0.5) * 1000;
+      const vertex = new THREE.Vector3();
+      vertex.x = (Math.random() - 0.5) * 1000;
+      vertex.y = (Math.random() - 0.5) * 1000;
+      vertex.z = (Math.random() - 0.5) * 100;
 
-      this.geometry.vertices.push(particle);
+      this.geometry.vertices.push(vertex);
     }
 
     this.particles = new THREE.Points(this.geometry, this.material);
     this.particles.sortPoints = true;
 
     this.frustumCulled = false;
-    console.log(this);
+    console.log(this.particles);
 
-    // this.animate();
+    this.animate();
   }
 
   animate(){
     this.requestId = requestAnimationFrame(this.animate.bind(this));
+
+    for (let i = 0; i < this.count; i++) {
+      const particle = this.geometry.vertices[i];
+      particle.x = particle.x + (Math.random() - 0.5) * 0.1;
+      particle.y = particle.y + (Math.random() - 0.5) * 0.1;
+      particle.z = particle.z + (Math.random() - 0.5) * 0.1;
+    }
+
+    // 頂点変更処理
+    this.geometry.verticesNeedUpdate = true;
   }
 
   stopAnimate(){

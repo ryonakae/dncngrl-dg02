@@ -31,7 +31,7 @@ const uaManager = new UaManager();
 
     // introduction particle
     const bgIntro = document.getElementById('bgIntroduction');
-    const canvasIntro = new Canvas(bgIntro, 25.0);
+    const canvasIntro = new Canvas(bgIntro, 2.0);
     let particle;
 
     // gallery
