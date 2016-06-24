@@ -74,7 +74,7 @@ const uaManager = new UaManager();
     function introIn(){
       canvasIntro.init();
 
-      particle = new Particle(1000, canvasIntro.renderer);
+      particle = new Particle(100000, canvasIntro.renderer);
       canvasIntro.scene.add(particle);
 
       $('.bg_item-intro').addClass('is-show');

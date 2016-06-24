@@ -13,9 +13,13 @@ export default class Particle extends THREE.Points {
     this.count = count;
     this.material = null;
     this.particles = null;
+
     this.posOfForce = new THREE.Vector3(0, 0, 0);
-    this.frameCount = 0;
-    this.timeScale = 0.001;
+    this.timeScale = 0.1;
+    this.tick = null;
+    this.clock = new THREE.Clock(true);
+    this.horizontalSpeed = 1.5;
+    this.verticalSpeed = 1.24;
 
     this.init();
   }
@@ -32,9 +36,9 @@ export default class Particle extends THREE.Points {
     // それぞれのパーティクル
     for (let i = 0; i < this.count; i++) {
       const vertex = new THREE.Vector3(0, 0, 0);
-      vertex.x = (Math.random() - 0.5) * 1000;
-      vertex.y = (Math.random() - 0.5) * 1000;
-      vertex.z = (Math.random() - 0.5) * 100;
+      vertex.x = (Math.random() - 0.5) * 500;
+      vertex.y = (Math.random() - 0.5) * 500;
+      vertex.z = (Math.random() - 0.5) * 50;
 
       vertex.velocity = new THREE.Vector3(0, 0, 0);
       vertex.force = new THREE.Vector3(0, 0, 0);
@@ -58,22 +62,24 @@ export default class Particle extends THREE.Points {
   animate(){
     this.requestId = requestAnimationFrame(this.animate.bind(this));
 
+    // 頂点の変更を有効にする
+    this.geometry.verticesNeedUpdate = true;
+
     // posOfForceを動かす
-    this.posOfForce.x = Math.cos(this.frameCount * this.timeScale) * 10;
-    this.posOfForce.y = Math.sin(this.frameCount * this.timeScale) * 8;
-    this.posOfForce.z = Math.sin(this.frameCount * this.timeScale) * 3;
+    const delta = this.clock.getDelta() * this.timeScale;
+    this.tick += delta;
+    this.posOfForce.x = Math.cos(this.tick * this.horizontalSpeed) * 50;
+    this.posOfForce.y = Math.sin(this.tick * this.verticalSpeed) * 40;
+    this.posOfForce.z = Math.sin(this.tick * this.horizontalSpeed + this.verticalSpeed) * 5;
 
     // それぞれのパーティクルのアニメーション
     for (let i = 0; i < this.count; i++) {
       const particle = this.geometry.vertices[i];
-      // this.vertexUpdate(particle, this.posOfForce);
+      this.vertexUpdate(particle, this.posOfForce);
     }
 
-    // 頂点変更処理
-    this.geometry.verticesNeedUpdate = true;
-
-    // frameCountをアップデート
-    this.frameCount++;
+    // console.log(this.geometry.vertices[0].velocity);
+    // console.log(this.posOfForce.x);
   }
 
   stopAnimate(){
@@ -87,9 +93,15 @@ export default class Particle extends THREE.Points {
   }
 
   vertexUpdate(vertex, posOfForce){
-    vertex.force = vertex.force.sub(vertex.multiplyScalar(vertex.friction));
-    this.vertexAddAttraction(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 10, 0.1);
-    vertex.velocity = vertex.velocity.add(vertex.force);
+    vertex.force.x = vertex.force.x - vertex.velocity.x * vertex.friction;
+    vertex.force.y = vertex.force.y - vertex.velocity.y * vertex.friction;
+    vertex.force.z = vertex.force.z - vertex.velocity.z * vertex.friction;
+
+    this.vertexAddAttraction(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 2000, 0.005);
+
+    vertex.velocity.x = vertex.velocity.x + vertex.force.x * 0.1;
+    vertex.velocity.y = vertex.velocity.y + vertex.force.y * 0.1;
+    vertex.velocity.z = vertex.velocity.z + vertex.force.z * 0.1;
 
     vertex.x = vertex.x + vertex.velocity.x;
     vertex.y = vertex.y + vertex.velocity.y;
@@ -119,7 +131,7 @@ export default class Particle extends THREE.Points {
       diff.normalize();
       vertex.force.x = vertex.force.x - diff.x * scale * pct;
       vertex.force.y = vertex.force.y - diff.y * scale * pct;
-      vertex.force.z = vertex.force.z - diff.z * scale * pct;
+      vertex.force.z = vertex.force.y - diff.y * scale * pct;
     }
   }
 }
