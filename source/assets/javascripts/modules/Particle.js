@@ -104,11 +104,11 @@ export default class Particle extends THREE.Points {
     if(this.frameCount % (60 * 8) == 0){
       if(this.forcePhase == 'attraction'){
         this.forcePhase = 'repulsion';
-        console.log('repulsion');
+        // console.log('repulsion');
       }
       else if(this.forcePhase == 'repulsion'){
         this.forcePhase = 'attraction';
-        console.log('attraction');
+        // console.log('attraction');
       }
     }
 

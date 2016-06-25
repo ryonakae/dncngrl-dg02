@@ -30,7 +30,7 @@ export const uaManager = new UaManager();
     // section initialize
     const sectionTop = new Section({
       bg: document.getElementById('bgTop'),
-      magnification: 5.0
+      magnification: 6.0
     });
     sectionTop.init();
     console.log(sectionTop.canvas);
@@ -52,11 +52,14 @@ export const uaManager = new UaManager();
 
 
     // show eyecatch
+    // top表示前はnowMovingをtrue
+    // topの表示が終わったらnowMovingがfalseになる
+    let _currentSection = 'top';
+    let _nowMoving = true;
     moveSection(null, 'top');
 
 
     // move section when scroll
-    let nowMoving = false;
     let moveAmount;
     let scrollPositionTop;
     let scrollPositionBottom;
@@ -80,22 +83,57 @@ export const uaManager = new UaManager();
     }
 
     $(window).on('wheel.onScroll touchmove.onScroll', ()=>{
-      // nowMovingがtrueなら以下スキップ
-      if(nowMoving) return;
+      console.log('nowMoving:', _nowMoving);
 
-      nowMoving = true;
+      // nowMovingがtrueなら以下スキップ
+      if(_nowMoving) return;
+
+      _nowMoving = true;
 
       scrollPositionTop = window.pageYOffset;
       scrollPositionBottom = scrollPositionTop + window.innerHeight;
-      console.log(moveAmount);
 
       if(moveAmount > 0){
-        console.log('next');
-        moveSection('top', 'intro');
+        console.log('move next');
+        console.log('nowMoving:', _nowMoving);
+
+        if(_currentSection == 'top') {
+          moveSection('top', 'intro');
+        }
+        else if(_currentSection == 'intro'){
+          moveSection('intro', 'gallery');
+        }
+        // else if(_currentSection == 'gallery'){
+        //   moveSection('gallery', 'credit');
+        // }
+        else {
+          _nowMoving = false;
+          console.log('nowMoving', _nowMoving);
+        }
       }
       else if(moveAmount < 0){
-        console.log('back');
+        console.log('move prev');
+        console.log('nowMoving:', _nowMoving);
+
+        if(_currentSection == 'intro'){
+          moveSection('intro', 'top');
+        }
+        else if(_currentSection == 'gallery'){
+          moveSection('gallery', 'intro');
+        }
+        // else if (_currentSection == 'credit') {
+        //   moveSection('credit', 'gallery');
+        // }
+        else {
+          _nowMoving = false;
+          console.log('nowMoving', _nowMoving);
+        }
       }
+    });
+
+
+    $(window).on('click', ()=>{
+      console.log('currentSection:', _currentSection);
     });
 
 
@@ -116,9 +154,10 @@ export const uaManager = new UaManager();
             eyecatch.parallax(document.body, -0.13, -0.15, 0.0002);
 
             $('.bg_item-top').addClass('is-show');
-            eyecatch.in(5.0, ()=>{
+            eyecatch.in(7.0, ()=>{
               $('.viewArea_section-top').addClass('is-show');
               console.log('eyecatch in');
+              _currentSection = 'top';
               resolve();
             });
           });
@@ -140,8 +179,44 @@ export const uaManager = new UaManager();
             particle.in(3.0, ()=>{
               $('.viewArea_section-intro').addClass('is-show');
               console.log('intro in');
+              _currentSection = 'intro';
               resolve();
             });
+          });
+        }
+
+        // gallery
+        else if(nextSection == 'gallery'){
+          return new Promise((resolve, reject)=>{
+            sectionGallery.canvas.init();
+
+            carousel = new Carousel({
+              itemWidth: 100,
+              itemHeight: 67,
+              itemDivisionX: 100*1.5,
+              itemDivisionY: 67*1.5,
+              duration: 3.5,
+              nav: document.getElementById('galleryNav'),
+              navNext: document.getElementById('galleryNavNext'),
+              navPrev: document.getElementById('galleryNavPrev'),
+              indicatorCurrent: document.getElementById('galleryIndicatorCurrent'),
+              indicatorAll: document.getElementById('galleryIndicatorAll'),
+              scene: sectionGallery.canvas.scene,
+              images: [
+                './assets/images/sample00.jpg',
+                './assets/images/sample01.jpg',
+                './assets/images/sample02.jpg',
+                './assets/images/sample03.jpg'
+              ]
+            });
+
+            carousel.parallax(document.body, 0, 0, 0.00006);
+
+            $('.bg_item-gallery').addClass('is-show');
+            $('.viewArea_section-gallery').addClass('is-show');
+            console.log('gallery in');
+            _currentSection = 'gallery';
+            resolve();
           });
         }
 
@@ -188,6 +263,20 @@ export const uaManager = new UaManager();
           });
         }
 
+        // gallery
+        else if(currentSection == 'gallery'){
+          return new Promise((resolve, reject)=>{
+            $('.viewArea_section-gallery').removeClass('is-show');
+
+            setTimeout(()=>{
+              $('.bg_item-gallery').removeClass('is-show');
+              sectionGallery.canvas.destroy();
+              console.log('gallery out');
+              resolve();
+            }, 1000);
+          });
+        }
+
         // どれでもない時
         // 最初のページ表示時とか
         else {
@@ -198,93 +287,22 @@ export const uaManager = new UaManager();
       }
 
       // 関数実行
+      console.log('nowMoving:', _nowMoving);
       // 今と次のセクションが同じだったら何もしない
-      if(currentSection == nextSection) return;
+      if(currentSection == nextSection) {
+        _nowMoving = false; //ロック解除
+        console.log('nowMoving:', _nowMoving);
+        return;
+      };
 
       sectionOut()
         .then(sectionIn)
         .then(()=>{
-          nowMoving = false; //ロック解除
           console.log('section moved');
+          console.log('currentSection:', _currentSection);
+          _nowMoving = false; //ロック解除
+          console.log('nowMoving:', _nowMoving);
         })
     }
-
-
-
-    // // eyecatch in/out
-    // let isEyecatchStarted = false;
-    // bgTop.addEventListener('click', ()=>{
-    //   if(isEyecatchStarted == false){
-    //     eyecatch.in(5.0, ()=>{
-    //       console.log('eyecatch in');
-    //       isEyecatchStarted = true;
-    //     });
-    //   }
-    //   else if(isEyecatchStarted == true){
-    //     eyecatch.out(5.0, ()=>{
-    //       console.log('eyecatch out');
-    //       isEyecatchStarted = false;
-    //     });
-    //   }
-    // }, false);
-    //
-    //
-    // // introduction particle
-    // canvasIntro.init();
-    //
-    // const particle = new Particle(100000);
-    // canvasIntro.scene.add(particle.particleSystem);
-    //
-    // // particle in/out
-    // let isParticleStarted = false;
-    // bgIntro.addEventListener('click', ()=>{
-    //   if(isParticleStarted == false){
-    //     particle.fadeIn(2.0, ()=>{
-    //       console.log('fadeIn');
-    //       isParticleStarted = true;
-    //     });
-    //   }
-    //   else if(isParticleStarted == true){
-    //     particle.fadeOut(2.0, ()=>{
-    //       console.log('fadeOut');
-    //       isParticleStarted = false;
-    //     });
-    //   }
-    // }, false);
-
-
-    // // gallery
-    // canvasGallery.init();
-    //
-    // const carousel = new Carousel({
-    //   itemWidth: 100,
-    //   itemHeight: 67,
-    //   itemDivisionX: 100*1.5,
-    //   itemDivisionY: 67*1.5,
-    //   duration: 3.5,
-    //   nav: document.getElementById('galleryNav'),
-    //   navNext: document.getElementById('galleryNavNext'),
-    //   navPrev: document.getElementById('galleryNavPrev'),
-    //   indicatorCurrent: document.getElementById('galleryIndicatorCurrent'),
-    //   indicatorAll: document.getElementById('galleryIndicatorAll'),
-    //   scene: canvasGallery.scene,
-    //   images: [
-    //     './assets/images/sample00.jpg',
-    //     './assets/images/sample01.jpg',
-    //     './assets/images/sample02.jpg',
-    //     './assets/images/sample03.jpg'
-    //   ]
-    // });
-    //
-    // carousel.initParallax(document.body, 0, 0, 0.00006);
-    //
-    // window.addEventListener('dblclick', ()=>{
-    //   canvasGallery.destroy();
-    //   console.log(canvasGallery);
-    //   canvasGallery = null;
-    //   console.log(canvasGallery);
-    //
-    //   carousel.destroyParallax();
-    // }, false);
   };
 })();
