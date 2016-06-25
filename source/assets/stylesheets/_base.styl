@@ -104,7 +104,9 @@ a
 
 .loader
   transition: all 1000ms ease
-  position absolute
+  position fixed
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
   width 100%
   height 100%
   z-index 100
