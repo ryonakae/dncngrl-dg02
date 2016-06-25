@@ -1,18 +1,23 @@
 .footer
+  transition: all 1000ms easing('in-out-cubic')
   position fixed
   bottom 0
   left 0
   width 100%
   padding 0 30px 30px
   z-index 10
+  opacity 0
+
+  body.is-ready &
+    opacity 1
 
 
   &_scroll
-    transition: all 1000ms easing('in-out-cubic')
+    transition: all 1000ms easing('in-out-quart')
     transition-property opacity, transform
     transition-delay 500ms
     position absolute
-    left 30px
+    right 30px
     bottom 25px
     cursor pointer
     opacity 0
@@ -78,10 +83,12 @@
 
 
   &_copyright
+    transition: all 400ms ease
     // float right
     position absolute
-    right 30px
-    bottom 25px
+    left 30px
+    bottom 19px
+    opacity 0.7
 
     > *
       display inline-block
@@ -89,10 +96,12 @@
       font-size $fontSize_small
 
     .border
-      width 30px
-      height 1px
+      width 1px
+      height 30px
       background-color $borderColor_default
       margin-left 12px
+      margin-right 15px
 
     .credit
-      margin-left 15px
+      a
+        margin-left .5em

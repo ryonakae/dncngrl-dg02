@@ -51,7 +51,8 @@ $transitionEasing = 'in-out-cubic'
 
   // top
   &-top
-    padding-left 30px
+    .content_inner
+      padding-left 30px
 
     .subTitle
       transition: all $transitionDuration easing($transitionEasing)
@@ -71,7 +72,7 @@ $transitionEasing = 'in-out-cubic'
     .title
       transition-delay 250ms
       font-size rem(90px)
-      letter-spacing 0.02em
+      letter-spacing -0.01em
       margin-top 12px
 
     .caption
