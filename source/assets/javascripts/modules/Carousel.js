@@ -29,7 +29,7 @@ export default class Carousel {
       this.addSlide(this.scene, images[i]);
     }
 
-    this.slides[0].init('out');
+    this.slides[0].init('in');
 
     this.initIndicator(this.slideCount, this.slides.length);
 
@@ -108,5 +108,13 @@ export default class Carousel {
         this.slides[i].rotation.y = defaultRotateY + mouseX * param;
       }, false);
     }
+  }
+
+  in(duration, cb){
+    this.slides[0].slideNextIn(duration, cb);
+  }
+
+  out(duration, cb){
+    this.slides[this.slideCount-1].slidePrevOut(duration, cb);
   }
 }

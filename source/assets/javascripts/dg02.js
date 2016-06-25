@@ -54,9 +54,13 @@ export const uaManager = new UaManager();
     // show eyecatch
     // top表示前はnowMovingをtrue
     // topの表示が終わったらnowMovingがfalseになる
-    let _currentSection = 'top';
+    // let _currentSection = 'top';
+    // let _nowMoving = true;
+    // moveSection(null, 'top');
+    // drbug
+    let _currentSection = 'gallery';
     let _nowMoving = true;
-    moveSection(null, 'top');
+    moveSection(null, 'gallery');
 
 
     // move section when scroll
@@ -195,7 +199,7 @@ export const uaManager = new UaManager();
               itemHeight: 67,
               itemDivisionX: 100*1.5,
               itemDivisionY: 67*1.5,
-              duration: 3.5,
+              duration: 4.0,
               nav: document.getElementById('galleryNav'),
               navNext: document.getElementById('galleryNavNext'),
               navPrev: document.getElementById('galleryNavPrev'),
@@ -213,10 +217,12 @@ export const uaManager = new UaManager();
             carousel.parallax(document.body, 0, 0, 0.00006);
 
             $('.bg_item-gallery').addClass('is-show');
-            $('.viewArea_section-gallery').addClass('is-show');
-            console.log('gallery in');
-            _currentSection = 'gallery';
-            resolve();
+            carousel.in(4.0, ()=>{
+              $('.viewArea_section-gallery').addClass('is-show');
+              console.log('gallery in');
+              _currentSection = 'gallery';
+              resolve();
+            });
           });
         }
 
@@ -269,10 +275,12 @@ export const uaManager = new UaManager();
             $('.viewArea_section-gallery').removeClass('is-show');
 
             setTimeout(()=>{
-              $('.bg_item-gallery').removeClass('is-show');
-              sectionGallery.canvas.destroy();
-              console.log('gallery out');
-              resolve();
+              carousel.out(4.0, ()=>{
+                $('.bg_item-gallery').removeClass('is-show');
+                sectionGallery.canvas.destroy();
+                console.log('gallery out');
+                resolve();
+              });
             }, 1000);
           });
         }
