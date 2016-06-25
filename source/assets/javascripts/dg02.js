@@ -27,12 +27,6 @@ export const uaManager = new UaManager();
     uaManager.init();
 
 
-    // bodyの高さをゴリ押しでなんとかする
-    $(window).on('load resize orientationchange', ()=>{
-      $('body').css({height: window.innerHeight});
-    });
-
-
     // 画像をロード
     // 使う画像全部入れとく
     const loadingManager = new THREE.LoadingManager();
@@ -242,11 +236,20 @@ export const uaManager = new UaManager();
           return new Promise((resolve, reject)=>{
             sectionGallery.canvas.init();
 
+            let divisionX, divisionY;
+            if(uaManager.device() === 'pc'){
+              divisionX = 100*1.5;
+              divisionY = 67*1.5;
+            } else {
+              divisionX = 100*1.0;
+              divisionY = 67*1.0;
+            }
+
             carousel = new Carousel({
               itemWidth: 100,
               itemHeight: 67,
-              itemDivisionX: 100*1.5,
-              itemDivisionY: 67*1.5,
+              itemDivisionX: divisionX,
+              itemDivisionY: divisionY,
               duration: 4.0,
               nav: document.getElementById('galleryNav'),
               navNext: document.getElementById('galleryNavNext'),

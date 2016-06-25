@@ -12,6 +12,11 @@ normalize()
 box-sizing-reset()
 
 
+html
+  width 100%
+  height 100%
+
+
 body
   font-family $fontFamily_default
   font-size $fontSize_default
@@ -23,8 +28,8 @@ body
   // text-align justify
   word-wrap break-word
   overflow-wrap break-word
-  width 100vw
-  height 100vh
+  width 100%
+  height 100%
   overflow hidden
 
   & ::-moz-selection
