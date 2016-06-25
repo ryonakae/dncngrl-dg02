@@ -120,5 +120,7 @@ export default class Carousel {
 
   out(duration, cb){
     this.slides[this.slideCount-1].slidePrevOut(duration, cb);
+    $(this.navNext).off('.carouselClick');
+    $(this.navPrev).off('.carouselClick');
   }
 }

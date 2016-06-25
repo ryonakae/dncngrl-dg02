@@ -89,10 +89,20 @@ export default class Particle extends THREE.Points {
     // posOfForceを動かす
     this.delta = this.clock.getDelta();
     this.tick += this.delta * this.timeScale;
-    this.posOfForce.x = Math.cos(this.tick * this.horizontalSpeed) * this.width * -0.5;
-    this.posOfForce.y = Math.sin(this.tick * this.verticalSpeed) * this.height * 0.5;
-    // this.posOfForce.z = Math.sin(this.tick * this.horizontalSpeed + this.verticalSpeed) * this.depth * 0.6;
-    this.posOfForce.z = 0;
+
+    // tickの数(経過時間)でposOfForceの位置を変える
+    // 最初は真ん中にしとく
+    if(this.tick < 1){
+      this.posOfForce.x = Math.cos(this.tick * this.horizontalSpeed) * 50;
+      this.posOfForce.y = Math.sin(this.tick * this.verticalSpeed) * 50;
+      this.posOfForce.z = 0;
+    }
+    else {
+      this.posOfForce.x = Math.cos(this.tick * this.horizontalSpeed) * this.width * -0.5;
+      this.posOfForce.y = Math.sin(this.tick * this.verticalSpeed) * this.height * 0.5;
+      // this.posOfForce.z = Math.sin(this.tick * this.horizontalSpeed + this.verticalSpeed) * this.depth * 0.6;
+      this.posOfForce.z = 0;
+    }
 
     // それぞれのパーティクルのアニメーション
     for (let i = 0; i < this.count; i++) {
@@ -154,9 +164,9 @@ export default class Particle extends THREE.Points {
   }
 
   vertexUpdate(vertex, posOfForce){
-    vertex.force.x = (vertex.force.x - vertex.velocity.x * vertex.friction) * 0.38;
-    vertex.force.y = (vertex.force.y - vertex.velocity.y * vertex.friction) * 0.38;
-    vertex.force.z = (vertex.force.z - vertex.velocity.z * vertex.friction) * 0.38;
+    vertex.force.x = (vertex.force.x - vertex.velocity.x * vertex.friction) * 0.41;
+    vertex.force.y = (vertex.force.y - vertex.velocity.y * vertex.friction) * 0.41;
+    vertex.force.z = (vertex.force.z - vertex.velocity.z * vertex.friction) * 0.41;
 
     // nowOutがflase: 通常時
     if(!this.nowOut){
@@ -175,9 +185,9 @@ export default class Particle extends THREE.Points {
       this.vertexAddRepulsion(vertex, 0, 0, 0, 700, 0.15);
     }
 
-    vertex.velocity.x = vertex.velocity.x + vertex.force.x * 0.38;
-    vertex.velocity.y = vertex.velocity.y + vertex.force.y * 0.38;
-    vertex.velocity.z = vertex.velocity.z + vertex.force.z * 0.38;
+    vertex.velocity.x = vertex.velocity.x + vertex.force.x * 0.41;
+    vertex.velocity.y = vertex.velocity.y + vertex.force.y * 0.41;
+    vertex.velocity.z = vertex.velocity.z + vertex.force.z * 0.41;
 
     vertex.x = vertex.x + vertex.velocity.x;
     vertex.y = vertex.y + vertex.velocity.y;
