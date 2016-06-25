@@ -39,6 +39,8 @@ export default class Carousel {
     $(this.navPrev).on('click.carouselClick', ()=>{
       this.slidePrev(this.duration);
     });
+
+    this.checkEdge();
   }
 
   addSlide(scene, imageSrc){
@@ -67,6 +69,7 @@ export default class Carousel {
         this.slideCount++;
         this.updateIndicator(this.slideCount);
         this.nav.classList.remove('is-disableClick');
+        this.checkEdge();
       });
     }
   }
@@ -78,17 +81,33 @@ export default class Carousel {
         this.slideCount--;
         this.updateIndicator(this.slideCount);
         this.nav.classList.remove('is-disableClick');
+        this.checkEdge();
       });
     }
   }
 
   initIndicator(currentNum, allNum){
-    this.indicatorAll.textContent = allNum;
-    this.indicatorCurrent.textContent = currentNum;
+    this.indicatorAll.textContent = '0' + allNum.toString();
+    this.indicatorCurrent.textContent = '0' + currentNum.toString();
   }
 
   updateIndicator(currentNum) {
-    this.indicatorCurrent.textContent = currentNum;
+    this.indicatorCurrent.textContent = '0' + currentNum.toString();
+  }
+
+  checkEdge(){
+    console.log(this.slideCount);
+
+    if(this.slideCount == 1){
+      $(this.navPrev).addClass('is-disableClick');
+    }
+    else if(this.slideCount == this.slides.length){
+      $(this.navNext).addClass('is-disableClick');
+    }
+    else {
+      $(this.navPrev).removeClass('is-disableClick');
+      $(this.navNext).removeClass('is-disableClick');
+    }
   }
 
   parallax(dom, defaultRotateX, defaultRotateY, param){

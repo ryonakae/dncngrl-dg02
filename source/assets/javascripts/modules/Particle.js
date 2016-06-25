@@ -153,7 +153,7 @@ export default class Particle extends THREE.Points {
       size: 0,
       opacity: 0,
       ease: Power1.easeOut,
-      delay: 0.8,
+      delay: 1.5,
       onComplete: ()=>{
         this.stopAnimate();
         $(window).off('.particleResize');
@@ -180,7 +180,7 @@ export default class Particle extends THREE.Points {
         this.vertexAddRepulsion(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 300, 0.02);
       }
     }
-    // nowOutがtrue: フェードイン
+    // nowOutがtrue: フェードアウト時
     else {
       this.vertexAddRepulsion(vertex, 0, 0, 0, 700, 0.15);
     }

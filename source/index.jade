@@ -43,40 +43,53 @@ html(lang='ja', prefix="og: http://ogp.me/ns#")
       //- top
       section.viewArea_section.viewArea_section-top
         .content.content-top
-          p.subTitle Dancing Girl. Vol.02
-          h1.title Another World
-          small.caption 2016 Summer -Aikatsu! Illustrations-
+          .content_inner
+            p.subTitle Dancing Girl. Vol.02
+            h1.title Another World
+            small.caption 2016 Summer -Aikatsu! Illustrations-
       
       //- introduction
       section.viewArea_section.viewArea_section-intro
         .content.content-intro
-          h2.title Introduction
-          .description
-            p あの「Soleil」のメンバーにして、ファッションブランド「SPICY AGEHA」の専属モデル、「美しき刃」こと紫吹蘭。そして「Dancing Diva」の一員、「ステージに咲く氷の華」氷上スミレ。そんなクールにして可憐な2人が、もし女性ファッション誌の巻頭特集を飾ったら……。
-            p 「Dancing Girl. Vol.01 Orchid &amp; Violet」は、そんなコンセプトで制作した、「アイカツ！」の二次創作イラスト集です。
-            p まるで、ゲーム・アニメから現実世界へ飛び出してきたようなアイドル2人の活躍をぜひ、ご覧ください。
+          .content_inner
+            h2.title Introduction
+            .description
+              p あの「Soleil」のメンバーにして、ファッションブランド「SPICY AGEHA」の専属モデル、「美しき刃」こと紫吹蘭。そして「Dancing Diva」の一員、「ステージに咲く氷の華」氷上スミレ。そんなクールにして可憐な2人が、もし女性ファッション誌の巻頭特集を飾ったら……。
+              p 「Dancing Girl. Vol.01 Orchid &amp; Violet」は、そんなコンセプトで制作した、「アイカツ！」の二次創作イラスト集です。
+              p まるで、ゲーム・アニメから現実世界へ飛び出してきたようなアイドル2人の活躍をぜひ、ご覧ください。
             
       //- gallery
       section.viewArea_section.viewArea_section-gallery
         .content.content-gallery
-          h2.title Gallery
+          .content_inner
+            h2.title Gallery
+            
           .galleryNav#galleryNav
-            .galleryNav_arrow.galleryNav_nav-prev#galleryNavPrev Prev
-            .galleryNav_arrow.galleryNav_nav-next#galleryNavNext Next
+            .galleryNav_arrow.galleryNav_arrow-prev#galleryNavPrev
+              .inner
+                .borderLeft
+                .borderCenter
+                .borderRight
+            .galleryNav_arrow.galleryNav_arrow-next#galleryNavNext
+              .inner
+                .borderLeft
+                .borderCenter
+                .borderRight
             
             .galleryNav_indicator
               span.current#galleryIndicatorCurrent -
-              span.separator /
+              .separator
               span.all#galleryIndicatorAll -
           
     //- footer
     footer.footer
       .footer_scroll#scroll
-        .icon
-          .icon_borderLeft
-          .icon_borderCenter
-          .icon_borderRight
-        .text Scroll
+        .inner
+          .icon
+            .icon_borderLeft
+            .icon_borderCenter
+            .icon_borderRight
+          .text Scroll
       
       .footer_copyright
         .copyright (C) 2016 Dancing Girl.

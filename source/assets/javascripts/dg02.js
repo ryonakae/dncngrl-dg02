@@ -56,12 +56,16 @@ export const uaManager = new UaManager();
     // topの表示が終わったらnowMovingがfalseになる
     let _currentSection = 'top';
     let _nowMoving = true;
-    moveSection(null, 'top');
+    moveSection(null, 'top', ()=>{
+      $('body').addClass('is-ready');
+    });
 
     // debug
-    // let _currentSection = 'intro';
+    // let _currentSection = 'gallery';
     // let _nowMoving = true;
-    // moveSection(null, 'intro');
+    // moveSection(null, 'gallery', ()=>{
+    //   $('body').addClass('is-ready');
+    // });
 
 
     // move section when scroll
@@ -157,7 +161,7 @@ export const uaManager = new UaManager();
 
 
     // セクション移動関数
-    function moveSection(currentSection, nextSection){
+    function moveSection(currentSection, nextSection, callback){
       // in: 次のセクションの処理
       function sectionIn(){
         // top
@@ -173,8 +177,9 @@ export const uaManager = new UaManager();
             eyecatch.parallax(document.body, -0.06, -0.11, 0.0001);
 
             $('.bg_item-top').addClass('is-show');
-            eyecatch.in(7.0, ()=>{
+            eyecatch.in(6.0, ()=>{
               $('.viewArea_section-top').addClass('is-show');
+              $('.footer_scroll').addClass('is-show');
               console.log('eyecatch in');
               _currentSection = 'top';
               resolve();
@@ -197,6 +202,7 @@ export const uaManager = new UaManager();
             $('.bg_item-intro').addClass('is-show');
             particle.in(3.0, ()=>{
               $('.viewArea_section-intro').addClass('is-show');
+              $('.footer_scroll').addClass('is-show');
               console.log('intro in');
               _currentSection = 'intro';
               resolve();
@@ -229,11 +235,12 @@ export const uaManager = new UaManager();
               ]
             });
 
-            carousel.parallax(document.body, 0, 0, 0.00005);
+            // carousel.parallax(document.body, 0, 0, 0.00005);
 
             $('.bg_item-gallery').addClass('is-show');
             carousel.in(4.0, ()=>{
               $('.viewArea_section-gallery').addClass('is-show');
+              $('.footer_scroll').addClass('is-show');
               console.log('gallery in');
               _currentSection = 'gallery';
               resolve();
@@ -256,16 +263,17 @@ export const uaManager = new UaManager();
         if(currentSection == 'top'){
           return new Promise((resolve, reject)=>{
             $('.viewArea_section-top').removeClass('is-show');
+            $('.footer_scroll').removeClass('is-show');
 
             setTimeout(()=>{
-              eyecatch.out(5.0, ()=>{
+              eyecatch.out(4.5, ()=>{
                 $('.bg_item-top').removeClass('is-show');
                 eyecatch.disableParallax(document.body);
                 sectionTop.canvas.destroy();
                 console.log('eyecatch out');
                 resolve();
               });
-            }, 1000);
+            }, 900);
           });
         }
 
@@ -273,6 +281,7 @@ export const uaManager = new UaManager();
         else if(currentSection == 'intro'){
           return new Promise((resolve, reject)=>{
             $('.viewArea_section-intro').removeClass('is-show');
+            $('.footer_scroll').removeClass('is-show');
 
             setTimeout(()=>{
               particle.out(3.0, ()=>{
@@ -281,7 +290,7 @@ export const uaManager = new UaManager();
                 console.log('intro out');
                 resolve();
               });
-            }, 1000);
+            }, 900);
           });
         }
 
@@ -289,16 +298,17 @@ export const uaManager = new UaManager();
         else if(currentSection == 'gallery'){
           return new Promise((resolve, reject)=>{
             $('.viewArea_section-gallery').removeClass('is-show');
+            $('.footer_scroll').removeClass('is-show');
 
             setTimeout(()=>{
               carousel.out(4.0, ()=>{
                 $('.bg_item-gallery').removeClass('is-show');
-                carousel.disableParallax(document.body);
+                // carousel.disableParallax(document.body);
                 sectionGallery.canvas.destroy();
                 console.log('gallery out');
                 resolve();
               });
-            }, 1000);
+            }, 900);
           });
         }
 
@@ -327,6 +337,7 @@ export const uaManager = new UaManager();
           console.log('currentSection:', _currentSection);
           _nowMoving = false; //ロック解除
           console.log('nowMoving:', _nowMoving);
+          if(callback) callback();
         })
     }
   };

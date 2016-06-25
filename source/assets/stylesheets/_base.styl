@@ -27,6 +27,14 @@ body
   height 100vh
   overflow hidden
 
+  & ::-moz-selection
+    background $bgColor_selection
+    color $textColor_default
+
+  & ::selection
+      background $bgColor_selection
+      color $textColor_default
+
   +retina-query(only screen, 2)
     -webkit-font-smoothing antialiased
 

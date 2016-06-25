@@ -4,20 +4,23 @@
   height 100%
   top 0
   left 0
+  pointer-events none
 
   &_item
+    transition: all 1000ms ease
     position absolute
     width 100%
     height 100%
     top 0
     left 0
-    visibility hidden
+    opacity 0
+    background-color transparent;
 
     &-intro
       background-color rgba(#000, 0.15);
 
       canvas
-        opacity 0.4
+        opacity 0.5
 
     &.is-show
-      visibility visible
+      opacity 1

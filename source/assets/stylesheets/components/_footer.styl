@@ -8,10 +8,24 @@
 
 
   &_scroll
+    transition: all 1000ms easing('in-out-cubic')
+    transition-property opacity, transform
+    transition-delay 500ms
     position absolute
     left 30px
     bottom 25px
     cursor pointer
+    opacity 0
+    transform translateY(80px)
+
+    .inner
+      transition: all 400ms easing('out-expo')
+      transition-property opacity, transform
+      transform translateY(0)
+
+    &.is-show
+      opacity 1
+      transform translateY(0)
 
     .icon
       width 21px
@@ -21,6 +35,8 @@
       transform translateX(-50%)
 
       &_borderCenter
+        transition: all 400ms easing('out-expo')
+        transition-property height
         position absolute
         bottom 0
         left 50%
@@ -49,6 +65,16 @@
       margin-top 5px
       font-size $fontSize_small
       text-align center
+
+    // hover animation
+    body.is-pc &
+      &:hover
+        .inner
+          opacity 0.7
+          transform translateY(5px)
+
+        .icon_borderCenter
+          height 15px
 
 
   &_copyright
