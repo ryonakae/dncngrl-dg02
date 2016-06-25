@@ -54,14 +54,14 @@ export const uaManager = new UaManager();
     // show eyecatch
     // top表示前はnowMovingをtrue
     // topの表示が終わったらnowMovingがfalseになる
-    // let _currentSection = 'top';
-    // let _nowMoving = true;
-    // moveSection(null, 'top');
+    let _currentSection = 'top';
+    let _nowMoving = true;
+    moveSection(null, 'top');
 
     // debug
-    let _currentSection = 'intro';
-    let _nowMoving = true;
-    moveSection(null, 'intro');
+    // let _currentSection = 'intro';
+    // let _nowMoving = true;
+    // moveSection(null, 'intro');
 
 
     // move section when scroll
@@ -170,7 +170,7 @@ export const uaManager = new UaManager();
             eyecatch.position.y = 3;
             sectionTop.canvas.scene.add(eyecatch);
 
-            eyecatch.parallax(document.body, -0.13, -0.15, 0.0001);
+            eyecatch.parallax(document.body, -0.06, -0.11, 0.0001);
 
             $('.bg_item-top').addClass('is-show');
             eyecatch.in(7.0, ()=>{

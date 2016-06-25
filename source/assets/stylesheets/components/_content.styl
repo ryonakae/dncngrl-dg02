@@ -1,0 +1,48 @@
+.content
+  position absolute
+  top 50%
+  transform translateY(-50%)
+  padding-left 170px
+  margin-right 170px
+
+
+  .title
+    font-size $fontSize_sectionTitle
+    margin 0
+    line-height 1
+
+  .description
+    margin-top 40px
+
+    > *:first-child
+      margin-top 0
+
+    > *:last-child
+      margin-bottom 0
+
+
+  // top
+  &-top
+    margin-left 30px
+    margin-right 30px
+
+    .subTitle
+      line-height 1
+      margin 0
+      font-size rem(28px)
+
+    .title
+      font-size rem(90px)
+      margin-top 12px
+
+    .caption
+      display block
+      line-height 1
+      margin 0
+      font-size rem(16px)
+      margin-top 10px
+
+
+  // intro
+  &-intro
+    max-width 50%
