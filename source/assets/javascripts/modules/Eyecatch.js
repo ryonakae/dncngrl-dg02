@@ -1,3 +1,4 @@
+window.jQuery = window.$ = require('jquery');
 import THREE from 'three';
 import gsap from 'gsap';
 import Bas from '../lib/bas.js';
@@ -231,12 +232,16 @@ export default class Eyecatch extends THREE.Mesh {
     this.rotation.x = defaultRotateX;
     this.rotation.y = defaultRotateY;
 
-    dom.addEventListener('mousemove', (e) => {
+    $(dom).on('mousemove.eyecatchMousemove', (e)=>{
       mouseX = e.pageX - window.innerWidth/2;
       mouseY = e.pageY - window.innerHeight/2;
 
       this.rotation.x = defaultRotateX + mouseY * param;
       this.rotation.y = defaultRotateY + mouseX * param;
-    }, false);
+    });
+  }
+
+  disableParallax(dom){
+    $(dom).off('.eyecatchMousemove');
   }
 }

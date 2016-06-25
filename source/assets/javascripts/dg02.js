@@ -229,7 +229,7 @@ export const uaManager = new UaManager();
               ]
             });
 
-            carousel.parallax(document.body, 0, 0, 0.00006);
+            carousel.parallax(document.body, 0, 0, 0.00005);
 
             $('.bg_item-gallery').addClass('is-show');
             carousel.in(4.0, ()=>{
@@ -260,6 +260,7 @@ export const uaManager = new UaManager();
             setTimeout(()=>{
               eyecatch.out(5.0, ()=>{
                 $('.bg_item-top').removeClass('is-show');
+                eyecatch.disableParallax(document.body);
                 sectionTop.canvas.destroy();
                 console.log('eyecatch out');
                 resolve();
@@ -292,6 +293,7 @@ export const uaManager = new UaManager();
             setTimeout(()=>{
               carousel.out(4.0, ()=>{
                 $('.bg_item-gallery').removeClass('is-show');
+                carousel.disableParallax(document.body);
                 sectionGallery.canvas.destroy();
                 console.log('gallery out');
                 resolve();

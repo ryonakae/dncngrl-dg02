@@ -75,7 +75,9 @@ export default class Particle extends THREE.Points {
     console.log(this.texture);
     console.log(this.geometry.vertices[0]);
 
-    window.addEventListener('resize', this.resize, false);
+    $(window).on('resize.particleResize', ()=>{
+      this.resize();
+    });
   }
 
   animate(){
@@ -144,6 +146,7 @@ export default class Particle extends THREE.Points {
       delay: 0.8,
       onComplete: ()=>{
         this.stopAnimate();
+        $(window).off('.particleResize');
         console.log('particle stop');
         cb();
       }

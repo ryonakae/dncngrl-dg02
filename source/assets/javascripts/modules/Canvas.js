@@ -1,3 +1,4 @@
+window.jQuery = window.$ = require('jquery');
 import THREE from 'three';
 // import OrbitControls from '../lib/OrbitControls.js';
 
@@ -47,9 +48,10 @@ export default class Canvas {
     this.animate();
 
     // listen resize event
-    this.resize = this.resize.bind(this);
     this.resize();
-    window.addEventListener('resize', this.resize, false);
+    $(window).on('resize.canvasResize', ()=>{
+      this.resize();
+    });
 
     console.log('canvas init', this);
   }
@@ -102,6 +104,9 @@ export default class Canvas {
         this.camera = null;
         this.controls = null;
         this.renderer = null;
+
+        // resizeイベントをoff
+        $(window).off('.canvasResize');
 
         console.log('canvas destroy', this);
       }

@@ -33,12 +33,12 @@ export default class Carousel {
 
     this.initIndicator(this.slideCount, this.slides.length);
 
-    this.navNext.addEventListener('click', ()=>{
+    $(this.navNext).on('click.carouselClick', ()=>{
       this.slideNext(this.duration);
-    }, false);
-    this.navPrev.addEventListener('click', ()=>{
+    });
+    $(this.navPrev).on('click.carouselClick', ()=>{
       this.slidePrev(this.duration);
-    }, false);
+    });
   }
 
   addSlide(scene, imageSrc){
@@ -100,14 +100,18 @@ export default class Carousel {
       this.slides[i].rotation.x = defaultRotateX;
       this.slides[i].rotation.y = defaultRotateY;
 
-      dom.addEventListener('mousemove', (e)=>{
+      $(dom).on('mousemove.carouselMousemove', (e)=>{
         mouseX = e.pageX - window.innerWidth/2;
         mouseY = e.pageY - window.innerHeight/2;
 
         this.slides[i].rotation.x = defaultRotateX + mouseY * param;
         this.slides[i].rotation.y = defaultRotateY + mouseX * param;
-      }, false);
+      });
     }
+  }
+
+  disableParallax(dom){
+    $(dom).off('.carouselMousemove');
   }
 
   in(duration, cb){
