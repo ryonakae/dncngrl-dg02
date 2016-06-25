@@ -30,7 +30,7 @@ export const uaManager = new UaManager();
     // section initialize
     const sectionTop = new Section({
       bg: document.getElementById('bgTop'),
-      magnification: 6.0
+      magnification: 7.0
     });
     sectionTop.init();
     console.log(sectionTop.canvas);
@@ -45,7 +45,7 @@ export const uaManager = new UaManager();
 
     const sectionGallery = new Section({
       bg: document.getElementById('bgGallery'),
-      magnification: 7.0
+      magnification: 8.0
     });
     sectionGallery.init();
     let carousel;
@@ -57,10 +57,11 @@ export const uaManager = new UaManager();
     // let _currentSection = 'top';
     // let _nowMoving = true;
     // moveSection(null, 'top');
-    // drbug
-    let _currentSection = 'gallery';
+
+    // debug
+    let _currentSection = 'intro';
     let _nowMoving = true;
-    moveSection(null, 'gallery');
+    moveSection(null, 'intro');
 
 
     // move section when scroll
@@ -91,54 +92,68 @@ export const uaManager = new UaManager();
 
       // nowMovingがtrueなら以下スキップ
       if(_nowMoving) return;
-
       _nowMoving = true;
 
       scrollPositionTop = window.pageYOffset;
       scrollPositionBottom = scrollPositionTop + window.innerHeight;
 
       if(moveAmount > 0){
-        console.log('move next');
-        console.log('nowMoving:', _nowMoving);
-
-        if(_currentSection == 'top') {
-          moveSection('top', 'intro');
-        }
-        else if(_currentSection == 'intro'){
-          moveSection('intro', 'gallery');
-        }
-        // else if(_currentSection == 'gallery'){
-        //   moveSection('gallery', 'credit');
-        // }
-        else {
-          _nowMoving = false;
-          console.log('nowMoving', _nowMoving);
-        }
+        moveNext();
       }
       else if(moveAmount < 0){
-        console.log('move prev');
-        console.log('nowMoving:', _nowMoving);
-
-        if(_currentSection == 'intro'){
-          moveSection('intro', 'top');
-        }
-        else if(_currentSection == 'gallery'){
-          moveSection('gallery', 'intro');
-        }
-        // else if (_currentSection == 'credit') {
-        //   moveSection('credit', 'gallery');
-        // }
-        else {
-          _nowMoving = false;
-          console.log('nowMoving', _nowMoving);
-        }
+        movePrev();
       }
     });
 
+    $('#scroll').on('click', ()=>{
+      // nowMovingがtrueなら以下スキップ
+      if(_nowMoving) return;
+      _nowMoving = true;
 
-    $(window).on('click', ()=>{
-      console.log('currentSection:', _currentSection);
+      moveNext();
     });
+
+
+    // 次のセクションに行くぞい
+    function moveNext(){
+      console.log('move next');
+      console.log('nowMoving:', _nowMoving);
+
+      if(_currentSection == 'top') {
+        moveSection('top', 'intro');
+      }
+      else if(_currentSection == 'intro'){
+        moveSection('intro', 'gallery');
+      }
+      // else if(_currentSection == 'gallery'){
+      //   moveSection('gallery', 'credit');
+      // }
+      else {
+        _nowMoving = false;
+        console.log('nowMoving', _nowMoving);
+      }
+    }
+
+
+    // 前のセクションに行くぞい
+    function movePrev(){
+      console.log('move prev');
+      console.log('nowMoving:', _nowMoving);
+
+      if(_currentSection == 'intro'){
+        moveSection('intro', 'top');
+      }
+      else if(_currentSection == 'gallery'){
+        moveSection('gallery', 'intro');
+      }
+      // else if (_currentSection == 'credit') {
+      //   moveSection('credit', 'gallery');
+      // }
+      else {
+        _nowMoving = false;
+        console.log('nowMoving', _nowMoving);
+      }
+    }
 
 
     // セクション移動関数
@@ -155,7 +170,7 @@ export const uaManager = new UaManager();
             eyecatch.position.y = 3;
             sectionTop.canvas.scene.add(eyecatch);
 
-            eyecatch.parallax(document.body, -0.13, -0.15, 0.0002);
+            eyecatch.parallax(document.body, -0.13, -0.15, 0.0001);
 
             $('.bg_item-top').addClass('is-show');
             eyecatch.in(7.0, ()=>{

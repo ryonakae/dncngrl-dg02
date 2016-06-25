@@ -29,6 +29,7 @@ export default class Particle extends THREE.Points {
 
     this.forcePhase = 'attraction';
     this.frameCount = 1;
+    this.nowOut = false; //フェードアウト時だけ有効にする
 
     this.init();
   }
@@ -134,10 +135,13 @@ export default class Particle extends THREE.Points {
   }
 
   out(duration, cb){
+    this.nowOut = true;
+
     TweenMax.to(this.material, duration, {
       size: 0,
       opacity: 0,
       ease: Power1.easeOut,
+      delay: 0.8,
       onComplete: ()=>{
         this.stopAnimate();
         console.log('particle stop');
@@ -151,14 +155,21 @@ export default class Particle extends THREE.Points {
     vertex.force.y = (vertex.force.y - vertex.velocity.y * vertex.friction) * 0.38;
     vertex.force.z = (vertex.force.z - vertex.velocity.z * vertex.friction) * 0.38;
 
-    // forcePhaseに応じて力の加え方を変える
-    if(this.forcePhase == 'attraction'){
-      this.vertexAddAttraction(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 900, 0.02);
-      this.vertexAddRepulsion(vertex, posOfForce.x*0.5, posOfForce.y*0.5, posOfForce.z*0.5, 200, 0.02);
+    // nowOutがflase: 通常時
+    if(!this.nowOut){
+      // forcePhaseに応じて力の加え方を変える
+      if(this.forcePhase == 'attraction'){
+        this.vertexAddAttraction(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 900, 0.02);
+        this.vertexAddRepulsion(vertex, posOfForce.x*0.5, posOfForce.y*0.5, posOfForce.z*0.5, 200, 0.02);
+      }
+      else if (this.forcePhase == 'repulsion'){
+        this.vertexAddAttraction(vertex, posOfForce.x*-0.5, posOfForce.y*-0.5, posOfForce.z*-0.5, 500, 0.02);
+        this.vertexAddRepulsion(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 300, 0.02);
+      }
     }
-    else if (this.forcePhase == 'repulsion'){
-      this.vertexAddAttraction(vertex, posOfForce.x*-0.5, posOfForce.y*-0.5, posOfForce.z*-0.5, 500, 0.02);
-      this.vertexAddRepulsion(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 300, 0.02);
+    // nowOutがtrue: フェードイン
+    else {
+      this.vertexAddRepulsion(vertex, 0, 0, 0, 700, 0.15);
     }
 
     vertex.velocity.x = vertex.velocity.x + vertex.force.x * 0.38;
