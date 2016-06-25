@@ -126,7 +126,7 @@ export default class Particle extends THREE.Points {
     this.animate();
 
     TweenMax.to(this.material, duration, {
-      size: 6,
+      size: 7,
       opacity: 1,
       ease: Power1.easeOut,
       onComplete: cb
@@ -153,12 +153,12 @@ export default class Particle extends THREE.Points {
 
     // forcePhaseに応じて力の加え方を変える
     if(this.forcePhase == 'attraction'){
-      this.vertexAddAttraction(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 1000, 0.02);
+      this.vertexAddAttraction(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 900, 0.02);
       this.vertexAddRepulsion(vertex, posOfForce.x*0.5, posOfForce.y*0.5, posOfForce.z*0.5, 200, 0.02);
     }
     else if (this.forcePhase == 'repulsion'){
-      this.vertexAddAttraction(vertex, posOfForce.x*-0.5, posOfForce.y*-0.5, posOfForce.z*-0.5, 700, 0.02);
-      this.vertexAddRepulsion(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 400, 0.02);
+      this.vertexAddAttraction(vertex, posOfForce.x*-0.5, posOfForce.y*-0.5, posOfForce.z*-0.5, 500, 0.02);
+      this.vertexAddRepulsion(vertex, posOfForce.x, posOfForce.y, posOfForce.z, 300, 0.02);
     }
 
     vertex.velocity.x = vertex.velocity.x + vertex.force.x * 0.38;
