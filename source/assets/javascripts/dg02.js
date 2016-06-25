@@ -23,8 +23,24 @@ export const uaManager = new UaManager();
     console.log('init');
 
 
-    // uamanager
+    // uamanager initialize
     uaManager.init();
+
+
+    // bodyの高さをゴリ押しでなんとかする
+    $(window).on('load resize orientationchange', ()=>{
+      $('body').css({height: window.innerHeight});
+    });
+
+
+    // 画像をロード
+    // 使う画像全部入れとく
+    const loadingManager = new THREE.LoadingManager();
+    const eyecatchImage = new THREE.ImageLoader(loadingManager).load('./assets/images/sample04.jpg');
+    const carouselImage00 = new THREE.ImageLoader(loadingManager).load('./assets/images/sample00.jpg');
+    const carouselImage01 = new THREE.ImageLoader(loadingManager).load('./assets/images/sample01.jpg');
+    const carouselImage02 = new THREE.ImageLoader(loadingManager).load('./assets/images/sample02.jpg');
+    const carouselImage03 = new THREE.ImageLoader(loadingManager).load('./assets/images/sample03.jpg');
 
 
     // section initialize
@@ -51,14 +67,28 @@ export const uaManager = new UaManager();
     let carousel;
 
 
-    // show eyecatch
+    // show eyecatch at first
     // top表示前はnowMovingをtrue
     // topの表示が終わったらnowMovingがfalseになる
     let _currentSection = 'top';
     let _nowMoving = true;
-    moveSection(null, 'top', ()=>{
-      $('body').addClass('is-ready');
-    });
+    $('body').addClass('is-nowLoading');
+
+    // return;
+
+    loadingManager.onLoad = (item, loaded, total)=>{
+      setTimeout(()=>{
+        console.log('all images are loaded');
+        $('body').removeClass('is-nowLoading');
+        $('body').addClass('is-loaded');
+
+        setTimeout(()=>{
+          moveSection(null, 'top', ()=>{
+            $('body').addClass('is-ready');
+          });
+        }, 1200);
+      }, 1500);
+    };
 
     // debug
     // let _currentSection = 'gallery';
@@ -70,8 +100,6 @@ export const uaManager = new UaManager();
 
     // move section when scroll
     let moveAmount;
-    let scrollPositionTop;
-    let scrollPositionBottom;
 
     if(uaManager.device() === 'pc'){
       $(window).on('wheel.onScroll', (e)=>{
@@ -92,19 +120,18 @@ export const uaManager = new UaManager();
     }
 
     $(window).on('wheel.onScroll touchmove.onScroll', ()=>{
+      console.log('moveAmount:', moveAmount);
       console.log('nowMoving:', _nowMoving);
 
       // nowMovingがtrueなら以下スキップ
       if(_nowMoving) return;
-      _nowMoving = true;
 
-      scrollPositionTop = window.pageYOffset;
-      scrollPositionBottom = scrollPositionTop + window.innerHeight;
-
-      if(moveAmount > 0){
+      if(moveAmount > 30){
+        _nowMoving = true;
         moveNext();
       }
-      else if(moveAmount < 0){
+      else if(moveAmount < -30){
+        _nowMoving = true;
         movePrev();
       }
     });

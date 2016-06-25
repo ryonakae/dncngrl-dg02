@@ -82,3 +82,49 @@ a
   background-image radial-gradient(circle at center, white 0%, transparent 100%)
   mix-blend-mode overlay
   opacity 0.6
+
+
+// loader
+@keyframes loading_flash
+  0%
+    opacity 0.4
+  49%
+    opacity 0.4
+  50%
+    opacity 1
+  99%
+    opacity 1
+  100%
+    opacity 0.4
+
+.loader
+  transition: all 1000ms ease
+  position absolute
+  width 100%
+  height 100%
+  z-index 100
+  // background-color #000
+  pointer-events none
+
+  .text
+    display inline-block
+    transition: all 1000ms easing('in-out-cubic')
+    font-weight bold
+    font-size rem(36px)
+    letter-spacing 0.06em
+    font-style italic
+    position relative
+    top 50%
+    left 50%
+    transform translate(-50%, -50%) scale(0.88, 1)
+
+    &_inner
+      animation loading_flash 125ms linear infinite
+
+  body.is-loaded &
+    opacity 0
+
+    .text
+      opacity 0
+      filter blur(15px)
+      transform translate(-50%, -50%) scale(1.3)
