@@ -1,0 +1,72 @@
+.sectionNav
+  transition: all 1000ms easing('in-out-cubic')
+  position fixed
+  right 40px
+  top 50%
+  transform translateX(60px) translateY(-50%)
+  margin 0
+  padding 0
+  list-style-type none
+  z-index 10
+  opacity 0
+  pointer-events none
+
+  &.is-show
+    transform translateX(0) translateY(-50%)
+    opacity 1
+    pointer-events auto
+
+  &_item
+    cursor pointer
+    position relative
+    margin-top 10px
+    text-align right
+
+    &:first-child
+      margin-top 0
+
+    .text
+      transition: all 600ms easing('out-expo')
+      transition-delay 100ms
+      display inline-block
+      vertical-align middle
+      margin-right 10px
+      opacity 0
+      transform translateX(-30px)
+      filter blur(20px)
+
+    .icon
+      display inline-block
+      vertical-align middle
+      position relative
+      width 10px
+      height 10px
+      margin-top -1px
+
+      .inner
+        transition: all 500ms easing('out-expo')
+        position absolute
+        top 50%
+        left 50%
+        transform translate(-50%, -50%)
+        transform-origin 50% 50%
+        width 6px
+        height 6px
+        opacity 0.6
+        background-color $textColor_default
+        border-radius 50%
+
+    body.is-pc &:hover
+      .text
+        opacity 1
+        transform translateX(0)
+        filter blur(0)
+
+      .icon .inner
+        opacity 1
+        transform translate(-50%, -50%) scale(1.5)
+
+    &.is-show
+      .icon .inner
+        opacity 1
+        transform translate(-50%, -50%) scale(1.5)

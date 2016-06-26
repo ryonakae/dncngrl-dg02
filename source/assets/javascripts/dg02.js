@@ -68,8 +68,6 @@ export const uaManager = new UaManager();
     let _nowMoving = true;
     $('body').addClass('is-nowLoading');
 
-    // return;
-
     loadingManager.onLoad = (item, loaded, total)=>{
       setTimeout(()=>{
         console.log('all images are loaded');
@@ -130,12 +128,23 @@ export const uaManager = new UaManager();
       }
     });
 
+
+    // move section when click scroll
     $('#scroll').on('click', ()=>{
       // nowMovingがtrueなら以下スキップ
       if(_nowMoving) return;
       _nowMoving = true;
 
       moveNext();
+    });
+
+
+    // move section whien click sectionNavi
+    $('.sectionNav_item').each((id, value)=>{
+      $(value).on('click', ()=>{
+        console.log(id, value.dataset.section);
+        moveSection(_currentSection, value.dataset.section);
+      });
     });
 
 
@@ -195,15 +204,24 @@ export const uaManager = new UaManager();
             eyecatch.position.y = 3;
             sectionTop.canvas.scene.add(eyecatch);
 
-            eyecatch.parallax(document.body, -0.06, -0.11, 0.0001);
+            // // parallax only pc
+            // if(uaManager.device() === 'pc') {
+            //   eyecatch.parallax(document.body, -0.06, -0.11, 0.0001);
+            // }
+            eyecatch.rotation.x = -0.06;
+            eyecatch.rotation.y = -0.11;
 
             $('.bg_item-top').addClass('is-show');
             eyecatch.in(6.0, ()=>{
               $('.viewArea_section-top').addClass('is-show');
               $('.footer_scroll').addClass('is-show');
-              console.log('eyecatch in');
+              $('#sectionNav').addClass('is-show');
+              $('#sectionNavTop').addClass('is-show');
+
               _currentSection = 'top';
               resolve();
+
+              console.log('eyecatch in');
             });
           });
         }
@@ -224,9 +242,13 @@ export const uaManager = new UaManager();
             particle.in(3.0, ()=>{
               $('.viewArea_section-intro').addClass('is-show');
               $('.footer_scroll').addClass('is-show');
-              console.log('intro in');
+              $('#sectionNav').addClass('is-show');
+              $('#sectionNavIntro').addClass('is-show');
+
               _currentSection = 'intro';
               resolve();
+
+              console.log('intro in');
             });
           });
         }
@@ -271,9 +293,13 @@ export const uaManager = new UaManager();
             carousel.in(4.0, ()=>{
               $('.viewArea_section-gallery').addClass('is-show');
               $('.footer_scroll').addClass('is-show');
-              console.log('gallery in');
+              $('#sectionNav').addClass('is-show');
+              $('#sectionNavGallery').addClass('is-show');
+
               _currentSection = 'gallery';
               resolve();
+
+              console.log('gallery in');
             });
           });
         }
@@ -294,11 +320,13 @@ export const uaManager = new UaManager();
           return new Promise((resolve, reject)=>{
             $('.viewArea_section-top').removeClass('is-show');
             $('.footer_scroll').removeClass('is-show');
+            $('#sectionNav').removeClass('is-show');
+            $('#sectionNavTop').removeClass('is-show');
 
             setTimeout(()=>{
               eyecatch.out(4.5, ()=>{
                 $('.bg_item-top').removeClass('is-show');
-                eyecatch.disableParallax(document.body);
+                // eyecatch.disableParallax(document.body);
                 sectionTop.canvas.destroy();
                 console.log('eyecatch out');
                 resolve();
@@ -312,6 +340,8 @@ export const uaManager = new UaManager();
           return new Promise((resolve, reject)=>{
             $('.viewArea_section-intro').removeClass('is-show');
             $('.footer_scroll').removeClass('is-show');
+            $('#sectionNav').removeClass('is-show');
+            $('#sectionNavIntro').removeClass('is-show');
 
             setTimeout(()=>{
               particle.out(3.0, ()=>{
@@ -329,6 +359,8 @@ export const uaManager = new UaManager();
           return new Promise((resolve, reject)=>{
             $('.viewArea_section-gallery').removeClass('is-show');
             $('.footer_scroll').removeClass('is-show');
+            $('#sectionNav').removeClass('is-show');
+            $('#sectionNavGallery').removeClass('is-show');
 
             setTimeout(()=>{
               carousel.out(4.0, ()=>{

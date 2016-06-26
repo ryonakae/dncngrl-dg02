@@ -225,7 +225,7 @@ export default class Eyecatch extends THREE.Mesh {
     });
   }
 
-  parallax(dom, defaultRotateX, defaultRotateY, param){
+  parallax(dom, defaultRotateX, defaultRotateY, quantity){
     let mouseX;
     let mouseY;
 
@@ -236,8 +236,14 @@ export default class Eyecatch extends THREE.Mesh {
       mouseX = e.pageX - window.innerWidth/2;
       mouseY = e.pageY - window.innerHeight/2;
 
-      this.rotation.x = defaultRotateX + mouseY * param;
-      this.rotation.y = defaultRotateY + mouseX * param;
+      // TweenMax.to(this.rotation, 400, {
+      //   x: defaultRotateX + mouseY * quantity,
+      //   y: defaultRotateY + mouseX * quantity,
+      //   overwrite: true
+      // });
+
+      this.rotation.x = defaultRotateX + mouseY * quantity;
+      this.rotation.y = defaultRotateY + mouseX * quantity;
     });
   }
 

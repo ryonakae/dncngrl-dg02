@@ -32,19 +32,6 @@ export default class Slide extends THREE.Mesh {
     // material
     this.material = new THREE.BAS.BasicAnimationMaterial();
 
-    this.frustumCulled = false;
-    this.defineProperty();
-
-    // hide slide at default
-    this.visible = false;
-
-    console.log(this);
-  }
-
-  init(animationPhase) {
-    // show slide
-    this.visible = true;
-
     // geometry
     this.plane = new THREE.PlaneGeometry(this.width, this.height, this.divisionX, this.divisionY);
     // console.log(THREE.BAS);
@@ -68,6 +55,19 @@ export default class Slide extends THREE.Mesh {
     this.control1 = new THREE.Vector3();
     this.endPosition = new THREE.Vector3();
     this.tempPoint = new THREE.Vector3();
+
+    this.frustumCulled = false;
+    this.defineProperty();
+
+    // hide slide at default
+    this.visible = false;
+
+    console.log(this);
+  }
+
+  init(animationPhase) {
+    // show slide
+    this.visible = true;
 
     let i, i2, i3, v;
     for (i = 0, i2 = 0, i3 = 0; i < this.geometry.faceCount; i++, i2 += 6, i3 += 9){
