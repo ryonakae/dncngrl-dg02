@@ -212,8 +212,10 @@ export const uaManager = new UaManager();
             eyecatch.rotation.y = -0.11;
 
             $('.bg_item-top').addClass('is-show');
+
             eyecatch.in(6.0, ()=>{
               $('.viewArea_section-top').addClass('is-show');
+
               $('.footer_scroll').addClass('is-show');
               $('#sectionNav').addClass('is-show');
               $('#sectionNavTop').addClass('is-show');
@@ -239,8 +241,10 @@ export const uaManager = new UaManager();
             sectionIntro.canvas.scene.add(particle);
 
             $('.bg_item-intro').addClass('is-show');
+
             particle.in(3.0, ()=>{
               $('.viewArea_section-intro').addClass('is-show');
+
               $('.footer_scroll').addClass('is-show');
               $('#sectionNav').addClass('is-show');
               $('#sectionNavIntro').addClass('is-show');
@@ -290,8 +294,10 @@ export const uaManager = new UaManager();
             // carousel.parallax(document.body, 0, 0, 0.00005);
 
             $('.bg_item-gallery').addClass('is-show');
+
             carousel.in(4.0, ()=>{
               $('.viewArea_section-gallery').addClass('is-show');
+
               $('.footer_scroll').addClass('is-show');
               $('#sectionNav').addClass('is-show');
               $('#sectionNavGallery').addClass('is-show');
@@ -319,6 +325,7 @@ export const uaManager = new UaManager();
         if(currentSection == 'top'){
           return new Promise((resolve, reject)=>{
             $('.viewArea_section-top').removeClass('is-show');
+
             $('.footer_scroll').removeClass('is-show');
             $('#sectionNav').removeClass('is-show');
             $('#sectionNavTop').removeClass('is-show');
@@ -326,6 +333,7 @@ export const uaManager = new UaManager();
             setTimeout(()=>{
               eyecatch.out(4.5, ()=>{
                 $('.bg_item-top').removeClass('is-show');
+
                 // eyecatch.disableParallax(document.body);
                 sectionTop.canvas.destroy();
                 console.log('eyecatch out');
@@ -339,6 +347,7 @@ export const uaManager = new UaManager();
         else if(currentSection == 'intro'){
           return new Promise((resolve, reject)=>{
             $('.viewArea_section-intro').removeClass('is-show');
+
             $('.footer_scroll').removeClass('is-show');
             $('#sectionNav').removeClass('is-show');
             $('#sectionNavIntro').removeClass('is-show');
@@ -346,6 +355,7 @@ export const uaManager = new UaManager();
             setTimeout(()=>{
               particle.out(3.0, ()=>{
                 $('.bg_item-intro').removeClass('is-show');
+
                 sectionIntro.canvas.destroy();
                 console.log('intro out');
                 resolve();
@@ -358,6 +368,7 @@ export const uaManager = new UaManager();
         else if(currentSection == 'gallery'){
           return new Promise((resolve, reject)=>{
             $('.viewArea_section-gallery').removeClass('is-show');
+
             $('.footer_scroll').removeClass('is-show');
             $('#sectionNav').removeClass('is-show');
             $('#sectionNavGallery').removeClass('is-show');
@@ -365,6 +376,7 @@ export const uaManager = new UaManager();
             setTimeout(()=>{
               carousel.out(4.0, ()=>{
                 $('.bg_item-gallery').removeClass('is-show');
+
                 // carousel.disableParallax(document.body);
                 sectionGallery.canvas.destroy();
                 console.log('gallery out');
