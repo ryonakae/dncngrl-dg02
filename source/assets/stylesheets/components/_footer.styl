@@ -1,5 +1,5 @@
 .footer
-  transition: all 1000ms easing('in-out-cubic')
+  transition: all $transitionDuration easing($transitionEasing)
   position fixed
   -webkit-backface-visibility:hidden;
   backface-visibility:hidden;
@@ -15,7 +15,7 @@
 
 
   &_scroll
-    transition: all 1000ms easing('in-out-quart')
+    transition: all $transitionDuration easing('in-out-quart')
     transition-property opacity, transform
     transition-delay 500ms
     position absolute
@@ -26,7 +26,7 @@
     transform translateY(80px)
 
     .inner
-      transition: all 400ms easing('out-expo')
+      transition: all $transitionDuration_quick easing('out-expo')
       transition-property opacity, transform
       transform translateY(0)
 
@@ -42,7 +42,7 @@
       transform translateX(-50%)
 
       &_borderCenter
-        transition: all 400ms easing('out-expo')
+        transition: all $transitionDuration_quick easing('out-expo')
         transition-property height
         position absolute
         bottom 0
@@ -85,8 +85,6 @@
 
 
   &_copyright
-    transition: all 400ms ease
-    // float right
     position absolute
     left 30px
     bottom 24px

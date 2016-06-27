@@ -1,5 +1,5 @@
 .sectionNav
-  transition: all 1000ms easing('in-out-cubic')
+  transition: all $transitionDuration easing($transitionEasing)
   position fixed
   right 40px
   top 50%
@@ -50,11 +50,12 @@
         left 50%
         transform translate(-50%, -50%)
         transform-origin 50% 50%
-        width 6px
-        height 6px
-        opacity 0.6
-        background-color $textColor_default
+        width 8px
+        height 8px
+        // opacity 0.6
+        background-color transparent
         border-radius 50%
+        border 1px solid $textColor_default
 
     body.is-pc &:hover
       .text
@@ -63,10 +64,12 @@
         filter blur(0)
 
       .icon .inner
-        opacity 1
-        transform translate(-50%, -50%) scale(1.5)
+        // opacity 1
+        transform translate(-50%, -50%) scale(1.4)
+        background-color $textColor_default
 
     &.is-show
       .icon .inner
-        opacity 1
-        transform translate(-50%, -50%) scale(1.5)
+        // opacity 1
+        transform translate(-50%, -50%) scale(1.4)
+        background-color $textColor_default

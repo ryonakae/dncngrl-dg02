@@ -1,43 +1,55 @@
-$transitionDuration = 1000ms
-$transitionEasing = 'in-out-cubic'
-
 .content
   position relative
   width 100%
   height 100%
+  display flex
+  justify-content center
+  align-items center
 
   &_inner
-    position absolute
-    top 50%
-    transform translateY(-50%)
+    width 100%
     padding-left 170px
+    padding-right 200px
 
 
   .title
-    transition: all $transitionDuration easing($transitionEasing)
+    position absolute
+    top 50%
+    transform translateY(-50%)
     transition-delay 0
     font-size $fontSize_sectionTitle
     letter-spacing 0.08em
     margin 0
     line-height 1
-    opacity 0
-    filter blur(20px)
+
+    span
+      transition: all $transitionDuration easing($transitionEasing)
+      transition-delay 0
+      position relative
+      display block
+      opacity 0
+      filter blur(20px)
 
     body.is-transitionIn &
-      transform translateY(40px)
+      span
+        transform translateY(40px)
 
     body.is-transitionOut &
-      transform translateY(-40px)
+      span
+        transform translateY(-40px)
 
     .viewArea_section.is-show &
-      opacity 1
-      transform translateY(0)
-      filter blur(0px)
+      span
+        opacity 1
+        filter blur(0px)
+        transform translateY(0)
+
 
   .description
     transition: all $transitionDuration easing($transitionEasing)
     transition-delay 250ms
-    margin-top 40px
+    margin-left 300px
+    max-width 600px
     opacity 0
     filter blur(20px)
 
@@ -85,10 +97,14 @@ $transitionEasing = 'in-out-cubic'
         filter blur(0px)
 
     .title
-      transition-delay 250ms
+      position relative
+      transform translateY(0)
       font-size rem(90px)
       letter-spacing -0.01em
       margin-top 12px
+
+      span
+        transition-delay 250ms
 
     .caption
       transition: all $transitionDuration easing($transitionEasing)
@@ -114,9 +130,10 @@ $transitionEasing = 'in-out-cubic'
 
 
   // intro
-  &-intro
-    max-width 50%
-
+  // &-intro
 
   // gallery
   // &-gallery
+
+  // info
+  // &-info

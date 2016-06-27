@@ -30,11 +30,11 @@ export const uaManager = new UaManager();
     // 画像をロード
     // 使う画像全部入れとく
     const loadingManager = new THREE.LoadingManager();
-    const eyecatchImage = new THREE.ImageLoader(loadingManager).load('./assets/images/sample04.jpg');
-    const carouselImage00 = new THREE.ImageLoader(loadingManager).load('./assets/images/sample00.jpg');
-    const carouselImage01 = new THREE.ImageLoader(loadingManager).load('./assets/images/sample01.jpg');
-    const carouselImage02 = new THREE.ImageLoader(loadingManager).load('./assets/images/sample02.jpg');
-    const carouselImage03 = new THREE.ImageLoader(loadingManager).load('./assets/images/sample03.jpg');
+    const eyecatchImage = new THREE.ImageLoader(loadingManager).load('./assets/images/eyecatch.jpg');
+    const carouselImage01 = new THREE.ImageLoader(loadingManager).load('./assets/images/gallery_01.jpg');
+    const carouselImage02 = new THREE.ImageLoader(loadingManager).load('./assets/images/gallery_02.jpg');
+    const carouselImage03 = new THREE.ImageLoader(loadingManager).load('./assets/images/gallery_03.jpg');
+    const particleImage = new THREE.TextureLoader(loadingManager).load('./assets/images/textures/particle2.png');
 
 
     // section initialize
@@ -60,11 +60,18 @@ export const uaManager = new UaManager();
     sectionGallery.init();
     let carousel;
 
+    const sectionInfo = new Section({
+      bg: document.getElementById('bgInfo'),
+      magnification: 1.0
+    });
+    sectionInfo.init();
+    let wave;
+
 
     // show eyecatch at first
     // top表示前はnowMovingをtrue
     // topの表示が終わったらnowMovingがfalseになる
-    let _currentSection = 'top';
+    let _currentSection = 'info';
     let _nowMoving = true;
     $('body').addClass('is-nowLoading');
 
@@ -75,19 +82,12 @@ export const uaManager = new UaManager();
         $('body').addClass('is-loaded');
 
         setTimeout(()=>{
-          moveSection(null, 'top', ()=>{
+          moveSection(null, 'info', ()=>{
             $('body').addClass('is-ready');
           });
         }, 1200);
       }, 1500);
     };
-
-    // debug
-    // let _currentSection = 'gallery';
-    // let _nowMoving = true;
-    // moveSection(null, 'gallery', ()=>{
-    //   $('body').addClass('is-ready');
-    // });
 
 
     // move section when scroll
@@ -159,9 +159,9 @@ export const uaManager = new UaManager();
       else if(_currentSection == 'intro'){
         moveSection('intro', 'gallery');
       }
-      // else if(_currentSection == 'gallery'){
-      //   moveSection('gallery', 'credit');
-      // }
+      else if(_currentSection == 'gallery'){
+        moveSection('gallery', 'info');
+      }
       else {
         _nowMoving = false;
         console.log('nowMoving', _nowMoving);
@@ -180,9 +180,9 @@ export const uaManager = new UaManager();
       else if(_currentSection == 'gallery'){
         moveSection('gallery', 'intro');
       }
-      // else if (_currentSection == 'credit') {
-      //   moveSection('credit', 'gallery');
-      // }
+      else if (_currentSection == 'info') {
+        moveSection('info', 'gallery');
+      }
       else {
         _nowMoving = false;
         console.log('nowMoving', _nowMoving);
@@ -212,9 +212,12 @@ export const uaManager = new UaManager();
             eyecatch.rotation.y = -0.11;
 
             $('.bg_item-top').addClass('is-show');
+            $('body').removeClass('is-transitionOut');
+            $('body').addClass('is-transitionIn');
 
             eyecatch.in(6.0, ()=>{
               $('.viewArea_section-top').addClass('is-show');
+              $('.body').removeClass('is-transitionIn');
 
               $('.footer_scroll').addClass('is-show');
               $('#sectionNav').addClass('is-show');
@@ -241,9 +244,12 @@ export const uaManager = new UaManager();
             sectionIntro.canvas.scene.add(particle);
 
             $('.bg_item-intro').addClass('is-show');
+            $('body').removeClass('is-transitionOut');
+            $('body').addClass('is-transitionIn');
 
             particle.in(3.0, ()=>{
               $('.viewArea_section-intro').addClass('is-show');
+              $('.body').removeClass('is-transitionIn');
 
               $('.footer_scroll').addClass('is-show');
               $('#sectionNav').addClass('is-show');
@@ -284,19 +290,21 @@ export const uaManager = new UaManager();
               indicatorAll: document.getElementById('galleryIndicatorAll'),
               scene: sectionGallery.canvas.scene,
               images: [
-                './assets/images/sample00.jpg',
-                './assets/images/sample01.jpg',
-                './assets/images/sample02.jpg',
-                './assets/images/sample03.jpg'
+                './assets/images/gallery_01.jpg',
+                './assets/images/gallery_02.jpg',
+                './assets/images/gallery_03.jpg'
               ]
             });
 
             // carousel.parallax(document.body, 0, 0, 0.00005);
 
             $('.bg_item-gallery').addClass('is-show');
+            $('body').removeClass('is-transitionOut');
+            $('body').addClass('is-transitionIn');
 
             carousel.in(4.0, ()=>{
               $('.viewArea_section-gallery').addClass('is-show');
+              $('.body').removeClass('is-transitionIn');
 
               $('.footer_scroll').addClass('is-show');
               $('#sectionNav').addClass('is-show');
@@ -307,6 +315,31 @@ export const uaManager = new UaManager();
 
               console.log('gallery in');
             });
+          });
+        }
+
+        // info
+        else if(nextSection == 'info'){
+          return new Promise((resolve, reject)=>{
+            sectionInfo.canvas.init();
+
+            $('.bg_item-info').addClass('is-show');
+            $('body').removeClass('is-transitionOut');
+            $('body').addClass('is-transitionIn');
+
+            setTimeout(()=>{
+              $('.viewArea_section-info').addClass('is-show');
+              $('.body').removeClass('is-transitionIn');
+
+              $('.footer_scroll').addClass('is-show');
+              $('#sectionNav').addClass('is-show');
+              $('#sectionNavInfo').addClass('is-show');
+
+              _currentSection = 'info';
+              resolve();
+
+              console.log('info in');
+            }, 3000);
           });
         }
 
@@ -325,6 +358,8 @@ export const uaManager = new UaManager();
         if(currentSection == 'top'){
           return new Promise((resolve, reject)=>{
             $('.viewArea_section-top').removeClass('is-show');
+            $('body').removeClass('is-transitionIn');
+            $('body').addClass('is-transitionOut');
 
             $('.footer_scroll').removeClass('is-show');
             $('#sectionNav').removeClass('is-show');
@@ -333,6 +368,7 @@ export const uaManager = new UaManager();
             setTimeout(()=>{
               eyecatch.out(4.5, ()=>{
                 $('.bg_item-top').removeClass('is-show');
+                $('.body').removeClass('is-transitionOut');
 
                 // eyecatch.disableParallax(document.body);
                 sectionTop.canvas.destroy();
@@ -347,6 +383,8 @@ export const uaManager = new UaManager();
         else if(currentSection == 'intro'){
           return new Promise((resolve, reject)=>{
             $('.viewArea_section-intro').removeClass('is-show');
+            $('body').removeClass('is-transitionIn');
+            $('body').addClass('is-transitionOut');
 
             $('.footer_scroll').removeClass('is-show');
             $('#sectionNav').removeClass('is-show');
@@ -355,6 +393,7 @@ export const uaManager = new UaManager();
             setTimeout(()=>{
               particle.out(3.0, ()=>{
                 $('.bg_item-intro').removeClass('is-show');
+                $('.body').removeClass('is-transitionOut');
 
                 sectionIntro.canvas.destroy();
                 console.log('intro out');
@@ -368,6 +407,8 @@ export const uaManager = new UaManager();
         else if(currentSection == 'gallery'){
           return new Promise((resolve, reject)=>{
             $('.viewArea_section-gallery').removeClass('is-show');
+            $('body').removeClass('is-transitionIn');
+            $('body').addClass('is-transitionOut');
 
             $('.footer_scroll').removeClass('is-show');
             $('#sectionNav').removeClass('is-show');
@@ -376,12 +417,35 @@ export const uaManager = new UaManager();
             setTimeout(()=>{
               carousel.out(4.0, ()=>{
                 $('.bg_item-gallery').removeClass('is-show');
+                $('.body').removeClass('is-transitionOut');
 
                 // carousel.disableParallax(document.body);
                 sectionGallery.canvas.destroy();
                 console.log('gallery out');
                 resolve();
               });
+            }, 900);
+          });
+        }
+
+        // info
+        else if(currentSection == 'info'){
+          return new Promise((resolve, reject)=>{
+            $('.viewArea_section-info').removeClass('is-show');
+            $('body').removeClass('is-transitionIn');
+            $('body').addClass('is-transitionOut');
+
+            $('.footer_scroll').removeClass('is-show');
+            $('#sectionNav').removeClass('is-show');
+            $('#sectionNavInfo').removeClass('is-show');
+
+            setTimeout(()=>{
+              $('.bg_item-info').removeClass('is-show');
+              $('.body').removeClass('is-transitionOut');
+
+              sectionInfo.canvas.destroy();
+              console.log('info out');
+              resolve();
             }, 900);
           });
         }
