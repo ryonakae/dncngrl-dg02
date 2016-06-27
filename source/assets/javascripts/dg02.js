@@ -38,10 +38,15 @@ export const uaManager = new UaManager();
     const particleImage = new THREE.TextureLoader(loadingManager).load('./assets/images/textures/particle2.png');
 
 
+    // リサイズ用変数
+    let _topMagnification;
+    let _galleryMagnification;
+
+
     // section initialize
     const sectionTop = new Section({
       bg: document.getElementById('bgTop'),
-      magnification: 7.0
+      magnification: _topMagnification
     });
     sectionTop.init();
     let eyecatch;
@@ -55,7 +60,7 @@ export const uaManager = new UaManager();
 
     const sectionGallery = new Section({
       bg: document.getElementById('bgGallery'),
-      magnification: 8.0
+      magnification: _galleryMagnification
     });
     sectionGallery.init();
     let carousel;
@@ -201,7 +206,8 @@ export const uaManager = new UaManager();
 
             eyecatch = new Eyecatch(78, 110, 78*1.5, 110*1.5);
             eyecatch.setImage(new THREE.ImageLoader().load('./assets/images/eyecatch.jpg'));
-            eyecatch.position.y = 3;
+            eyecatch.position.x = -1;
+            eyecatch.position.y = 2;
             sectionTop.canvas.scene.add(eyecatch);
 
             // // parallax only pc
@@ -485,5 +491,42 @@ export const uaManager = new UaManager();
           if(callback) callback();
         })
     }
+
+
+    // windowの幅によって倍率変える
+    $(window).on('load resize', ()=>{
+      // width
+      if(window.innerWidth >= 768) {
+        _topMagnification = 7.0;
+        _galleryMagnification = 9.0;
+      }
+      else if(window.innerWidth < 768 && window.innerWidth >= 720){
+        _topMagnification = 6.5;
+        _galleryMagnification = 7.0;
+      }
+      else if(window.innerWidth < 720 && window.innerWidth >= 640){
+        _topMagnification = 6.0;
+        _galleryMagnification = 6.0;
+      }
+      else if(window.innerWidth < 640 && window.innerWidth >= 500){
+        _topMagnification = 5.5;
+        _galleryMagnification = 4.5;
+      }
+      else if(window.innerWidth < 500 && window.innerWidth >= 400){
+        _topMagnification = 4.5;
+        _galleryMagnification = 3.8;
+      }
+      else if(window.innerWidth < 400 && window.innerWidth >= 350){
+        _topMagnification = 4.0;
+        _galleryMagnification = 3.3;
+      }
+      else {
+        _topMagnification = 3.5;
+        _galleryMagnification = 2.9;
+      }
+
+      sectionTop.canvas.magnification = _topMagnification;
+      sectionGallery.canvas.magnification = _galleryMagnification;
+    });
   };
 })();

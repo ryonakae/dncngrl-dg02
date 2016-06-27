@@ -25,7 +25,6 @@ export default class Canvas {
 
     // camera
     this.camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 10, 10000);
-    this.setCameraAsPixelSize();
     this.camera.lookAt(this.scene.position);
 
     // renderer
@@ -48,9 +47,10 @@ export default class Canvas {
     this.animate();
 
     // listen resize event
-    this.resize();
+    this.resize(this.magnification);
     $(window).on('resize.canvasResize', ()=>{
-      this.resize();
+      console.log('canvas resize', this.magnification);
+      this.resize(this.magnification);
     });
 
     console.log('canvas init', this);
@@ -71,18 +71,14 @@ export default class Canvas {
     this.renderer.render(this.scene, this.camera);
   }
 
-  resize() {
+  resize(magnification) {
     this.camera.aspect = window.innerWidth / window.innerHeight;
-    this.setCameraAsPixelSize();
+
+    const cameraZ = ((window.innerHeight/2) / Math.tan((this.camera.fov * Math.PI/180)/2)) / -magnification;
+    this.camera.position.z = -cameraZ;
+
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-  }
-
-  setCameraAsPixelSize() {
-    // ピクセル等倍にする(canvasのサイズでオブジェクトの大きさを変えない)
-    // http://ikeryou.jp/log/?p=242
-    const cameraZ = ((window.innerHeight/2) / Math.tan((this.camera.fov * Math.PI/180)/2)) / -this.magnification;
-    this.camera.position.z = -cameraZ;
   }
 
   destroy(){
