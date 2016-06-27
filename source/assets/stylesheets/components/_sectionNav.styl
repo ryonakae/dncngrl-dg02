@@ -73,3 +73,29 @@
         // opacity 1
         transform translate(-50%, -50%) scale(1.4)
         background-color $textColor_default
+
+
++media-query($mq_tablet)
+  .sectionNav
+    right 30px
+    top 75px
+    transform translateX(60px) translateY(0)
+
+    &.is-show
+      transform translateX(0) translateY(0)
+
+    &_item
+      display inline-block
+      vertical-align middle
+      margin-top 0
+      margin-left 10px
+
+      .icon
+        display none
+
+      .text
+        transform translateX(0)
+        filter blur(0)
+        opacity 1
+        font-size $fontSize_small
+        margin-right 0

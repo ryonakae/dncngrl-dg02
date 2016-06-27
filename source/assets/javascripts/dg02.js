@@ -207,7 +207,7 @@ export const uaManager = new UaManager();
             eyecatch = new Eyecatch(78, 110, 78*1.5, 110*1.5);
             eyecatch.setImage(new THREE.ImageLoader().load('./assets/images/eyecatch.jpg'));
             eyecatch.position.x = -1;
-            eyecatch.position.y = 2;
+            eyecatch.position.y = 1;
             sectionTop.canvas.scene.add(eyecatch);
 
             // // parallax only pc
@@ -496,11 +496,11 @@ export const uaManager = new UaManager();
     // windowの幅によって倍率変える
     $(window).on('load resize', ()=>{
       // width
-      if(window.innerWidth >= 768) {
+      if(window.innerWidth > 768) {
         _topMagnification = 7.0;
         _galleryMagnification = 9.0;
       }
-      else if(window.innerWidth < 768 && window.innerWidth >= 720){
+      else if(window.innerWidth <= 768 && window.innerWidth >= 720){
         _topMagnification = 6.5;
         _galleryMagnification = 7.0;
       }
