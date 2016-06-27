@@ -65,10 +65,13 @@ export default class Carousel {
   slideNext(duration){
     if(this.slideCount < this.slides.length){
       this.nav.classList.add('is-disableClick');
+      document.body.classList.add('is-transition');
+
       this.showNext(this.slideCount, duration, ()=>{
         this.slideCount++;
         this.updateIndicator(this.slideCount);
         this.nav.classList.remove('is-disableClick');
+        document.body.classList.remove('is-transition');
         this.checkEdge();
       });
     }
@@ -77,10 +80,13 @@ export default class Carousel {
   slidePrev(duration){
     if(this.slideCount > 1){
       this.nav.classList.add('is-disableClick');
+      document.body.classList.add('is-transition');
+
       this.showPrev(this.slideCount, duration, ()=>{
         this.slideCount--;
         this.updateIndicator(this.slideCount);
         this.nav.classList.remove('is-disableClick');
+        document.body.classList.remove('is-transition');
         this.checkEdge();
       });
     }

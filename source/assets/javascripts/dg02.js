@@ -117,6 +117,8 @@ export const uaManager = new UaManager();
     }
 
     $(window).on('wheel.onScroll touchmove.onScroll', ()=>{
+      if($('body').hasClass('is-transition')) return;
+
       console.log('moveAmount:', moveAmount);
       console.log('nowMoving:', _nowMoving);
 
@@ -136,6 +138,8 @@ export const uaManager = new UaManager();
 
     // move section when click scroll
     $('#scroll').on('click', ()=>{
+      if($('body').hasClass('is-transition')) return;
+
       // nowMovingがtrueなら以下スキップ
       if(_nowMoving) return;
       _nowMoving = true;
@@ -147,6 +151,8 @@ export const uaManager = new UaManager();
     // move section whien click sectionNavi
     $('.sectionNav_item').each((id, value)=>{
       $(value).on('click', ()=>{
+        if($('body').hasClass('is-transition')) return;
+
         console.log(id, value.dataset.section);
         moveSection(_currentSection, value.dataset.section);
       });

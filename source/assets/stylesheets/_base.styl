@@ -82,7 +82,6 @@ a
 // noise and light
 .noise,
 .light
-  // display none
   position fixed
   // -webkit-backface-visibility:hidden;
   // backface-visibility:hidden;
@@ -99,10 +98,19 @@ a
   mix-blend-mode overlay
   opacity 0.6
 
+  body.is-mobile &
+    background url('../images/bg_noise_mobile.gif')
+    background-size 200px
+    mix-blend-mode normal
+    opacity 0.7
+
 .light
   background-image radial-gradient(circle at center, white 0%, transparent 100%)
   mix-blend-mode overlay
   opacity 0.6
+
+  body.is-mobile &
+    display none
 
 
 // loader
