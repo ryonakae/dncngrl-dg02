@@ -71,7 +71,7 @@ export const uaManager = new UaManager();
     // show eyecatch at first
     // top表示前はnowMovingをtrue
     // topの表示が終わったらnowMovingがfalseになる
-    let _currentSection = 'info';
+    let _currentSection = 'top';
     let _nowMoving = true;
     $('body').addClass('is-nowLoading');
 
@@ -82,7 +82,7 @@ export const uaManager = new UaManager();
         $('body').addClass('is-loaded');
 
         setTimeout(()=>{
-          moveSection(null, 'info', ()=>{
+          moveSection(null, 'top', ()=>{
             $('body').addClass('is-ready');
           });
         }, 1200);
