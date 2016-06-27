@@ -22,16 +22,33 @@ export default class Eyecatch extends THREE.Mesh {
     this.stretch = 0.11;
     this.totalDuration = this.maxDuration + this.maxDelayX + this.maxDelayY + this.stretch;
 
+    this.plane = null;
+    this.geometry = null;
+    this.material = null;
+
+    // geometry
     this.plane = new THREE.PlaneGeometry(this.width, this.height, this.divisionX, this.divisionY);
-    console.log(THREE.BAS);
     THREE.BAS.Utils.separateFaces(this.plane);
 
     this.geometry = new THREE.BAS.ModelBufferGeometry(this.plane);
     this.geometry.bufferUVs();
-    console.log(this.geometry, this.geometry.faceCount);
+    // console.log(this.geometry, this.geometry.faceCount);
 
     this.bufferPositions();
 
+    // material
+    this.material = new THREE.BAS.BasicAnimationMaterial();
+
+    this.frustumCulled = false;
+    this.defineProperty();
+
+    console.log(this);
+
+    this.init();
+  }
+
+  init(){
+    // variables/attributes
     this.aAnimation = this.geometry.createAttribute('aAnimation', 2);
     this.aStartPosition = this.geometry.createAttribute('aStartPosition', 3);
     this.aControl0 = this.geometry.createAttribute('aControl0', 3);
@@ -132,11 +149,25 @@ export default class Eyecatch extends THREE.Mesh {
       map: new THREE.Texture()
     });
     console.log(this.material);
+  }
 
-    console.log(this);
-    this.frustumCulled = false;
+  destroy(){
+    // delete this.plane;
+    // delete this.geometry;
+    // delete this.material;
+    delete this.aAnimation;
+    delete this.aStartPosition;
+    delete this.aControl0;
+    delete this.aControl1;
+    delete this.aEndPosition;
+    delete this.startPosition;
+    delete this.control0;
+    delete this.control1;
+    delete this.endPosition;
+    delete this.tempPoint;
 
-    this.defineProperty();
+    console.log('eyecatch destroy');
+    console.log(this.aAnimation, this.aStartPosition, this.aEndPosition);
   }
 
   bufferPositions() {
@@ -221,7 +252,10 @@ export default class Eyecatch extends THREE.Mesh {
       ease:Power1.easeOut
     }, {
       time:0.0,
-      onComplete: cb
+      onComplete: ()=>{
+        this.destroy();
+        cb();
+      }
     });
   }
 
@@ -235,12 +269,6 @@ export default class Eyecatch extends THREE.Mesh {
     $(dom).on('mousemove.eyecatchMousemove', (e)=>{
       mouseX = e.pageX - window.innerWidth/2;
       mouseY = e.pageY - window.innerHeight/2;
-
-      // TweenMax.to(this.rotation, 400, {
-      //   x: defaultRotateX + mouseY * quantity,
-      //   y: defaultRotateY + mouseX * quantity,
-      //   overwrite: true
-      // });
 
       this.rotation.x = defaultRotateX + mouseY * quantity;
       this.rotation.y = defaultRotateY + mouseX * quantity;

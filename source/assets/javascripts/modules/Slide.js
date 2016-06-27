@@ -26,6 +26,19 @@ export default class Slide extends THREE.Mesh {
     this.geometry = null;
     this.material = null;
 
+    // geometry
+    this.plane = new THREE.PlaneGeometry(this.width, this.height, this.divisionX, this.divisionY);
+    THREE.BAS.Utils.separateFaces(this.plane);
+
+    this.geometry = new THREE.BAS.ModelBufferGeometry(this.plane);
+    this.geometry.bufferUVs();
+    // console.log(this.geometry, this.geometry.faceCount);
+
+    this.bufferPositions();
+
+    // material
+    this.material = new THREE.BAS.BasicAnimationMaterial();
+
     this.frustumCulled = false;
     this.defineProperty();
 
@@ -36,20 +49,6 @@ export default class Slide extends THREE.Mesh {
   }
 
   init(animationPhase) {
-    // material
-    this.material = new THREE.BAS.BasicAnimationMaterial();
-
-    // geometry
-    this.plane = new THREE.PlaneGeometry(this.width, this.height, this.divisionX, this.divisionY);
-    // console.log(THREE.BAS);
-    THREE.BAS.Utils.separateFaces(this.plane);
-
-    this.geometry = new THREE.BAS.ModelBufferGeometry(this.plane);
-    this.geometry.bufferUVs();
-    // console.log(this.geometry, this.geometry.faceCount);
-
-    this.bufferPositions();
-
     // variables/attributes
     this.aAnimation = this.geometry.createAttribute('aAnimation', 2);
     this.aStartPosition = this.geometry.createAttribute('aStartPosition', 3);
@@ -167,7 +166,7 @@ export default class Slide extends THREE.Mesh {
   }
 
   destroy(){
-    delete this.plane;
+    // delete this.plane;
     // delete this.geometry;
     // delete this.material;
     delete this.aAnimation;
@@ -260,7 +259,7 @@ export default class Slide extends THREE.Mesh {
       time: this.totalDuration,
       ease: Power0.easeInOut,
       onComplete: ()=>{
-        this.destroy();
+        // this.destroy();
         if(cb) cb();
       }
     });
@@ -275,7 +274,7 @@ export default class Slide extends THREE.Mesh {
       time: this.totalDuration,
       ease: Power0.easeInOut,
       onComplete: ()=>{
-        this.destroy();
+        // this.destroy();
         if(cb) cb();
       }
     });
@@ -290,7 +289,7 @@ export default class Slide extends THREE.Mesh {
     }, {
       time: 0.0,
       onComplete: ()=>{
-        this.destroy();
+        // this.destroy();
         if(cb) cb();
       }
     });
@@ -305,7 +304,7 @@ export default class Slide extends THREE.Mesh {
     }, {
       time: 0.0,
       onComplete: ()=>{
-        this.destroy();
+        // this.destroy();
         if(cb) cb();
       }
     });

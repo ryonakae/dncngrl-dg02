@@ -71,7 +71,7 @@ export const uaManager = new UaManager();
     // show eyecatch at first
     // top表示前はnowMovingをtrue
     // topの表示が終わったらnowMovingがfalseになる
-    let _currentSection = 'info';
+    let _currentSection = 'top';
     let _nowMoving = true;
     $('body').addClass('is-nowLoading');
 
@@ -82,7 +82,7 @@ export const uaManager = new UaManager();
         $('body').addClass('is-loaded');
 
         setTimeout(()=>{
-          moveSection(null, 'info', ()=>{
+          moveSection(null, 'top', ()=>{
             $('body').addClass('is-ready');
           });
         }, 1200);
@@ -200,7 +200,7 @@ export const uaManager = new UaManager();
             sectionTop.canvas.init();
 
             eyecatch = new Eyecatch(78, 110, 78*1.5, 110*1.5);
-            eyecatch.setImage(new THREE.ImageLoader().load('./assets/images/sample04.jpg'));
+            eyecatch.setImage(new THREE.ImageLoader().load('./assets/images/eyecatch.jpg'));
             eyecatch.position.y = 3;
             sectionTop.canvas.scene.add(eyecatch);
 
