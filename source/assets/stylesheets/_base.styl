@@ -30,7 +30,7 @@ body
   overflow-wrap break-word
   width 100%
   height 100%
-  overflow hidden
+  // overflow hidden
 
   & ::-moz-selection
     background $bgColor_selection
@@ -42,6 +42,14 @@ body
 
   +retina-query(only screen, 2)
     -webkit-font-smoothing antialiased
+
++media-query($mq_spLarge)
+  body
+    font-size rem(13px)
+
++media-query($mq_sp)
+  body
+    font-size rem(12px)
 
 a
   color inherit
@@ -74,6 +82,7 @@ a
 // noise and light
 .noise,
 .light
+  // display none
   position fixed
   // -webkit-backface-visibility:hidden;
   // backface-visibility:hidden;
@@ -81,6 +90,8 @@ a
   height 100%
   top 0
   left 0
+  // overflow hidden
+  // transform translateZ(0)
 
 .noise
   background-image url('../images/bg_noise.gif')
@@ -140,3 +151,9 @@ a
       opacity 0
       filter blur(15px)
       transform translate(-50%, -50%) scale(1.3)
+
+
++media-query($mq_spLarge)
+  .loader
+    .text
+      font-size rem(24px)

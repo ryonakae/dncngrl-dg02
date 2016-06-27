@@ -204,7 +204,11 @@ export const uaManager = new UaManager();
           return new Promise((resolve, reject)=>{
             sectionTop.canvas.init();
 
-            eyecatch = new Eyecatch(78, 110, 78*1.5, 110*1.5);
+            if(uaManager.device() === 'pc'){
+              eyecatch = new Eyecatch(78, 110, 78*1.5, 110*1.5);
+            } else {
+              eyecatch = new Eyecatch(78, 110, 78*0.7, 110*0.7);
+            }
             eyecatch.setImage(new THREE.ImageLoader().load('./assets/images/eyecatch.jpg'));
             eyecatch.position.x = -1;
             eyecatch.position.y = 1;
@@ -279,8 +283,8 @@ export const uaManager = new UaManager();
               divisionX = 100*1.5;
               divisionY = 67*1.5;
             } else {
-              divisionX = 100*1.0;
-              divisionY = 67*1.0;
+              divisionX = 100*0.8;
+              divisionY = 67*0.8;
             }
 
             carousel = new Carousel({
@@ -521,7 +525,7 @@ export const uaManager = new UaManager();
         _galleryMagnification = 3.3;
       }
       else {
-        _topMagnification = 3.5;
+        _topMagnification = 3.2;
         _galleryMagnification = 2.9;
       }
 

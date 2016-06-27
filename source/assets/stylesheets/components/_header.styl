@@ -6,7 +6,7 @@
   top 0
   left 0
   width 100%
-  padding 30px 30px 0
+  padding 30px 27px 0
   z-index 10
   clearfix()
   opacity 0
@@ -85,3 +85,27 @@
 
         &-gp a span
           retinaSprite($icon_gp_group)
+
+
++media-query($mq_spLarge)
+  .header
+    padding 20px 15px 0 20px
+
+    &_backTop
+      padding 0
+      border none
+
+    &_share
+      margin-top -7px
+
+      .title,
+      .border
+        display none
+
+      .list .item
+        margin-left 0
+
+
++media-query($mq_sp)
+  .header
+    padding 10px 5px 0 10px

@@ -1,5 +1,5 @@
 .info_list
-  margin -15px 0 0 0
+  margin 0
   clearfix()
 
   &Title
@@ -47,3 +47,38 @@
         display inline-block
         vertical-align middle
         margin-right 15px
+
+
++media-query($mq_spLarge)
+  .info_list
+    &Title
+      // float none
+      margin-top 5px
+
+    &Text
+      // float none
+      margin-left 60px
+      margin-top 5px
+
+  .info_credit
+    margin-top 5px
+
+    &Title
+      float none
+      width auto
+      font-size rem(16px)
+
+    &List
+      float none
+
+      &Title
+        margin-top 5px
+
+        &:first-child
+          margin-top 5px
+
+      &Text
+        margin-top 0
+
+        &-large
+          font-size rem(15px)

@@ -78,7 +78,7 @@
 +media-query($mq_tablet)
   .sectionNav
     right 30px
-    top 75px
+    top 80px
     transform translateX(60px) translateY(0)
 
     &.is-show
@@ -88,7 +88,7 @@
       display inline-block
       vertical-align middle
       margin-top 0
-      margin-left 10px
+      margin-left 5px
 
       .icon
         display none
@@ -99,3 +99,21 @@
         opacity 1
         font-size $fontSize_small
         margin-right 0
+
+
++media-query($mq_spLarge)
+  .sectionNav
+    right initial
+    left 20px
+    top 45px
+    transform translateX(-60px) translateY(0)
+
+    &_item
+      margin-left 0
+      margin-right 5px
+
+
++media-query($mq_sp)
+  .sectionNav
+    left 10px
+    top 32px
