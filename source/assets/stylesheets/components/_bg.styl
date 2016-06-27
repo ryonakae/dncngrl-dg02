@@ -9,7 +9,7 @@
   pointer-events none
 
   &_item
-    transition: all $transitionDuration easing($transitionEasing)
+    transition: all $transitionDuration ease
     position fixed
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
@@ -42,3 +42,7 @@
     // info
     &-info
       background-color rgba(#000, 0.1);
+
+      canvas
+        opacity 0.35
+        mask-image linear-gradient(to bottom, rgba(#000, 0), rgba(#000, 1))

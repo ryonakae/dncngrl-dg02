@@ -108,9 +108,6 @@ export default class Particle extends THREE.Points {
     for (let i = 0; i < this.count; i++) {
       const particle = this.geometry.vertices[i];
       this.vertexUpdate(particle, this.posOfForce);
-
-      if(this.frameCount % (60 * 10) == 0){
-      }
     }
 
     // n秒毎にforcePhaseを切り替える
@@ -153,7 +150,7 @@ export default class Particle extends THREE.Points {
       size: 0,
       opacity: 0,
       ease: Power1.easeOut,
-      delay: 1.5,
+      delay: 1.0,
       onComplete: ()=>{
         this.stopAnimate();
         $(window).off('.particleResize');

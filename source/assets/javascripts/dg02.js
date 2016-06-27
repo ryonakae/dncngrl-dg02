@@ -8,6 +8,7 @@ import Canvas from './modules/Canvas';
 import Eyecatch from './modules/Eyecatch';
 import Particle from './modules/Particle';
 import Carousel from './modules/Carousel';
+import Wave from './modules/Wave';
 import Section from './modules/Section';
 
 import UaManager from './modules/UaManager';
@@ -43,7 +44,6 @@ export const uaManager = new UaManager();
       magnification: 7.0
     });
     sectionTop.init();
-    console.log(sectionTop.canvas);
     let eyecatch;
 
     const sectionIntro = new Section({
@@ -71,7 +71,7 @@ export const uaManager = new UaManager();
     // show eyecatch at first
     // top表示前はnowMovingをtrue
     // topの表示が終わったらnowMovingがfalseになる
-    let _currentSection = 'top';
+    let _currentSection = 'info';
     let _nowMoving = true;
     $('body').addClass('is-nowLoading');
 
@@ -82,7 +82,7 @@ export const uaManager = new UaManager();
         $('body').addClass('is-loaded');
 
         setTimeout(()=>{
-          moveSection(null, 'top', ()=>{
+          moveSection(null, 'info', ()=>{
             $('body').addClass('is-ready');
           });
         }, 1200);
@@ -322,12 +322,17 @@ export const uaManager = new UaManager();
         else if(nextSection == 'info'){
           return new Promise((resolve, reject)=>{
             sectionInfo.canvas.init();
+            // sectionInfo.canvas.scene.fog = new THREE.FogExp2(0x989EA5, 0.001);
+
+            wave = new Wave();
+            wave.position.y = -200;
+            sectionInfo.canvas.scene.add(wave);
 
             $('.bg_item-info').addClass('is-show');
             $('body').removeClass('is-transitionOut');
             $('body').addClass('is-transitionIn');
 
-            setTimeout(()=>{
+            wave.in(3.0, ()=>{
               $('.viewArea_section-info').addClass('is-show');
               $('.body').removeClass('is-transitionIn');
 
@@ -339,7 +344,7 @@ export const uaManager = new UaManager();
               resolve();
 
               console.log('info in');
-            }, 3000);
+            });
           });
         }
 
@@ -440,12 +445,14 @@ export const uaManager = new UaManager();
             $('#sectionNavInfo').removeClass('is-show');
 
             setTimeout(()=>{
-              $('.bg_item-info').removeClass('is-show');
-              $('.body').removeClass('is-transitionOut');
+              wave.out(3.0, ()=>{
+                $('.bg_item-info').removeClass('is-show');
+                $('.body').removeClass('is-transitionOut');
 
-              sectionInfo.canvas.destroy();
-              console.log('info out');
-              resolve();
+                sectionInfo.canvas.destroy();
+                console.log('info out');
+                resolve();
+              });
             }, 900);
           });
         }
