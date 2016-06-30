@@ -12,6 +12,8 @@ import sourcemaps from 'gulp-sourcemaps';
 import gulpif from 'gulp-if';
 import lazypipe from 'lazypipe';
 import bs from './browserSync';
+import replace from 'gulp-replace';
+import base64 from 'gulp-base64';
 
 
 // stylus
@@ -38,6 +40,12 @@ gulp.task('stylus', () => {
       set: { 'include css': true }
     }))
     .pipe(gulpif(!env.isProduction, sourcemaps.write('./')))
+    .pipe(gulpif(env.isProduction, replace('../', 'http://file.brdr.jp/dncngrl_02/')))
+    .pipe(gulpif(env.isProduction, base64({
+      extensions: ['woff', 'ttf', 'svg'],
+      maxImageSize: 2000*1024, //20MB
+      debug: true
+    })))
     .pipe(gulpif(env.isProduction, prodTasks()))
     .pipe(gulp.dest(path.build.stylesheets))
     .pipe(bs.stream({match: '**/*.css'}));
