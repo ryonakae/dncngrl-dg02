@@ -36,6 +36,7 @@ export default class Particle extends THREE.Points {
 
   init(){
     const textureLoader = new THREE.TextureLoader();
+    textureLoader.crossOrigin = 'anonymous';
     this.texture = textureLoader.load('./assets/images/textures/particle2.png');
 
     this.geometry = new THREE.Geometry();

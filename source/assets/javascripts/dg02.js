@@ -33,8 +33,8 @@ export const uaManager = new UaManager();
     const loadingManager = new THREE.LoadingManager();
     const imageLoader = new THREE.ImageLoader(loadingManager);
     const textureLoader = new THREE.TextureLoader(loadingManager);
-    imageLoader.crossOrigin = '*';
-    textureLoader.crossOrigin = '*';
+    imageLoader.crossOrigin = 'anonymous';
+    textureLoader.crossOrigin = 'anonymous';
     const eyecatchImage = imageLoader.load('./assets/images/eyecatch.jpg');
     const carouselImage01 = imageLoader.load('./assets/images/gallery_01.jpg');
     const carouselImage02 = imageLoader.load('./assets/images/gallery_02.jpg');
@@ -219,7 +219,9 @@ export const uaManager = new UaManager();
             } else {
               eyecatch = new Eyecatch(78, 110, 78*0.7, 110*0.7);
             }
-            eyecatch.setImage(new THREE.ImageLoader().load('./assets/images/eyecatch.jpg'));
+            const eyecatchLoader = new THREE.ImageLoader();
+            eyecatchLoader.crossOrigin = 'anonymous';
+            eyecatch.setImage(eyecatchLoader.load('./assets/images/eyecatch.jpg'));
             eyecatch.position.x = -1;
             eyecatch.position.y = 1;
             sectionTop.canvas.scene.add(eyecatch);

@@ -160,7 +160,9 @@ export default class Slide extends THREE.Mesh {
     });
 
     // set image
-    this.setImage(new THREE.ImageLoader().load(this.imageSrc));
+    const slideLoader = new THREE.ImageLoader();
+    slideLoader.crossOrigin = 'anonymous';
+    this.setImage(slideLoader.load(this.imageSrc));
 
     //console.log(this);
   }
