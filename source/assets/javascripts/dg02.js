@@ -21,7 +21,7 @@ export const uaManager = new UaManager();
   });
 
   const init = () => {
-    console.log('init');
+    //console.log('init');
 
 
     // uamanager initialize
@@ -31,11 +31,15 @@ export const uaManager = new UaManager();
     // 画像をロード
     // 使う画像全部入れとく
     const loadingManager = new THREE.LoadingManager();
-    const eyecatchImage = new THREE.ImageLoader(loadingManager).load('./assets/images/eyecatch.jpg');
-    const carouselImage01 = new THREE.ImageLoader(loadingManager).load('./assets/images/gallery_01.jpg');
-    const carouselImage02 = new THREE.ImageLoader(loadingManager).load('./assets/images/gallery_02.jpg');
-    const carouselImage03 = new THREE.ImageLoader(loadingManager).load('./assets/images/gallery_03.jpg');
-    const particleImage = new THREE.TextureLoader(loadingManager).load('./assets/images/textures/particle2.png');
+    const imageLoader = new THREE.ImageLoader(loadingManager);
+    const textureLoader = new THREE.TextureLoader(loadingManager);
+    imageLoader.crossOrigin = '*';
+    textureLoader.crossOrigin = '*';
+    const eyecatchImage = imageLoader.load('./assets/images/eyecatch.jpg');
+    const carouselImage01 = imageLoader.load('./assets/images/gallery_01.jpg');
+    const carouselImage02 = imageLoader.load('./assets/images/gallery_02.jpg');
+    const carouselImage03 = imageLoader.load('./assets/images/gallery_03.jpg');
+    const particleImage = textureLoader.load('./assets/images/textures/particle2.png');
 
 
     // リサイズ用変数
@@ -82,7 +86,7 @@ export const uaManager = new UaManager();
 
     loadingManager.onLoad = (item, loaded, total)=>{
       setTimeout(()=>{
-        console.log('all images are loaded');
+        //console.log('all images are loaded');
         $('body').removeClass('is-nowLoading');
         $('body').addClass('is-loaded');
 
@@ -119,8 +123,8 @@ export const uaManager = new UaManager();
     $(window).on('wheel.onScroll touchmove.onScroll', ()=>{
       if($('body').hasClass('is-transition')) return;
 
-      console.log('moveAmount:', moveAmount);
-      console.log('nowMoving:', _nowMoving);
+      //console.log('moveAmount:', moveAmount);
+      //console.log('nowMoving:', _nowMoving);
 
       // nowMovingがtrueなら以下スキップ
       if(_nowMoving) return;
@@ -153,7 +157,7 @@ export const uaManager = new UaManager();
       $(value).on('click', ()=>{
         if($('body').hasClass('is-transition')) return;
 
-        console.log(id, value.dataset.section);
+        //console.log(id, value.dataset.section);
         moveSection(_currentSection, value.dataset.section);
       });
     });
@@ -161,8 +165,8 @@ export const uaManager = new UaManager();
 
     // 次のセクションに行くぞい
     function moveNext(){
-      console.log('move next');
-      console.log('nowMoving:', _nowMoving);
+      //console.log('move next');
+      //console.log('nowMoving:', _nowMoving);
 
       if(_currentSection == 'top') {
         moveSection('top', 'intro');
@@ -175,15 +179,15 @@ export const uaManager = new UaManager();
       }
       else {
         _nowMoving = false;
-        console.log('nowMoving', _nowMoving);
+        //console.log('nowMoving', _nowMoving);
       }
     }
 
 
     // 前のセクションに行くぞい
     function movePrev(){
-      console.log('move prev');
-      console.log('nowMoving:', _nowMoving);
+      //console.log('move prev');
+      //console.log('nowMoving:', _nowMoving);
 
       if(_currentSection == 'intro'){
         moveSection('intro', 'top');
@@ -196,7 +200,7 @@ export const uaManager = new UaManager();
       }
       else {
         _nowMoving = false;
-        console.log('nowMoving', _nowMoving);
+        //console.log('nowMoving', _nowMoving);
       }
     }
 
@@ -242,7 +246,7 @@ export const uaManager = new UaManager();
               _currentSection = 'top';
               resolve();
 
-              console.log('eyecatch in');
+              //console.log('eyecatch in');
             });
           });
         }
@@ -274,7 +278,7 @@ export const uaManager = new UaManager();
               _currentSection = 'intro';
               resolve();
 
-              console.log('intro in');
+              //console.log('intro in');
             });
           });
         }
@@ -329,7 +333,7 @@ export const uaManager = new UaManager();
               _currentSection = 'gallery';
               resolve();
 
-              console.log('gallery in');
+              //console.log('gallery in');
             });
           });
         }
@@ -359,7 +363,7 @@ export const uaManager = new UaManager();
               _currentSection = 'info';
               resolve();
 
-              console.log('info in');
+              //console.log('info in');
             });
           });
         }
@@ -393,7 +397,7 @@ export const uaManager = new UaManager();
 
                 // eyecatch.disableParallax(document.body);
                 sectionTop.canvas.destroy();
-                console.log('eyecatch out');
+                //console.log('eyecatch out');
                 resolve();
               });
             }, 900);
@@ -417,7 +421,7 @@ export const uaManager = new UaManager();
                 $('.body').removeClass('is-transitionOut');
 
                 sectionIntro.canvas.destroy();
-                console.log('intro out');
+                //console.log('intro out');
                 resolve();
               });
             }, 900);
@@ -442,7 +446,7 @@ export const uaManager = new UaManager();
 
                 // carousel.disableParallax(document.body);
                 sectionGallery.canvas.destroy();
-                console.log('gallery out');
+                //console.log('gallery out');
                 resolve();
               });
             }, 900);
@@ -466,7 +470,7 @@ export const uaManager = new UaManager();
                 $('.body').removeClass('is-transitionOut');
 
                 sectionInfo.canvas.destroy();
-                console.log('info out');
+                //console.log('info out');
                 resolve();
               });
             }, 900);
@@ -483,21 +487,21 @@ export const uaManager = new UaManager();
       }
 
       // 関数実行
-      console.log('nowMoving:', _nowMoving);
+      //console.log('nowMoving:', _nowMoving);
       // 今と次のセクションが同じだったら何もしない
       if(currentSection == nextSection) {
         _nowMoving = false; //ロック解除
-        console.log('nowMoving:', _nowMoving);
+        //console.log('nowMoving:', _nowMoving);
         return;
       };
 
       sectionOut()
         .then(sectionIn)
         .then(()=>{
-          console.log('section moved');
-          console.log('currentSection:', _currentSection);
+          //console.log('section moved');
+          //console.log('currentSection:', _currentSection);
           _nowMoving = false; //ロック解除
-          console.log('nowMoving:', _nowMoving);
+          //console.log('nowMoving:', _nowMoving);
           if(callback) callback();
         })
     }

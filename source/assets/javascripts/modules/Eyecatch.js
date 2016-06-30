@@ -42,7 +42,7 @@ export default class Eyecatch extends THREE.Mesh {
     this.frustumCulled = false;
     this.defineProperty();
 
-    console.log(this);
+    //console.log(this);
 
     this.init();
   }
@@ -148,7 +148,7 @@ export default class Eyecatch extends THREE.Mesh {
     }, {
       map: new THREE.Texture()
     });
-    console.log(this.material);
+    //console.log(this.material);
   }
 
   destroy(){
@@ -166,8 +166,8 @@ export default class Eyecatch extends THREE.Mesh {
     delete this.endPosition;
     delete this.tempPoint;
 
-    console.log('eyecatch destroy');
-    console.log(this.aAnimation, this.aStartPosition, this.aEndPosition);
+    //console.log('eyecatch destroy');
+    //console.log(this.aAnimation, this.aStartPosition, this.aEndPosition);
   }
 
   bufferPositions() {
@@ -222,7 +222,7 @@ export default class Eyecatch extends THREE.Mesh {
     this.material.uniforms.map.value.image = img;
     this.material.uniforms.map.value.needsUpdate = true;
 
-    console.log(this.material.uniforms.map.value);
+    //console.log(this.material.uniforms.map.value);
   }
 
   defineProperty() {

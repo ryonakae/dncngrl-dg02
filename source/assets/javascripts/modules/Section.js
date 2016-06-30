@@ -47,7 +47,7 @@ export default class Section {
       .then(main)
       .then(onComplete)
       .then(()=>{
-        console.log('transition done');
+        //console.log('transition done');
       });
   }
 }

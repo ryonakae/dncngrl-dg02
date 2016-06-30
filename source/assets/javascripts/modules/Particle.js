@@ -71,9 +71,9 @@ export default class Particle extends THREE.Points {
     // this.particles.sortParticles = true;
 
     this.frustumCulled = false;
-    console.log(this.particles);
-    console.log(this.texture);
-    console.log(this.geometry.vertices[0]);
+    //console.log(this.particles);
+    //console.log(this.texture);
+    //console.log(this.geometry.vertices[0]);
 
     $(window).on('resize.particleResize', ()=>{
       this.resize();
@@ -154,7 +154,7 @@ export default class Particle extends THREE.Points {
       onComplete: ()=>{
         this.stopAnimate();
         $(window).off('.particleResize');
-        console.log('particle stop');
+        //console.log('particle stop');
         cb();
       }
     });

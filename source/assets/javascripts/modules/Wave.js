@@ -30,7 +30,7 @@ export default class Wave extends THREE.Mesh{
       color: 0x000000,
       transparent: true,
       wireframe: true,
-      antialias: true,
+      // antialias: true,
       // blending: THREE.AdditiveBlending,
     });
 
@@ -39,7 +39,7 @@ export default class Wave extends THREE.Mesh{
 
     this.simplexNoise = new SimplexNoise();
 
-    console.log(this);
+    //console.log(this);
   }
 
   animate(){
@@ -77,7 +77,7 @@ export default class Wave extends THREE.Mesh{
       opacity: 1,
       ease: Power1.easeInOut,
       onComplete: ()=>{
-        console.log('wave in');
+        //console.log('wave in');
         cb();
       }
     });
@@ -98,7 +98,7 @@ export default class Wave extends THREE.Mesh{
       ease: Power1.easeInOut,
       onComplete: ()=>{
         this.stopAnimate();
-        console.log('wave out');
+        //console.log('wave out');
         cb();
       }
     });

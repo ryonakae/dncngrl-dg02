@@ -45,7 +45,7 @@ export default class Slide extends THREE.Mesh {
     // hide slide at default
     this.visible = false;
 
-    console.log(this);
+    //console.log(this);
   }
 
   init(animationPhase) {
@@ -162,7 +162,7 @@ export default class Slide extends THREE.Mesh {
     // set image
     this.setImage(new THREE.ImageLoader().load(this.imageSrc));
 
-    console.log(this);
+    //console.log(this);
   }
 
   destroy(){
@@ -180,8 +180,8 @@ export default class Slide extends THREE.Mesh {
     delete this.endPosition;
     delete this.tempPoint;
 
-    console.log('slide destroy');
-    console.log(this.aAnimation, this.aStartPosition, this.aEndPosition);
+    //console.log('slide destroy');
+    //console.log(this.aAnimation, this.aStartPosition, this.aEndPosition);
   }
 
   bufferPositions() {
@@ -236,7 +236,7 @@ export default class Slide extends THREE.Mesh {
     this.material.uniforms.map.value.image = img;
     this.material.uniforms.map.value.needsUpdate = true;
 
-    console.log(this.material.uniforms.map.value);
+    //console.log(this.material.uniforms.map.value);
   }
 
   defineProperty() {

@@ -49,11 +49,11 @@ export default class Canvas {
     // listen resize event
     this.resize(this.magnification);
     $(window).on('resize.canvasResize', ()=>{
-      console.log('canvas resize', this.magnification);
+      //console.log('canvas resize', this.magnification);
       this.resize(this.magnification);
     });
 
-    console.log('canvas init', this);
+    //console.log('canvas init', this);
   }
 
   animate() {
@@ -104,7 +104,7 @@ export default class Canvas {
         // resizeイベントをoff
         $(window).off('.canvasResize');
 
-        console.log('canvas destroy', this);
+        //console.log('canvas destroy', this);
       }
     }
   }
