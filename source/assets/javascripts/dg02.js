@@ -222,7 +222,9 @@ export const uaManager = new UaManager();
             }
             const eyecatchLoader = new THREE.ImageLoader();
             eyecatchLoader.crossOrigin = 'anonymous';
-            eyecatch.setImage(eyecatchLoader.load('./assets/images/eyecatch.jpg'));
+            eyecatchLoader.load('./assets/images/eyecatch.jpg', (image)=>{
+              eyecatch.setImage(image);
+            });
             eyecatch.position.x = -1;
             eyecatch.position.y = 1;
             sectionTop.canvas.scene.add(eyecatch);

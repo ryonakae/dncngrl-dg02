@@ -261,7 +261,7 @@ export default class Slide extends THREE.Mesh {
       time: this.totalDuration,
       ease: Power0.easeInOut,
       onComplete: ()=>{
-        // this.destroy();
+        this.destroy();
         if(cb) cb();
       }
     });
@@ -276,7 +276,7 @@ export default class Slide extends THREE.Mesh {
       time: this.totalDuration,
       ease: Power0.easeInOut,
       onComplete: ()=>{
-        // this.destroy();
+        this.destroy();
         if(cb) cb();
       }
     });
@@ -291,7 +291,7 @@ export default class Slide extends THREE.Mesh {
     }, {
       time: 0.0,
       onComplete: ()=>{
-        // this.destroy();
+        this.destroy();
         if(cb) cb();
       }
     });
@@ -306,7 +306,7 @@ export default class Slide extends THREE.Mesh {
     }, {
       time: 0.0,
       onComplete: ()=>{
-        // this.destroy();
+        this.destroy();
         if(cb) cb();
       }
     });
