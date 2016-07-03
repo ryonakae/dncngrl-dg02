@@ -39,6 +39,7 @@ export const uaManager = new UaManager();
     const carouselImage01 = imageLoader.load('./assets/images/gallery_01.jpg');
     const carouselImage02 = imageLoader.load('./assets/images/gallery_02.jpg');
     const carouselImage03 = imageLoader.load('./assets/images/gallery_03.jpg');
+    const carouselImage04 = imageLoader.load('./assets/images/gallery_04.jpg');
     const particleImage = textureLoader.load('./assets/images/textures/particle2.png');
 
 
@@ -314,7 +315,8 @@ export const uaManager = new UaManager();
               images: [
                 './assets/images/gallery_01.jpg',
                 './assets/images/gallery_02.jpg',
-                './assets/images/gallery_03.jpg'
+                './assets/images/gallery_03.jpg',
+                './assets/images/gallery_04.jpg'
               ]
             });
 
