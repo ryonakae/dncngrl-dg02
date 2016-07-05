@@ -1,0 +1,151 @@
+import Slide from './Slide';
+
+
+// Carousel Class
+export default class Carousel {
+  constructor(options){
+    this.itemWidth = options.itemWidth;
+    this.itemHeight = options.itemHeight;
+    this.itemDivisionX = options.itemDivisionX;
+    this.itemDivisionY = options.itemDivisionY;
+    this.duration = options.duration;
+
+    this.nav = options.nav;
+    this.navNext = options.navNext;
+    this.navPrev = options.navPrev;
+    this.indicatorCurrent = options.indicatorCurrent;
+    this.indicatorAll = options.indicatorAll;
+
+    this.scene = options.scene;
+    this.images = options.images;
+    this.slides = [];
+    this.slideCount = 1;
+
+    this.init(this.images);
+  }
+
+  init(images){
+    for(let i = 0; i < images.length; i++){
+      this.addSlide(this.scene, images[i]);
+    }
+
+    this.slides[0].init('in');
+
+    this.initIndicator(this.slideCount, this.slides.length);
+
+    $(this.navNext).on('click.carouselClick', ()=>{
+      this.slideNext(this.duration);
+    });
+    $(this.navPrev).on('click.carouselClick', ()=>{
+      this.slidePrev(this.duration);
+    });
+
+    this.checkEdge();
+  }
+
+  addSlide(scene, imageSrc){
+    const slide = new Slide(this.itemWidth, this.itemHeight, this.itemDivisionX, this.itemDivisionY, imageSrc);
+    scene.add(slide);
+    this.slides.push(slide);
+    //console.log(this.slides, this.slides.length);
+  }
+
+  showNext(currentNum, duration, cb){
+    this.slides[currentNum-1].slideNextOut(duration);
+    this.slides[currentNum].slideNextIn(duration, cb);
+    //console.log(currentNum);
+  }
+
+  showPrev(currentNum, duration, cb){
+    this.slides[currentNum-1].slidePrevOut(duration);
+    this.slides[currentNum-2].slidePrevIn(duration, cb);
+    //console.log(currentNum);
+  }
+
+  slideNext(duration){
+    if(this.slideCount < this.slides.length){
+      this.nav.classList.add('is-disableClick');
+      document.body.classList.add('is-transition');
+
+      this.showNext(this.slideCount, duration, ()=>{
+        this.slideCount++;
+        this.updateIndicator(this.slideCount);
+        this.nav.classList.remove('is-disableClick');
+        document.body.classList.remove('is-transition');
+        this.checkEdge();
+      });
+    }
+  }
+
+  slidePrev(duration){
+    if(this.slideCount > 1){
+      this.nav.classList.add('is-disableClick');
+      document.body.classList.add('is-transition');
+
+      this.showPrev(this.slideCount, duration, ()=>{
+        this.slideCount--;
+        this.updateIndicator(this.slideCount);
+        this.nav.classList.remove('is-disableClick');
+        document.body.classList.remove('is-transition');
+        this.checkEdge();
+      });
+    }
+  }
+
+  initIndicator(currentNum, allNum){
+    this.indicatorAll.textContent = '0' + allNum.toString();
+    this.indicatorCurrent.textContent = '0' + currentNum.toString();
+  }
+
+  updateIndicator(currentNum) {
+    this.indicatorCurrent.textContent = '0' + currentNum.toString();
+  }
+
+  checkEdge(){
+    //console.log(this.slideCount);
+
+    if(this.slideCount == 1){
+      $(this.navPrev).addClass('is-disableClick');
+    }
+    else if(this.slideCount == this.slides.length){
+      $(this.navNext).addClass('is-disableClick');
+    }
+    else {
+      $(this.navPrev).removeClass('is-disableClick');
+      $(this.navNext).removeClass('is-disableClick');
+    }
+  }
+
+  parallax(dom, defaultRotateX, defaultRotateY, param){
+    let mouseX;
+    let mouseY;
+    let rotation = {};
+
+    for(let i = 0; i < this.slides.length; i++){
+      this.slides[i].rotation.x = defaultRotateX;
+      this.slides[i].rotation.y = defaultRotateY;
+
+      $(dom).on('mousemove.carouselMousemove', (e)=>{
+        mouseX = e.pageX - window.innerWidth/2;
+        mouseY = e.pageY - window.innerHeight/2;
+
+        this.slides[i].rotation.x = defaultRotateX + mouseY * param;
+        this.slides[i].rotation.y = defaultRotateY + mouseX * param;
+      });
+    }
+  }
+
+  disableParallax(dom){
+    $(dom).off('.carouselMousemove');
+  }
+
+  in(duration, cb){
+    this.slides[0].slideNextIn(duration, cb);
+  }
+
+  out(duration, cb){
+    this.slides[this.slideCount-1].slidePrevOut(duration, cb);
+    $(this.navNext).off('.carouselClick');
+    $(this.navPrev).off('.carouselClick');
+  }
+}

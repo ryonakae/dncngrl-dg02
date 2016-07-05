@@ -1,0 +1,172 @@
+@import 'kouto-swiss'
+@import '_config'
+@import '_sprite'
+
+font-face( 'ProximaNova', '../fonts/ProximaNova-Regular', normal, normal, formats: woff )
+font-face( 'ProximaNova', '../fonts/ProximaNova-Regular-Italic', normal, italic, formats: woff )
+font-face( 'ProximaNova', '../fonts/ProximaNova-Semibold', bold, normal, formats: woff )
+font-face( 'ProximaNova', '../fonts/ProximaNova-Semibold-Italic', bold, italic, formats: woff )
+font-face( 'NotoSansJapanese', '../fonts/NotoSansJP-Regular', normal, normal, formats: woff )
+
+normalize()
+box-sizing-reset()
+
+
+html
+  width 100%
+  height 100%
+
+
+body
+  font-family $fontFamily_default
+  font-size $fontSize_default
+  line-height $lineHeight_default
+  letter-spacing $letterSpacing_default
+  background-color $bgColor_default
+  font-kerning normal
+  color $textColor_default
+  // text-align justify
+  word-wrap break-word
+  overflow-wrap break-word
+  width 100%
+  height 100%
+  // overflow hidden
+
+  & ::-moz-selection
+    background $bgColor_selection
+    color $textColor_default
+
+  & ::selection
+      background $bgColor_selection
+      color $textColor_default
+
+  +retina-query(only screen, 2)
+    -webkit-font-smoothing antialiased
+
++media-query($mq_spLarge)
+  body
+    font-size rem(13px)
+
++media-query($mq_sp)
+  body
+    font-size rem(12px)
+
+a
+  color inherit
+  text-decoration none
+  transition: all $transitionDuration_quick ease
+  position relative
+
+  &.is-animation:after
+    transition: all $transitionDuration_quick easing('out-expo')
+    content ''
+    position absolute
+    width 0
+    height 1px
+    background-color $textColor_default
+    bottom -2px
+    left 0
+
+
+  body.is-pc &:hover
+    opacity 0.7
+    text-decoration none
+
+    &.is-animation
+      opacity 1
+
+      &:after
+        width 100%
+
+
+// Tumblr COntrolを非表示
+body .tmblr-iframe
+  display none !important
+
+
+// noise and light
+.noise,
+.light
+  position fixed
+  // -webkit-backface-visibility:hidden;
+  // backface-visibility:hidden;
+  width 100%
+  height 100%
+  top 0
+  left 0
+  // overflow hidden
+  // transform translateZ(0)
+
+.noise
+  background-image url('../images/bg_noise.gif')
+  background-size 300px
+  mix-blend-mode overlay
+  opacity 0.6
+
+  body.is-mobile &
+    background url('../images/bg_noise_mobile.gif')
+    background-size 200px
+    mix-blend-mode normal
+    opacity 0.7
+
+.light
+  background-image radial-gradient(circle at center, white 0%, transparent 100%)
+  mix-blend-mode overlay
+  opacity 0.6
+
+  body.is-mobile &
+    display none
+
+
+// loader
+@keyframes loading_flash
+  0%
+    opacity 0.4
+  49%
+    opacity 0.4
+  50%
+    opacity 1
+  99%
+    opacity 1
+  100%
+    opacity 0.4
+
+.loader
+  transition: all $transitionDuration easing($transitionEasing)
+  position fixed
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+  width 100%
+  height 100%
+  z-index 100
+  // background-color #000
+  pointer-events none
+
+  .text
+    display inline-block
+    transition: all $transitionDuration easing($transitionEasing)
+    font-weight bold
+    font-size rem(36px)
+    letter-spacing 0.06em
+    font-style italic
+    position relative
+    top 50%
+    left 50%
+    transform translate(-50%, -50%) scale(0.88, 1)
+
+    &_inner
+      animation loading_flash 125ms linear infinite
+
+  body.is-loaded &
+    opacity 0
+
+    .text
+      opacity 0
+      filter blur(15px)
+      transform translate(-50%, -50%) scale(1.3)
+
+
++media-query($mq_spLarge)
+  .loader
+    .text
+      font-size rem(24px)

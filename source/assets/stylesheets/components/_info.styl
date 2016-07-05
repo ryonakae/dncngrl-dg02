@@ -1,0 +1,84 @@
+.info_list
+  margin 0
+  clearfix()
+
+  &Title
+    float left
+    font-size $fontSize_small
+    padding-top 2px
+    margin-top 15px
+
+  &Text
+    margin 15px 0 0 100px
+
+    &+&
+      margin-top 5px
+
+
+.info_credit
+  margin-top 30px
+  clearfix()
+
+  &Title
+    float left
+    width 100px
+    margin 0
+    font-size rem(18px)
+
+  &List
+    float left
+    margin 0
+
+    &Title
+      margin-top 15px
+      font-size $fontSize_small
+
+      &:first-child
+        margin-top 5px
+
+    &Text
+      margin 3px 0 0 0
+      font-weight bold
+
+      &-large
+        font-size rem(18px)
+
+      &-guest
+        display inline-block
+        vertical-align middle
+        margin-right 15px
+
+
++media-query($mq_spLarge)
+  .info_list
+    &Title
+      // float none
+      margin-top 5px
+
+    &Text
+      // float none
+      margin-left 60px
+      margin-top 5px
+
+  .info_credit
+    margin-top 5px
+
+    &Title
+      float none
+      width auto
+      font-size rem(16px)
+
+    &List
+      float none
+
+      &Title
+        margin-top 5px
+
+        &:first-child
+          margin-top 5px
+
+      &Text
+        margin-top 0
+
+        &-large
+          font-size rem(15px)

@@ -1,0 +1,111 @@
+.header
+  transition: all $transitionDuration easing($transitionEasing)
+  position fixed
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+  top 0
+  left 0
+  width 100%
+  padding 30px 27px 0
+  z-index 10
+  clearfix()
+  opacity 0
+
+  body.is-ready &
+    opacity 1
+
+
+  &_backTop
+    float left
+    font-size $fontSize_small
+    border 1px solid $borderColor_default
+    color rgba($textColor_default, 0.7)
+    padding 10px 15px
+
+    body.is-pc &
+      &:hover
+        opacity 1
+        border-color transparent
+        background-color $textColor_default
+        color $bgColor_default
+
+
+  &_share
+    float right
+    position relative
+    margin-top 6px
+
+    > *
+      display inline-block
+      vertical-align middle
+
+    .title
+      font-size $fontSize_small
+
+    .border
+      width 30px
+      height 1px
+      background-color $borderColor_default
+      margin-left 15px
+
+    .list
+      margin 0 0 0 10px
+      padding 0
+      list-style-type none
+
+      .item
+        display inline-block
+        vertical-align middle
+        margin-left 7px
+        width 30px
+        height 30px
+        position relative
+
+        a
+          display block
+          width 100%
+          height 100%
+
+          span
+            display block
+            hide-text()
+            position relative
+            top 50%
+            left 50%
+            transform translate(-50%, -50%)
+
+        &:first-child
+          margin-left 0
+
+        &-tw a span
+          retinaSprite($icon_tw_group)
+
+        &-fb a span
+          retinaSprite($icon_fb_group)
+
+        &-gp a span
+          retinaSprite($icon_gp_group)
+
+
++media-query($mq_spLarge)
+  .header
+    padding 20px 15px 0 20px
+
+    &_backTop
+      padding 0
+      border none
+
+    &_share
+      margin-top -7px
+
+      .title,
+      .border
+        display none
+
+      .list .item
+        margin-left 0
+
+
++media-query($mq_sp)
+  .header
+    padding 10px 5px 0 10px

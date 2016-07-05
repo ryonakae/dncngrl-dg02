@@ -1,0 +1,49 @@
+.bg
+  position fixed
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  width 100%
+  height 100%
+  top 0
+  left 0
+  pointer-events none
+
+  &_item
+    transition: all $transitionDuration ease
+    position fixed
+
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    width 100%
+    height 100%
+    top 0
+    left 0
+    opacity 0
+    background-color transparent;
+
+    // おまじない
+    canvas
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      visibility hidden
+
+    &.is-show
+      opacity 1
+
+      canvas
+        visibility visible
+
+    // intro
+    &-intro
+      background-color rgba(#000, 0.1);
+
+      canvas
+        opacity 0.5
+
+    // info
+    &-info
+      background-color rgba(#000, 0.1);
+
+      canvas
+        opacity 0.35
+        // mask-image linear-gradient(to bottom, rgba(#000, 0), rgba(#000, 1))

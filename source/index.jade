@@ -1,0 +1,173 @@
+doctype html
+html(lang='ja', prefix="og: http://ogp.me/ns#")
+  head
+    meta(charset='UTF-8')
+    title Dancing Girl. Vol.02 Another World | 芸能人はカードが命！10 ソ30
+
+    meta(name="description", content="「アイカツ！」の二次創作イラスト集「Dancing Girl. Vol.02 Another World」の特設サイト。")
+    meta(name="robots", content="index,follow")
+    meta(name="viewport", content="width=device-width,initial-scale=1.0")
+
+    meta(property="og:title", content="Dancing Girl. Vol.02 Another World | 芸能人はカードが命！10 ソ30")
+    meta(property="og:type", content="website")
+    meta(property="og:url", content="http://dncngrl.com/dg02")
+    meta(property="og:description", content="「アイカツ！」の二次創作イラスト集「Dancing Girl. Vol.02 Another World」の特設サイト。")
+    meta(property="og:site_name", content="Dancing Girl.")
+    meta(property="og:image", content="http://file.brdr.jp/dncngrl_02/images/ogp_img.jpg")
+    meta(property="og:locale", content="ja_JP")
+    meta(name="twitter:card", content="summary_large_image")
+    
+    link(rel='stylesheet', href='assets/stylesheets/dg02.css')
+    script(src='assets/javascripts/dg02.js')
+  body
+    //- noise and light
+    .noise
+    .light
+      
+    //- loader
+    .loader
+      .text
+        .text_inner dg02 Loading
+    
+    //- bg
+    .bg
+      .bg_item.bg_item-top#bgTop
+      .bg_item.bg_item-intro#bgIntroduction
+      .bg_item.bg_item-gallery#bgGallery
+      .bg_item.bg_item-info#bgInfo
+    
+    
+    //- header
+    header.header
+      a.header_backTop(href='/') Back to dncngrl.com
+      
+      .header_share
+        .title Share
+        .border
+        ul.list
+          li.item.item-tw
+            a(href='https://twitter.com/share?url=http://dncngrl.com/dg02&text=Dancing%20Girl.%20Vol.02%20Another%20World%20%7C%20%E8%8A%B8%E8%83%BD%E4%BA%BA%E3%81%AF%E3%82%AB%E3%83%BC%E3%83%89%E3%81%8C%E5%91%BD%EF%BC%8110%20%E3%82%BD30', target='_blank')
+              span Tw
+          li.item.item-fb
+            a(href='https://www.facebook.com/sharer/sharer.php?u=http://dncngrl.com/dg02', target='_blank')
+              span Fb
+          li.item.item-gp
+            a(href='https://plus.google.com/share?url=dncngrl.com/dg02', target='_blank')
+              span Gp
+    
+    
+    //- navi
+    ul.sectionNav#sectionNav
+      li.sectionNav_item(data-section='top')#sectionNavTop
+        .text Top
+        .icon
+          .inner
+      li.sectionNav_item(data-section='intro')#sectionNavIntro
+        .text Introduction
+        .icon
+          .inner
+      li.sectionNav_item(data-section='gallery')#sectionNavGallery
+        .text Gallery
+        .icon
+          .inner
+      li.sectionNav_item(data-section='info')#sectionNavInfo
+        .text Information
+        .icon
+          .inner
+    
+    
+    //- viewArea
+    .viewArea
+      //- top
+      section.viewArea_section.viewArea_section-top
+        .content.content-top
+          .content_inner
+            p.subTitle Dancing Girl. Vol.02
+            h1.title
+              span Another World
+            small.caption 2016 Summer -Aikatsu! Illustrations-
+      
+      //- introduction
+      section.viewArea_section.viewArea_section-intro
+        .content.content-intro
+          .content_inner
+            h2.title
+              span Introduction
+            .description
+              p SFのようなサイバーな世界、ファンタジーのように幻想的な世界。そんな世界観に「アイカツ！」のキャラクターがいたら、彼女たちは一体どんな風に輝いてくれるだろう。
+              p 「Dancing Girl. Vol.02 Another World」は、“アイカツ！×マットペイント”がコンセプトな、「アイカツ！」の二次創作イラスト集です。
+              p 非現実的な世界にたたずむ彼女たちアイドルの輝きを、ぜひご覧ください。
+            
+      //- gallery
+      section.viewArea_section.viewArea_section-gallery
+        .content.content-gallery
+          .content_inner
+            h2.title
+              span Gallery
+            
+          .galleryNav#galleryNav
+            .galleryNav_arrow.galleryNav_arrow-prev#galleryNavPrev
+              .inner
+                .borderLeft
+                .borderCenter
+                .borderRight
+            .galleryNav_arrow.galleryNav_arrow-next#galleryNavNext
+              .inner
+                .borderLeft
+                .borderCenter
+                .borderRight
+            
+            .galleryNav_indicator
+              span.current#galleryIndicatorCurrent -
+              .separator
+              span.all#galleryIndicatorAll -
+              
+      //- information
+      section.viewArea_section.viewArea_section-info
+        .content.content-info
+          .content_inner
+            h2.title
+              span Information
+            
+            .description
+              dl.info_list
+                dt.info_listTitle 仕様
+                dd.info_listText B5縦 フルカラーオフセット印刷 無線綴じ 20P
+                dt.info_listTitle 頒布価格
+                dd.info_listText 700円
+                dt.info_listTitle 頒布場所
+                dd.info_listText
+                  | 2016.7.10 芸能人はカードが命！10
+                  br
+                  a.is-animation(href='http://ketto.com/mimiken/ken.cgi?wf=%2C%83_%83%93%83V%83%93%83O%83K%81%5B%83%8B%2C', target='_blank') - ソ30「Dancing Girl.」
+                      
+              .info_credit
+                h3.info_creditTitle Credit
+                dl.info_creditList
+                  dt.info_creditListTitle Concept / Illustration / Graphic Design / Web Design &amp; Develop
+                  dd.info_creditListText.info_creditListText-large
+                    a.is-animation(href='http://brdr.jp', target='_blank') Ryo Nakae
+                  dt.info_creditListTitle Guest Illustration
+                  dd.info_creditListText.info_creditListText-guest
+                    a.is-animation(href='http://daisukenagai.com', target='_blank') Daisuke Nagai
+                  dd.info_creditListText.info_creditListText-guest
+                    a.is-animation(href='https://jypg.net/futa', target='_blank') futa
+                  dd.info_creditListText.info_creditListText-guest
+                    a.is-animation(href='https://about.me/sazu12', target='_blank') sazu
+          
+    //- footer
+    footer.footer
+      .footer_copyright
+        .copyright (C) 2016 Dancing Girl.
+        .border
+        .credit
+          | Design and Illustration by
+          a.is-animation(href='http://brdr.jp', target='_blank') Ryo Nakae
+        
+      .footer_scroll#scroll
+        .inner
+          .icon
+            .icon_borderLeft
+            .icon_borderCenter
+            .icon_borderRight
+          .text Scroll

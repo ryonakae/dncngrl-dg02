@@ -1,0 +1,135 @@
+.footer
+  transition: all $transitionDuration easing($transitionEasing)
+  position fixed
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+  bottom 0
+  left 0
+  width 100%
+  z-index 10
+  opacity 0
+
+  body.is-ready &
+    opacity 1
+
+
+  &_scroll
+    transition: all $transitionDuration easing('in-out-quart')
+    transition-property opacity, transform
+    transition-delay 500ms
+    position absolute
+    right 30px
+    bottom 25px
+    cursor pointer
+    opacity 0
+    transform translateY(80px)
+
+    .inner
+      transition: all $transitionDuration_quick easing('out-expo')
+      transition-property opacity, transform
+      transform translateY(0)
+
+    &.is-show
+      opacity 1
+      transform translateY(0)
+
+    .icon
+      width 21px
+      height 21px
+      position relative
+      left 50%
+      transform translateX(-50%)
+
+      &_borderCenter
+        transition: all $transitionDuration_quick easing('out-expo')
+        transition-property height
+        position absolute
+        bottom 0
+        left 50%
+        width 1px
+        height 20px
+        background-color $textColor_default
+
+      &_borderLeft,
+      &_borderRight
+        position absolute
+        width 1px
+        height 6px
+        bottom 0
+        left 50%
+        background-color $textColor_default
+
+      &_borderLeft
+        transform rotate(-45deg)
+        transform-origin bottom left
+
+      &_borderRight
+        transform rotate(45deg)
+        transform-origin bottom right
+
+    .text
+      margin-top 5px
+      font-size $fontSize_small
+      text-align center
+
+    // hover animation
+    body.is-pc &
+      &:hover
+        .inner
+          opacity 0.7
+          transform translateY(5px)
+
+        .icon_borderCenter
+          height 15px
+
+
+  &_copyright
+    position absolute
+    left 30px
+    bottom 24px
+    opacity 0.7
+
+    > *
+      display inline-block
+      vertical-align middle
+      font-size $fontSize_small
+
+    .border
+      width 30px
+      height 1px
+      background-color $borderColor_default
+      margin-left 12px
+      margin-right 15px
+
+    .credit
+      a
+        margin-left .5em
+
+
++media-query($mq_spLarge)
+  .footer
+    &_scroll
+      right 20px
+      bottom 18px
+
+    &_copyright
+      left 20px
+      bottom 18px
+
+      .border
+        display none
+
+      .copyright,
+      .credit
+        display block
+
+
++media-query($mq_sp)
+  .footer
+    &_scroll
+      right 10px
+      bottom 8px
+
+    &_copyright
+      left 10px
+      bottom 8px
