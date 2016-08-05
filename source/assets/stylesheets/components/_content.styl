@@ -129,6 +129,28 @@
         transform translateY(0)
         filter blur(0px)
 
+    .date
+      transition: all $transitionDuration easing($transitionEasing)
+      transition-delay 750ms
+      display block
+      line-height 1
+      margin 0
+      font-size rem(16px)
+      margin-top 8px
+      opacity 0
+      filter blur(20px)
+
+      body.is-transitionIn &
+        transform translateY(40px)
+
+      body.is-transitionOut &
+        transform translateY(-40px)
+
+      .viewArea_section.is-show &
+        opacity 1
+        transform translateY(0)
+        filter blur(0px)
+
 
   // intro
   // &-intro
@@ -175,6 +197,10 @@
         margin-top 6px
         font-size rem(14px)
 
+      .date
+        margin-top 8px
+        font-size rem(14px)
+
     &-gallery
       .content_inner
         padding-left 30px
@@ -205,6 +231,10 @@
 
       .caption
         margin-top 3px
+        font-size rem(11px)
+
+      .date
+        margin-top 6px
         font-size rem(11px)
 
     &-gallery
