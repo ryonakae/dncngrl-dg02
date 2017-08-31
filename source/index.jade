@@ -10,52 +10,53 @@ html(lang='ja', prefix="og: http://ogp.me/ns#")
 
     meta(property="og:title", content="Dancing Girl. Vol.02 Another World | コミックマーケット90 1日目 西g13a")
     meta(property="og:type", content="website")
-    meta(property="og:url", content="http://dncngrl.com/dg02")
+    meta(property="og:url", content="https://s.dncngrl.com/dg02")
     meta(property="og:description", content="「アイカツ！」の二次創作イラスト集「Dancing Girl. Vol.02 Another World」の特設サイト。")
     meta(property="og:site_name", content="Dancing Girl.")
-    meta(property="og:image", content="http://file.brdr.jp/dncngrl_02/images/ogp_img.jpg")
+    meta(property="og:image", content="https://s.dncngrl.com/dg02/assets/images/ogp_img.jpg")
     meta(property="og:locale", content="ja_JP")
     meta(name="twitter:card", content="summary_large_image")
-    
+
     link(rel='stylesheet', href='assets/stylesheets/dg02.css')
     script(src='assets/javascripts/dg02.js')
   body
+    .page_bg
     //- noise and light
     .noise
     .light
-      
+
     //- loader
     .loader
       .text
         .text_inner dg02 Loading
-    
+
     //- bg
     .bg
       .bg_item.bg_item-top#bgTop
       .bg_item.bg_item-intro#bgIntroduction
       .bg_item.bg_item-gallery#bgGallery
       .bg_item.bg_item-info#bgInfo
-    
-    
+
+
     //- header
     header.header
-      a.header_backTop(href='/') Back to dncngrl.com
-      
+      a.header_backTop(href='https://dncngrl.com', target='_blank') Back to dncngrl.com
+
       .header_share
         .title Share
         .border
         ul.list
           li.item.item-tw
-            a(href='https://twitter.com/share?url=http://dncngrl.com/dg02&text=Dancing%20Girl.%20Vol.02%20Another%20World%20%7C%20%E8%8A%B8%E8%83%BD%E4%BA%BA%E3%81%AF%E3%82%AB%E3%83%BC%E3%83%89%E3%81%8C%E5%91%BD%EF%BC%8110%20%E3%82%BD30', target='_blank')
+            a(href='https://twitter.com/share?url=https://s.dncngrl.com/dg02&text=Dancing%20Girl.%20Vol.02%20Another%20World%20%7C%20%E8%8A%B8%E8%83%BD%E4%BA%BA%E3%81%AF%E3%82%AB%E3%83%BC%E3%83%89%E3%81%8C%E5%91%BD%EF%BC%8110%20%E3%82%BD30', target='_blank')
               span Tw
           li.item.item-fb
-            a(href='https://www.facebook.com/sharer/sharer.php?u=http://dncngrl.com/dg02', target='_blank')
+            a(href='https://www.facebook.com/sharer/sharer.php?u=https://s.dncngrl.com/dg02', target='_blank')
               span Fb
           li.item.item-gp
-            a(href='https://plus.google.com/share?url=dncngrl.com/dg02', target='_blank')
+            a(href='https://plus.google.com/share?url=s.dncngrl.com/dg02', target='_blank')
               span Gp
-    
-    
+
+
     //- navi
     ul.sectionNav#sectionNav
       li.sectionNav_item(data-section='top')#sectionNavTop
@@ -74,8 +75,8 @@ html(lang='ja', prefix="og: http://ogp.me/ns#")
         .text Information
         .icon
           .inner
-    
-    
+
+
     //- viewArea
     .viewArea
       //- top
@@ -87,7 +88,7 @@ html(lang='ja', prefix="og: http://ogp.me/ns#")
               span Another World
             small.caption 2016 Summer -Aikatsu! Illustrations-
             small.date コミックマーケット90 1日目 西g13a
-      
+
       //- introduction
       section.viewArea_section.viewArea_section-intro
         .content.content-intro
@@ -98,14 +99,14 @@ html(lang='ja', prefix="og: http://ogp.me/ns#")
               p SFのようなサイバーな世界、ファンタジーのように幻想的な世界。そんな世界観に「アイカツ！」のキャラクターがいたら、彼女たちは一体どんな風に輝いてくれるだろう。
               p 「Dancing Girl. Vol.02 Another World」は、“アイカツ！×マットペイント”がコンセプトな、「アイカツ！」の二次創作イラスト集です。
               p 非現実的な世界にたたずむ彼女たちアイドルの輝きを、ぜひご覧ください。
-            
+
       //- gallery
       section.viewArea_section.viewArea_section-gallery
         .content.content-gallery
           .content_inner
             h2.title
               span Gallery
-            
+
           .galleryNav#galleryNav
             .galleryNav_arrow.galleryNav_arrow-prev#galleryNavPrev
               .inner
@@ -117,19 +118,19 @@ html(lang='ja', prefix="og: http://ogp.me/ns#")
                 .borderLeft
                 .borderCenter
                 .borderRight
-            
+
             .galleryNav_indicator
               span.current#galleryIndicatorCurrent -
               .separator
               span.all#galleryIndicatorAll -
-              
+
       //- information
       section.viewArea_section.viewArea_section-info
         .content.content-info
           .content_inner
             h2.title
               span Information
-            
+
             .description
               dl.info_list
                 dt.info_listTitle 仕様
@@ -145,7 +146,7 @@ html(lang='ja', prefix="og: http://ogp.me/ns#")
                   | 2016.8.12 コミックマーケット90
                   br
                   a.is-animation(href='https://webcatalog-free.circle.ms/Circle/12726600', target='_blank') - 1日目 西g13a「Dancing Girl.」
-                      
+
               .info_credit
                 h3.info_creditTitle Credit
                 dl.info_creditList
@@ -159,7 +160,7 @@ html(lang='ja', prefix="og: http://ogp.me/ns#")
                     a.is-animation(href='https://jypg.net/futa', target='_blank') futa
                   dd.info_creditListText.info_creditListText-guest
                     a.is-animation(href='https://about.me/sazu12', target='_blank') sazu
-          
+
     //- footer
     footer.footer
       .footer_copyright
@@ -168,7 +169,7 @@ html(lang='ja', prefix="og: http://ogp.me/ns#")
         .credit
           | Design, Illustration and Develop by
           a.is-animation(href='http://brdr.jp', target='_blank') Ryo Nakae
-        
+
       .footer_scroll#scroll
         .inner
           .icon

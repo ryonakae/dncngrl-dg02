@@ -12,7 +12,6 @@ import plumber from 'gulp-plumber';
 import gulpif from 'gulp-if';
 import uglify from 'gulp-uglify';
 import bs from './browserSync';
-import replace from 'gulp-replace';
 
 
 // bundleScript function
@@ -51,7 +50,6 @@ const bundleScript = (isProduction) => {
         .pipe(source(bundleFile))
         .pipe(buffer())
         .pipe(gulpif(isProduction, uglify({ preserveComments: 'some' })))
-        .pipe(gulpif(isProduction, replace('./assets/', 'http://file.brdr.jp/dncngrl_02/')))
         .pipe(gulp.dest(destPath))
         .on('end', () => {
           gutil.log('Finished', "'" + gutil.colors.cyan('Browserify Bundled') + "'", gutil.colors.green(bundleFile));
